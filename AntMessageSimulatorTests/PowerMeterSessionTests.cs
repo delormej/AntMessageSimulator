@@ -14,11 +14,11 @@ namespace AntMessageSimulator.Tests
         [TestMethod()]
         public void GetPowerMeterSessionTest()
         {
-            string line = "    28.406 { 288576140} Tx - [A4][05][51][01][89][E0][11][00][89][00][00]";
+            string line = "    31.859 {2319279593} Tx - [A4][05][51][01][E6][01][0B][00][1D][00][00]";
             var message = Message.MessageFromLine(line);
             var session = PowerMeterSession.GetPowerMeterSession(message);
 
-            Assert.IsTrue(session.DeviceId == 57481);
+            Assert.IsTrue(session.DeviceId == 486);
         }
     }
 }

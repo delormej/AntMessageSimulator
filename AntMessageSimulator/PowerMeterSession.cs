@@ -11,7 +11,7 @@ namespace AntMessageSimulator
         const byte DEVICE_TYPE_INDEX = 6;
         const byte DEVICE_ID_MSB_INDEX = 5;
         const byte DEVICE_ID_LSB_INDEX = 4;
-        const byte POWER_METER_DEVICE_TYPE = 0x11;
+        const byte POWER_METER_DEVICE_TYPE = 0x0B;
 
         public ushort DeviceId { get; private set; }
         public byte ChannelId { get; private set; }
