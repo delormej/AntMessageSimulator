@@ -39,18 +39,34 @@ using System.Collections.Generic;
         /// Ride objects.
         /// </summary>
         /// <param name="path"></param>
-        static void ParseDeviceLog(string path)
+        public static List<PowerMeterSession> ParseDeviceLog(string path)
         {
             List<PowerMeterSession> sessions = new List<PowerMeterSession>();
-            PowerMeterSession currentSession;
+            PowerMeterSession currentSession = null;
 
             // Open the file.
             foreach (var line in File.ReadLines(path))
             {
                 Message message = Message.MessageFromLine(line);
-
-
-                
+                if (currentSession == null)
+                {
+                    currentSession = PowerMeterSession.GetPowerMeterSession(message);
+                    if (currentSession != null)
+                        sessions.Add(currentSession);
+                }
+                else
+                {
+                    if (currentSession.Messages.Count > 0 && message.Timestamp < 
+                        currentSession.Messages[currentSession.Messages.Count - 1].Timestamp)
+                    {
+                        // Start a new session.
+                        currentSession = null;
+                    }
+                    else
+                    {
+                        currentSession.Messages.Add(message);
+                    }
+                }                
             }
 
             // For each line, parse the message.
@@ -59,7 +75,7 @@ using System.Collections.Generic;
             // If message is a set channel id, parse the device and channel ids.
             //  Once channel id is set, when a message is from the power meter, record that to the powerMeterSession object.
 
-
+            return sessions;
         }
 
         static void Main(string[] args)

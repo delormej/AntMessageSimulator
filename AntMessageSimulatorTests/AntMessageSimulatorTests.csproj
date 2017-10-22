@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="MessageTests.cs" />
     <Compile Include="PowerMeterSessionTests.cs" />
+    <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@ namespace AntMessageSimulator
 
         public ushort DeviceId { get; private set; }
         public byte ChannelId { get; private set; }
-        public List<Message> Messages { get; }
+        public List<Message> Messages { get; private set; }
 
         public static PowerMeterSession GetPowerMeterSession(Message message)
         {
@@ -41,6 +41,7 @@ namespace AntMessageSimulator
         {
             this.ChannelId = channelId;
             this.DeviceId = deviceId;
+            this.Messages = new List<Message>();
         }
     }
 }

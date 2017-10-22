@@ -136,18 +136,12 @@ namespace AntMessageSimulator
             string[] stringBytes = Regex.Split(value, @"\]\[");
             this.bytes = new byte[stringBytes.Length];
 
-            for (int i = 0; i < stringBytes.Length; i++)
-            {
-                try
-                {
-                    this.bytes[i] = Convert.ToByte(stringBytes[i], 16);
-                }
-                catch
-                {
-                    // Ignore any errors.
-                    continue;
-                }
-            }            
+            // Regex doesn't parse the first or last well, so just set to 0 since we don't use this.
+            this.bytes[0] = 0; 
+
+            for (int i = 1; i < stringBytes.Length-1; i++)
+                this.bytes[i] = Convert.ToByte(stringBytes[i], 16);
+        
         }
 
         /// <summary>
