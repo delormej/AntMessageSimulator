@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{74C38A0F-8B94-42A3-AFE1-9839C86F178A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleApp1</RootNamespace>
-    <AssemblyName>ConsoleApp1</AssemblyName>
+    <RootNamespace>AntMessageSimulator</RootNamespace>
+    <AssemblyName>AntMessageSimulator</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Message.cs" />
+    <Compile Include="PowerMeterSession.cs" />
     <Compile Include="PowerMeterSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

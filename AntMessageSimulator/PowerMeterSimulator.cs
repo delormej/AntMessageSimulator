@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 /*
@@ -18,14 +19,11 @@ using System.Collections.Generic;
         }
     }
 
-    /// <summary>
-    /// Represents a ride session as built from a device log.
-    /// </summary>
-    public class PowerMeterSession
+    public class PowerMeterParser
     {
-        public int DeviceId { get; }
-        public int ChannelId { get; }
-        public List<Message> Messages { get; }
+        // Visit each line.  
+        // Check if it's an interesting event, i.e. like Set Channel ID
+        // Check if it's a new session... 
 
     }
 
@@ -43,7 +41,17 @@ using System.Collections.Generic;
         /// <param name="path"></param>
         static void ParseDeviceLog(string path)
         {
+            List<PowerMeterSession> sessions = new List<PowerMeterSession>();
+            PowerMeterSession currentSession;
+
             // Open the file.
+            foreach (var line in File.ReadLines(path))
+            {
+                Message message = Message.MessageFromLine(line);
+
+
+                
+            }
 
             // For each line, parse the message.
             // If timestamp < last timestamp, start a new session.
@@ -80,3 +88,4 @@ using System.Collections.Generic;
         }
     }
 }
+
