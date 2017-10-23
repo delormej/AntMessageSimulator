@@ -51,6 +51,7 @@
     <Compile Include="AutoAntsScriptGenerator.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="DeviceSession.cs" />
+    <Compile Include="PowerMeterEventsQuery.cs" />
     <Compile Include="PowerMeterSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

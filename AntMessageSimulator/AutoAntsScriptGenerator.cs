@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace AntMessageSimulator
@@ -139,14 +138,8 @@ r! [40][{0:X2}][41][00]
         /// <returns></returns>
         private IEnumerable<Message> GetPowerMeterBroadcastMessages()
         {
-            IEnumerable<Message> messages =
-                from message in session.Messages
-                where message.IsBroadcastEvent() && 
-                    message.ChannelId == session.ChannelId && 
-                    message.MessageId < 0xF0    // Ignore manufacturer specific pages.
-                select message;
-
-            return messages;
+            PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
+            return query.FindAllPowerMeterBroadcastEvents();
         }
 
         public void Dispose()
