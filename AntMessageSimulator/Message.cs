@@ -8,10 +8,15 @@ namespace AntMessageSimulator
     /// </summary>
     public class Message
     {
+        const byte MAX_PAYLOAD_LENGTH = 8;
+        const byte MESSAGE_HEADER_LENGTH = 4;
         const byte SET_NETWORK_KEY_EVENT = 0x46;
+        const byte MESSAGE_LENGTH_POSITION = 1;
         const byte EVENT_ID_POSITION = 2;
         const byte CHANNEL_ID_POSITION = 3;
-        const int MESSAGE_ID_POSTITION = 4;
+        const byte MESSAGE_ID_POSTITION = 4;
+        const byte TRANSMIT_TYPE_START_INDEX = 24;
+        const byte TRANSMIT_TYPE_LENGTH = 2;
 
         private float timestamp;
         private byte[] bytes;
@@ -111,8 +116,6 @@ namespace AntMessageSimulator
         /// <returns></returns>
         private string GetTransmitType(string value)
         {
-            const int TRANSMIT_TYPE_START_INDEX = 24;
-            const int TRANSMIT_TYPE_LENGTH = 2;
             // can be Rx or Tx
             return value.Substring(TRANSMIT_TYPE_START_INDEX, TRANSMIT_TYPE_LENGTH);
         }
@@ -130,6 +133,15 @@ namespace AntMessageSimulator
         /// <summary>
         /// Right side contains the bytes that were on the wire encoded as strings.
         /// </summary>
+        /// <remarks>
+        /// Don't read past 8 bytes.
+        /// [A4][14][4E][01][01][10][01][00][00][00][02][4B][E0][E6][01][0B][01][10][00][6D][00][5A][42][CE]
+        ///      |-- Length
+        ///          |-- EventID
+        ///              |-- ChannelID
+        ///                  |-- MessageID (beginning of paylod)
+        ///                        End of 8 byte payload --|
+        /// </remarks>
         /// <param name="value"></param>
         private void ParseMessageBytes(string value)
         {
@@ -137,11 +149,19 @@ namespace AntMessageSimulator
             this.bytes = new byte[stringBytes.Length];
 
             // Regex doesn't parse the first or last well, so just set to 0 since we don't use this.
-            this.bytes[0] = 0; 
+            this.bytes[0] = 0;
 
-            for (int i = 1; i < stringBytes.Length-1; i++)
+            byte length = Convert.ToByte(stringBytes[MESSAGE_LENGTH_POSITION], 16);
+            if (length > MAX_PAYLOAD_LENGTH)
+                length = MAX_PAYLOAD_LENGTH + MESSAGE_HEADER_LENGTH;
+            else
+                length += MESSAGE_HEADER_LENGTH;
+
+            if (stringBytes[length - 1].EndsWith("]"))
+                stringBytes[length - 1] = stringBytes[length - 1].Replace("]", "");
+
+            for (int i = 1; i < length; i++)
                 this.bytes[i] = Convert.ToByte(stringBytes[i], 16);
-        
         }
 
         /// <summary>
