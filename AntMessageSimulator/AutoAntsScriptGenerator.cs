@@ -8,7 +8,7 @@ namespace AntMessageSimulator
 {
     public class AutoAntsScriptGenerator : IDisposable
     {
-        private PowerMeterSession session;
+        private DeviceSession session;
         private StreamWriter writer;
 
         #region String Constants
@@ -49,7 +49,7 @@ r! [40][{0:X2}][41][00]
 ";
         #endregion
 
-        public AutoAntsScriptGenerator(PowerMeterSession session)
+        public AutoAntsScriptGenerator(DeviceSession session)
         {
             this.session = session;
         }

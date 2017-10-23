@@ -15,7 +15,7 @@ namespace AntMessageSimulator.Tests
         public void ParseDeviceLogTest()
         {
             string path = @"..\..\..\AntMessageSimulatorTests\Device0.txt";
-            List<PowerMeterSession> sessions = Program.ParseDeviceLog(path);
+            List<DeviceSession> sessions = PowerMeterSimulator.ParseDeviceLog(path);
             Assert.IsTrue(sessions.Count > 7);
         }
     }

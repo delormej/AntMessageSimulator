@@ -50,7 +50,7 @@
   <ItemGroup>
     <Compile Include="AutoAntsScriptGenerator.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="PowerMeterSession.cs" />
+    <Compile Include="DeviceSession.cs" />
     <Compile Include="PowerMeterSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -12,19 +12,17 @@ namespace AntMessageSimulator
     // The act of parsing the log should implement the visitor pattern, such that other
     // operations, i.e. speed events or FE-C errors could be gleaned from this log.
 
-    public class Program
+    public class PowerMeterSimulator
     {
-        private List<PowerMeterSession> powerMeterSessions;
-
         /// <summary>
         /// At the end of this method, this class will be populated with 0 or more
         /// Ride objects.
         /// </summary>
         /// <param name="path"></param>
-        public static List<PowerMeterSession> ParseDeviceLog(string path)
+        public static List<DeviceSession> ParseDeviceLog(string path)
         {
-            List<PowerMeterSession> sessions = new List<PowerMeterSession>();
-            PowerMeterSession currentSession = null;
+            List<DeviceSession> sessions = new List<DeviceSession>();
+            DeviceSession currentSession = null;
 
             // Open the file.
             foreach (var line in File.ReadLines(path))
@@ -32,7 +30,7 @@ namespace AntMessageSimulator
                 Message message = Message.MessageFromLine(line);
                 if (currentSession == null)
                 {
-                    currentSession = PowerMeterSession.GetPowerMeterSession(message);
+                    currentSession = DeviceSession.GetDeviceSession(message);
                     if (currentSession != null)
                         sessions.Add(currentSession);
                 }
@@ -51,38 +49,72 @@ namespace AntMessageSimulator
                 }                
             }
 
-            // For each line, parse the message.
-            // If timestamp < last timestamp, start a new session.
-            // Check the channel id, 
-            // If message is a set channel id, parse the device and channel ids.
-            //  Once channel id is set, when a message is from the power meter, record that to the powerMeterSession object.
-
             return sessions;
+        }
+
+        static void PrintUsage()
+        {
+            const string USAGE =
+                @"simulator.exe {Device Log} {Optional: .ants output script}
+    Example: simulator.exe ""C:\Program Files (x86)\Zwift\Device0.txt"" Device0.ants
+";
+            Console.WriteLine(USAGE);
+        }
+
+        static void PrintError(string message)
+        {
+            Console.WriteLine(message);
+            Console.WriteLine();
+            PrintUsage();
+        }
+
+        static void PrintWarning(string message)
+        {
+            Console.WriteLine(message);
         }
 
         static void Main(string[] args)
         {
-            // Read a Device*.txt|log file, line by line.
+            string source = args[1];
+            string destination = args[2];
+            string script = "";
 
-            // Pre-parse
-            // Identify & break file into multiple streams if the timestamp resets.
-            // Identify if there are power meter messages in the stream.
-            // Per stream, identify all connected devices (channel Id, device type, device id)
+            // Validate arguments.
+            if (args.Length < 2)
+            {
+                PrintUsage();
+                return;
+            }
+            if (!File.Exists(source))
+            {
+                PrintError(string.Format("Source {0} does not exist!", source));
+                return;
+            }
 
+            // Clean up previous run.
+            if (File.Exists(destination))
+            {
+                File.Delete(destination);
+                PrintWarning(string.Format("Overwriting previous file: {0}", destination));
+            }
 
+            // TODO: be able to list the # of sessions and the device Id.
 
-            // Extract all relevant events for one or more channels.
-            // For all Rx events on a given channel.
-            // Truncate extended messages at 8 bytes.
+            List<DeviceSession> sessions = ParseDeviceLog(source);
 
-            // Create an .ants file that:
-            // 1. Assigns, configures and opens the appropriate channel for a given (channelId, deviceType, deviceId)
-            // 
+            // Use the last session to generate a script.
+            using (AutoAntsScriptGenerator generator =
+                new AutoAntsScriptGenerator(sessions[sessions.Count - 1]))
+            {
 
-            // n. Close the channel.
+                Stream stream = generator.CreateScriptStream();
+                TextReader reader = new StreamReader(stream);
 
-            // Execute the script, logging and exiting as necessary.
-
+                script = reader.ReadToEnd();
+            }
+            
+            // Write the file out.
+            File.WriteAllText(destination, script);
         }
     }
 }

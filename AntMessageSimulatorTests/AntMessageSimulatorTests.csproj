@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="AutoAntsScriptGeneratorTests.cs" />
     <Compile Include="MessageTests.cs" />
-    <Compile Include="PowerMeterSessionTests.cs" />
+    <Compile Include="DeviceSessionTests.cs" />
     <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

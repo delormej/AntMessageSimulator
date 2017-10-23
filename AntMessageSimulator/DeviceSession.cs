@@ -6,7 +6,7 @@ namespace AntMessageSimulator
     /// <summary>
     /// Represents a ride session as built from a device log.
     /// </summary>
-    public class PowerMeterSession
+    public class DeviceSession
     {
         const byte DEVICE_TYPE_INDEX = 6;
         const byte DEVICE_ID_MSB_INDEX = 5;
@@ -17,9 +17,9 @@ namespace AntMessageSimulator
         public byte ChannelId { get; private set; }
         public List<Message> Messages { get; private set; }
 
-        public static PowerMeterSession GetPowerMeterSession(Message message)
+        public static DeviceSession GetDeviceSession(Message message)
         {
-            PowerMeterSession session = null;
+            DeviceSession session = null;
 
             // Start a session when we see a set channel id for a power meter type.
             if (message.ChannelId != null && message.EventId == (byte)
@@ -30,14 +30,14 @@ namespace AntMessageSimulator
                     ushort deviceId = (ushort)(message.Bytes[DEVICE_ID_MSB_INDEX] << 8 |
                         message.Bytes[DEVICE_ID_LSB_INDEX]);
 
-                    session = new PowerMeterSession((byte)message.ChannelId, deviceId);
+                    session = new DeviceSession((byte)message.ChannelId, deviceId);
                 }
             }
 
             return session;
         }
 
-        private PowerMeterSession(byte channelId, ushort deviceId)
+        private DeviceSession(byte channelId, ushort deviceId)
         {
             this.ChannelId = channelId;
             this.DeviceId = deviceId;
