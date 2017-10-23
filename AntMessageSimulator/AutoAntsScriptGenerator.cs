@@ -114,8 +114,8 @@ r! [40][{0:X2}][41][00]
 
         private void WriteChannelConfiguration()
         {
-            byte deviceLsb = (byte)(session.DeviceId & 0xFF);
-            byte deviceMsb = (byte)((session.DeviceId & 0xFF00) >> 8);
+            byte deviceLsb = (byte)(session.PowerMeterId & 0xFF);
+            byte deviceMsb = (byte)((session.PowerMeterId & 0xFF00) >> 8);
             writer.Write(CHANNEL_CONFIGURATION_BLOCK, 
                 session.ChannelId,
                 deviceLsb,

@@ -14,14 +14,14 @@ namespace AntMessageSimulator
         const byte POWER_METER_DEVICE_TYPE = 0x0B;
         const byte FEC_DEVICE_TYPE = 0x11;
 
-        public ushort DeviceId { get; private set; }
+        public ushort PowerMeterId { get; private set; }
         public byte ChannelId { get; private set; }
         public List<Message> Messages { get; private set; }
 
         public override string ToString()
         {
             const string TO_STRING_TEMPLATE = "DeviceId: {0}, ChannelId: {1}, Messages: {2}";
-            return string.Format(TO_STRING_TEMPLATE, DeviceId, ChannelId, Messages.Count);
+            return string.Format(TO_STRING_TEMPLATE, PowerMeterId, ChannelId, Messages.Count);
         }
 
         public static DeviceSession GetDeviceSession(Message message)
@@ -51,7 +51,7 @@ namespace AntMessageSimulator
         private DeviceSession(byte channelId, ushort deviceId)
         {
             this.ChannelId = channelId;
-            this.DeviceId = deviceId;
+            this.PowerMeterId = deviceId;
             this.Messages = new List<Message>();
         }
     }
