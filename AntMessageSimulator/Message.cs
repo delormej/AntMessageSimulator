@@ -1,21 +1,34 @@
 ﻿using System;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace AntMessageSimulator
 {
+    public class MessageException : Exception
+    {
+        public MessageException(string message) : base(message)
+        {
+        }
+
+        public MessageException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+    }
+
     /// <summary>
     /// Represents a message recorded to the ANT device log.
     /// </summary>
     public class Message
     {
+        // TODO: not sure if it's a good practice to expose these or if there 
+        // is a better way of achieving the end goal here...
+        public const byte EVENT_ID_POSITION = 2;
+        public const byte CHANNEL_ID_POSITION = 3;
+        public const byte MESSAGE_ID_POSTITION = 4;
+
         const byte MAX_PAYLOAD_LENGTH = 8;
         const byte MESSAGE_HEADER_LENGTH = 4;
         const byte SET_NETWORK_KEY_EVENT = 0x46;
         const byte MESSAGE_LENGTH_POSITION = 1;
-        const byte EVENT_ID_POSITION = 2;
-        const byte CHANNEL_ID_POSITION = 3;
-        const byte MESSAGE_ID_POSTITION = 4;
         const byte TRANSMIT_TYPE_START_INDEX = 24;
         const byte TRANSMIT_TYPE_LENGTH = 2;
 
@@ -70,6 +83,9 @@ namespace AntMessageSimulator
         }
 
         public byte[] Bytes { get { return this.bytes; } }
+
+        public byte PayloadLength {  get { return this.payloadLength; } }
+
 
         /// <summary>
         /// Parses a single line from an ANT device log and represents as a Message object.
@@ -138,6 +154,15 @@ namespace AntMessageSimulator
             this.transmitType = GetTransmitType(value);
         }
 
+        /// <summary>
+        /// Returns the acceptable payload length + ant header length from the 
+        /// ANT message.
+        /// </summary>
+        /// <remarks>
+        /// If the payload > 8 bytes, truncate at 8.
+        /// </remarks>
+        /// <param name="stringBytes"></param>
+        /// <returns></returns>
         private byte GetPayloadLength(string[] stringBytes)
         {
             byte length = Convert.ToByte(stringBytes[MESSAGE_LENGTH_POSITION], 16);
@@ -164,6 +189,7 @@ namespace AntMessageSimulator
         /// <param name="value"></param>
         private void ParseMessageBytes(string value)
         {
+            // Strip into individual elements so we parse meaningful values.
             string[] stringBytes = Regex.Split(value, @"\]\[");
             this.payloadLength = GetPayloadLength(stringBytes);
             byte[] bytes = new byte[this.payloadLength];
@@ -176,6 +202,7 @@ namespace AntMessageSimulator
                 stringBytes[this.payloadLength - 1] = 
                     stringBytes[this.payloadLength - 1].Replace("]", "");
 
+            // Convert string representation into byte array.
             for (int i = 1; i < this.payloadLength; i++)
                 bytes[i] = Convert.ToByte(stringBytes[i], 16);
 
@@ -207,38 +234,6 @@ namespace AntMessageSimulator
         private Message(string line)
         {
             ParseLine(line);
-        }
-
-        /// <summary>
-        /// Returns a line of executable Auto ANT script.
-        /// </summary>
-        public string ToAutoAntScriptLine()
-        {
-            // Write a message, then wait for a response.
-            //w [4E][01][10][10][FF][FF][00][10][00][01]
-            //r [40][01][01][03]
-            //  |-- Reponse Event
-            //      |-- ChannelID
-            //          |-- Message that was sent
-            //              |-- EVENT_TX
-
-            StringBuilder script = new StringBuilder();
-
-            script.Append("w ");
-
-            for (int i = EVENT_ID_POSITION; i < this.payloadLength; i++)
-                script.AppendFormat("[{0:X2}]", this.bytes[i]);
-
-            script.AppendLine();
-
-            // Look for successful response.
-            script.AppendFormat("r [40][{0:X2}][{1:X2}][03]",
-                this.ChannelId,
-                this.MessageId);
-
-            script.AppendLine();
-
-            return script.ToString();
         }
     }
 }

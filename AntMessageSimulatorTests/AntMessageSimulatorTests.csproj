@@ -56,6 +56,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="AutoAntsScriptGeneratorTests.cs" />
     <Compile Include="MessageTests.cs" />
     <Compile Include="PowerMeterSessionTests.cs" />
     <Compile Include="ProgramTests.cs" />

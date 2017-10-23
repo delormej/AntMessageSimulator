@@ -1,32 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 
 /*
  * This program takes an ANT device log and simulates the power meter by opening an ANT+
  * channel and transmitting those messages.
  */
- namespace AntMessageSimulator
+namespace AntMessageSimulator
 {
-    public class MessageException : Exception
-    {
-        public MessageException(string message) : base(message)
-        {
-        }
-
-        public MessageException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-    }
-
-    public class PowerMeterParser
-    {
-        // Visit each line.  
-        // Check if it's an interesting event, i.e. like Set Channel ID
-        // Check if it's a new session... 
-
-    }
-
     // The act of parsing the log should implement the visitor pattern, such that other
     // operations, i.e. speed events or FE-C errors could be gleaned from this log.
 
