@@ -18,10 +18,10 @@ namespace AntMessageSimulator
             this.session = session;
         }
 
-        public IEnumerable<Message> FindEventsWithSpeed()
-        {
-            return null;
-        }
+        //public IEnumerable<Message> FindEventsWithSpeed()
+        //{
+        //    return null;
+        //}
 
         public IEnumerable<Message> FindAllPowerMeterBroadcastEvents()
         {
@@ -30,7 +30,7 @@ namespace AntMessageSimulator
                 where message.IsBroadcastEvent() &&
                     message.ChannelId == session.ChannelId &&
                     message.MessageId < 0xF0    // Ignore manufacturer specific pages.
-                            select message;
+                select message;
 
             return messages;
         }

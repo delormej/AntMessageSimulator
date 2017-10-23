@@ -18,6 +18,12 @@ namespace AntMessageSimulator
         public byte ChannelId { get; private set; }
         public List<Message> Messages { get; private set; }
 
+        public override string ToString()
+        {
+            const string TO_STRING_TEMPLATE = "DeviceId: {0}, ChannelId: {1}, Messages: {2}";
+            return string.Format(TO_STRING_TEMPLATE, DeviceId, ChannelId, Messages.Count);
+        }
+
         public static DeviceSession GetDeviceSession(Message message)
         {
             DeviceSession session = null;
