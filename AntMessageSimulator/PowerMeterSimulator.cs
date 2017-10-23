@@ -55,8 +55,8 @@ namespace AntMessageSimulator
         static void PrintUsage()
         {
             const string USAGE =
-                @"simulator.exe {Device Log} {Optional: .ants output script}
-    Example: simulator.exe ""C:\Program Files (x86)\Zwift\Device0.txt"" Device0.ants
+                @"simulator.exe {Device Log} {Optional: Session Number} {Optional: .ants output script}
+    Example: simulator.exe ""C:\Program Files (x86)\Zwift\Device0.txt"" 1 Device0.ants
 ";
             Console.WriteLine(USAGE);
         }
@@ -75,6 +75,12 @@ namespace AntMessageSimulator
 
         static void Main(string[] args)
         {
+            // A few different modes, if no session or output file is specified, just print the sessions.
+            // If no output file is specified, default to the input filename with an .ants extension
+            // 
+            // Need option to actually invoke the ants script enginge (Future).
+
+
             string source = args[1];
             string destination = args[2];
             string script = "";
