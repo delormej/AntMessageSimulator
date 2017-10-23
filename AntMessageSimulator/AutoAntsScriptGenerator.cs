@@ -72,6 +72,14 @@ r! [40][{0:X2}][41][00]
             return stream;
         }
 
+        private static string CreateResponseScriptLine(Message message)
+        {
+            // Look for successful response.
+            return string.Format("r [40][{0:X2}][{1:X2}][03]",
+                message.ChannelId,
+                message.MessageId);
+        }
+
         /// <summary>
         /// Returns a line of executable Auto ANT script.
         /// </summary>
@@ -93,13 +101,7 @@ r! [40][{0:X2}][41][00]
                 script.AppendFormat("[{0:X2}]", message.Bytes[i]);
 
             script.AppendLine();
-
-            // Look for successful response.
-            script.AppendFormat("r [40][{0:X2}][{1:X2}][03]",
-                message.ChannelId,
-                message.MessageId);
-
-            script.AppendLine();
+            script.AppendLine(CreateResponseScriptLine(message));
 
             return script.ToString();
         }
@@ -139,7 +141,9 @@ r! [40][{0:X2}][41][00]
         {
             IEnumerable<Message> messages =
                 from message in session.Messages
-                where message.IsBroadcastEvent() && message.ChannelId == session.ChannelId
+                where message.IsBroadcastEvent() && 
+                    message.ChannelId == session.ChannelId && 
+                    message.MessageId < 0xF0    // Ignore manufacturer specific pages.
                 select message;
 
             return messages;
