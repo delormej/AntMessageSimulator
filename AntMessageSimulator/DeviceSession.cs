@@ -14,6 +14,7 @@ namespace AntMessageSimulator
         const byte POWER_METER_DEVICE_TYPE = 0x0B;
         const byte FEC_DEVICE_TYPE = 0x11;
 
+        public ushort EmotionId { get; private set; }
         public ushort PowerMeterId { get; private set; }
         public byte ChannelId { get; private set; }
         public List<Message> Messages { get; private set; }

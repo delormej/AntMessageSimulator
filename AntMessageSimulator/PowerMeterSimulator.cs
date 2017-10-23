@@ -45,7 +45,7 @@ namespace AntMessageSimulator
             PrintUsage();
         }
 
-        private static void PrintWarning(string message)
+        private static void PrintInfo(string message)
         {
             Console.WriteLine(message);
         }
@@ -54,6 +54,23 @@ namespace AntMessageSimulator
         {
             DeviceLogParser parser = new DeviceLogParser();
             sessions = parser.Parse(source);
+        }
+
+        private DeviceSession GetSingleSession()
+        {
+            if (sessionNumber == 0)
+                return GetLastSession();
+            else
+            {
+                try
+                {
+                    return sessions[sessionNumber];
+                }
+                catch (IndexOutOfRangeException exception)
+                {
+                    throw new Exception("Invalid session number.", exception);
+                }
+             }
         }
 
         DeviceSession GetLastSession()
@@ -73,16 +90,19 @@ namespace AntMessageSimulator
             }
         }
 
+        private void ValidateDestination(string value)
+        {
+            // Should be the destination filename.
+            destination = value;
+
+            // Clean up previous run.
+            DeleteDestination();
+        }
+
         private void ValidateDestinationOrSession(string value)
         {
             if (!int.TryParse(value, out sessionNumber))
-            {
-                // Should be the destination filename.
-                destination = value;
-
-                // Clean up previous run.
-                DeleteDestination();
-            }
+                ValidateDestination(value);
         }
 
         private void DeleteDestination()
@@ -90,26 +110,20 @@ namespace AntMessageSimulator
             if (File.Exists(destination))
             {
                 File.Delete(destination);
-                PrintWarning(string.Format("Overwriting previous file: {0}", destination));
+                PrintInfo(string.Format("Overwriting previous file: {0}", destination));
             }
         }
 
         private void ParseArgs()
         {
-            // Validate arguments.
-            switch (args.Length)
-            { 
-                case 0:
-                    throw new ArgumentException("Invalid number of parameters.");
-                case 1:
-                    ValidateSource(args[0]);
-                    break;
-                case 2:
-                    ValidateDestinationOrSession(args[1]);
-                    break;
-                default:
-                    break;
-            }
+            if (args.Length == 0)
+                throw new ArgumentException("Invalid number of parameters.");
+            if (args.Length > 0)
+                ValidateSource(args[0]);
+            if (args.Length > 1)
+                ValidateDestinationOrSession(args[1]);
+            if (args.Length > 2)
+                ValidateDestination(args[2]);
         }
 
         private void PrintSummary()
@@ -124,24 +138,23 @@ namespace AntMessageSimulator
             string script = "";
 
             GetSessionsFromFile(source);
-            DeviceSession session = GetLastSession();
+            DeviceSession session = GetSingleSession();
 
-            if (destination == null)
+            if (destination != null)
             {
-                PrintSummary();
-                return;
+                using (AutoAntsScriptGenerator generator = new AutoAntsScriptGenerator(session))
+                {
+                    Stream stream = generator.CreateScriptStream();
+                    TextReader reader = new StreamReader(stream);
+
+                    script = reader.ReadToEnd();
+                }
+
+                PrintInfo("Writing output to file: " + destination);
+                // Write the file out.
+                File.WriteAllText(destination, script);
             }
-
-            using (AutoAntsScriptGenerator generator = new AutoAntsScriptGenerator(session))
-            {
-                Stream stream = generator.CreateScriptStream();
-                TextReader reader = new StreamReader(stream);
-
-                script = reader.ReadToEnd();
-            }
-
-            // Write the file out.
-            File.WriteAllText(destination, script);
+            PrintSummary();
         }
 
         /// <summary>
