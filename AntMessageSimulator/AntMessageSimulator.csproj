@@ -7,7 +7,7 @@
     <ProjectGuid>{74C38A0F-8B94-42A3-AFE1-9839C86F178A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>AntMessageSimulator</RootNamespace>
-    <AssemblyName>AntMessageSimulator</AssemblyName>
+    <AssemblyName>simulator</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Text;
 
 /*
  * This program takes an ANT device log and simulates the power meter by opening an ANT+
@@ -55,10 +54,19 @@ namespace AntMessageSimulator
         static void PrintUsage()
         {
             const string USAGE =
-                @"simulator.exe {Device Log} {Optional: Session Number} {Optional: .ants output script}
-    Example: simulator.exe ""C:\Program Files (x86)\Zwift\Device0.txt"" 1 Device0.ants
+                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {Optional: .ants output script}
+    Example:  simulator.exe ""C:\Program Files (x86)\Zwift\Device0.txt"" 1 Device0.ants
 ";
             Console.WriteLine(USAGE);
+        }
+
+        static void PrintWelcome()
+        {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fvi.FileVersion;
+            Console.WriteLine("ANT+ Message Simulator version: " + version);
+            Console.WriteLine();
         }
 
         static void PrintError(string message)
@@ -75,15 +83,12 @@ namespace AntMessageSimulator
 
         static void Main(string[] args)
         {
+            PrintWelcome();
             // A few different modes, if no session or output file is specified, just print the sessions.
             // If no output file is specified, default to the input filename with an .ants extension
             // 
             // Need option to actually invoke the ants script enginge (Future).
 
-
-            string source = args[1];
-            string destination = args[2];
-            string script = "";
 
             // Validate arguments.
             if (args.Length < 2)
@@ -91,6 +96,11 @@ namespace AntMessageSimulator
                 PrintUsage();
                 return;
             }
+
+            string source = args[1];
+            string destination = args[2];
+            string script = "";
+
             if (!File.Exists(source))
             {
                 PrintError(string.Format("Source {0} does not exist!", source));
