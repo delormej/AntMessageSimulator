@@ -18,6 +18,7 @@ namespace AntMessageSimulator.Tests
             var message = Message.MessageFromLine(line);
             var session = PowerMeterSession.GetPowerMeterSession(message);
 
+            Assert.IsNull(message.MessageId);
             Assert.IsTrue(session.DeviceId == 486);
         }
     }

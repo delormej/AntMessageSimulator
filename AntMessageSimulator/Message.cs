@@ -60,7 +60,7 @@ namespace AntMessageSimulator
         {
             get
             {
-                if (IsParseableEvent())
+                if (IsBroadcastEvent())
                     return this.bytes[MESSAGE_ID_POSTITION];
                 else
                     return null;
@@ -82,6 +82,12 @@ namespace AntMessageSimulator
         private bool IsParseableEvent()
         {
             return (this.EventId != SET_NETWORK_KEY_EVENT);
+        }
+
+        private bool IsBroadcastEvent()
+        {
+            return (this.EventId ==
+                (byte)ANT_Managed_Library.ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E);
         }
 
         /// <summary>
