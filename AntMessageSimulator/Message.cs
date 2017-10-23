@@ -202,8 +202,14 @@ namespace AntMessageSimulator
         /// </summary>
         public string ToAutoAntScriptLine()
         {
-            // Example:
-            // w  [42][01][10][00]     # Assign channel 0, bidirectional master, network 0
+
+            // For each we should broadcast a message, then wait for a response.
+            //w[4E][01][10][10][FF][FF][00][10][00][01]
+            //r[40][01][01][03]
+            //  |-- Reponse Event
+            //      |-- ChannelID
+            //          |-- Message that was sent
+            //              |-- EVENT_TX
             return null;
         }
     }
