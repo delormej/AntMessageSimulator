@@ -30,7 +30,7 @@ namespace AntMessageSimulator.Tests
             if (File.Exists(destination))
                 File.Delete(destination);
 
-            List<DeviceSession> sessions = PowerMeterSimulator.ParseDeviceLog(source);
+            List<DeviceSession> sessions = DeviceLogParser.Parse(source);
 
             // Use the last session to generate a script.
             using (AutoAntsScriptGenerator generator =

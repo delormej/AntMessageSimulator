@@ -13,42 +13,13 @@ namespace AntMessageSimulator
 
     public class PowerMeterSimulator
     {
-        /// <summary>
-        /// At the end of this method, this class will be populated with 0 or more
-        /// Ride objects.
-        /// </summary>
-        /// <param name="path"></param>
-        public static List<DeviceSession> ParseDeviceLog(string path)
+        static void PrintWelcome()
         {
-            List<DeviceSession> sessions = new List<DeviceSession>();
-            DeviceSession currentSession = null;
-
-            // Open the file.
-            foreach (var line in File.ReadLines(path))
-            {
-                Message message = Message.MessageFromLine(line);
-                if (currentSession == null)
-                {
-                    currentSession = DeviceSession.GetDeviceSession(message);
-                    if (currentSession != null)
-                        sessions.Add(currentSession);
-                }
-                else
-                {
-                    if (currentSession.Messages.Count > 0 && message.Timestamp < 
-                        currentSession.Messages[currentSession.Messages.Count - 1].Timestamp)
-                    {
-                        // Start a new session.
-                        currentSession = null;
-                    }
-                    else
-                    {
-                        currentSession.Messages.Add(message);
-                    }
-                }                
-            }
-
-            return sessions;
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fvi.FileVersion;
+            Console.WriteLine("ANT+ Message Simulator version: " + version);
+            Console.WriteLine();
         }
 
         static void PrintUsage()
@@ -58,15 +29,6 @@ namespace AntMessageSimulator
     Example:  simulator.exe ""C:\Program Files (x86)\Zwift\Device0.txt"" 1 Device0.ants
 ";
             Console.WriteLine(USAGE);
-        }
-
-        static void PrintWelcome()
-        {
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-            string version = fvi.FileVersion;
-            Console.WriteLine("ANT+ Message Simulator version: " + version);
-            Console.WriteLine();
         }
 
         static void PrintError(string message)
@@ -115,8 +77,8 @@ namespace AntMessageSimulator
             }
 
             // TODO: be able to list the # of sessions and the device Id.
-
-            List<DeviceSession> sessions = ParseDeviceLog(source);
+            
+            List<DeviceSession> sessions = DeviceLogParser.Parse(source);
 
             // Use the last session to generate a script.
             using (AutoAntsScriptGenerator generator =

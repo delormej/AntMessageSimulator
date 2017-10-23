@@ -1,10 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AntMessageSimulator;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AntMessageSimulator.Tests
 {
@@ -15,7 +10,7 @@ namespace AntMessageSimulator.Tests
         public void ParseDeviceLogTest()
         {
             string path = @"..\..\..\AntMessageSimulatorTests\Device0.txt";
-            List<DeviceSession> sessions = PowerMeterSimulator.ParseDeviceLog(path);
+            List<DeviceSession> sessions = DeviceLogParser.Parse(path);
             Assert.IsTrue(sessions.Count > 7);
         }
     }

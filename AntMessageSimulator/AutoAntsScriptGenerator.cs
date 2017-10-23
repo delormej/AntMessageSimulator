@@ -66,6 +66,8 @@ r! [40][{0:X2}][41][00]
             writer.Flush();
 
             // IMPORTANT: do not close the writer as that will dispose of the stream.
+            // This class implements IDisposable, so the caller should Dispose of the 
+            // instance when done reading.
 
             stream.Position = 0;
             return stream;
