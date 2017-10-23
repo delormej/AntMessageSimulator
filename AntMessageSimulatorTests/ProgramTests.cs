@@ -10,7 +10,8 @@ namespace AntMessageSimulator.Tests
         public void ParseDeviceLogTest()
         {
             string path = @"..\..\..\AntMessageSimulatorTests\Device0.txt";
-            List<DeviceSession> sessions = DeviceLogParser.Parse(path);
+            DeviceLogParser parser = new DeviceLogParser();
+            List<DeviceSession> sessions = parser.Parse(path);
             Assert.IsTrue(sessions.Count > 7);
         }
     }

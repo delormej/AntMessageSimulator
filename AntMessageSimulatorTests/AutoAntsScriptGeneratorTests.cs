@@ -30,7 +30,8 @@ namespace AntMessageSimulator.Tests
             if (File.Exists(destination))
                 File.Delete(destination);
 
-            List<DeviceSession> sessions = DeviceLogParser.Parse(source);
+            DeviceLogParser parser = new DeviceLogParser();
+            List<DeviceSession> sessions = parser.Parse(source);
 
             // Use the last session to generate a script.
             using (AutoAntsScriptGenerator generator =

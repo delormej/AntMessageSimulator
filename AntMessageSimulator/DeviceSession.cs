@@ -12,6 +12,7 @@ namespace AntMessageSimulator
         const byte DEVICE_ID_MSB_INDEX = 5;
         const byte DEVICE_ID_LSB_INDEX = 4;
         const byte POWER_METER_DEVICE_TYPE = 0x0B;
+        const byte FEC_DEVICE_TYPE = 0x11;
 
         public ushort DeviceId { get; private set; }
         public byte ChannelId { get; private set; }
@@ -32,6 +33,10 @@ namespace AntMessageSimulator
 
                     session = new DeviceSession((byte)message.ChannelId, deviceId);
                 }
+                //else if (message.Bytes[DEVICE_TYPE_INDEX] == FEC_DEVICE_TYPE)
+                //{
+
+                //}
             }
 
             return session;

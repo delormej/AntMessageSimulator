@@ -6,16 +6,22 @@ namespace AntMessageSimulator
 {
     public class DeviceLogParser
     {
+        List<DeviceSession> sessions;
+        DeviceSession currentSession;
+
+        private bool IsTimestampRollover(float timestamp)
+        {
+            return currentSession.Messages.Count > 0 &&
+                timestamp < currentSession.Messages[currentSession.Messages.Count - 1].Timestamp;
+        }
+
         /// <summary>
         /// At the end of this method, this class will be populated with 0 or more
         /// Ride objects.
         /// </summary>
         /// <param name="path"></param>
-        public static List<DeviceSession> Parse(string path)
+        public List<DeviceSession> Parse(string path)
         {
-            List<DeviceSession> sessions = new List<DeviceSession>();
-            DeviceSession currentSession = null;
-
             // Open the file.
             foreach (var line in File.ReadLines(path))
             {
@@ -28,20 +34,22 @@ namespace AntMessageSimulator
                 }
                 else
                 {
-                    if (currentSession.Messages.Count > 0 && message.Timestamp <
-                        currentSession.Messages[currentSession.Messages.Count - 1].Timestamp)
-                    {
+                    if (IsTimestampRollover(message.Timestamp))
                         // Start a new session.
                         currentSession = null;
-                    }
                     else
-                    {
+                        // Add message to the session.
                         currentSession.Messages.Add(message);
-                    }
                 }
             }
 
             return sessions;
+        }
+
+        public DeviceLogParser()
+        {
+            sessions = new List<DeviceSession>();
+            currentSession = null;
         }
     }
 }
