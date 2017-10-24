@@ -50,7 +50,7 @@ namespace AntMessageSimulator
             Console.WriteLine(message);
         }
 
-        private void GetSessionsFromFile(string source)
+        private void GetSessionsFromFile()
         {
             DeviceLogParser parser = new DeviceLogParser();
             sessions = parser.Parse(source);
@@ -133,27 +133,31 @@ namespace AntMessageSimulator
                 Console.WriteLine(session);
         }
 
-        private void Execute()
+        private void GenerateAutoAntsScript()
         {
             string script = "";
-
-            GetSessionsFromFile(source);
             DeviceSession session = GetSingleSession();
 
-            if (destination != null)
+            using (AutoAntsScriptGenerator generator = new AutoAntsScriptGenerator(session))
             {
-                using (AutoAntsScriptGenerator generator = new AutoAntsScriptGenerator(session))
-                {
-                    Stream stream = generator.CreateScriptStream();
-                    TextReader reader = new StreamReader(stream);
+                Stream stream = generator.CreateScriptStream();
+                TextReader reader = new StreamReader(stream);
 
-                    script = reader.ReadToEnd();
-                }
-
-                PrintInfo("Writing output to file: " + destination);
-                // Write the file out.
-                File.WriteAllText(destination, script);
+                script = reader.ReadToEnd();
             }
+
+            PrintInfo("Writing output to file: " + destination);
+            // Write the file out.
+            File.WriteAllText(destination, script);
+        }
+
+        private void Execute()
+        {
+            GetSessionsFromFile();
+
+            if (destination != null)
+                GenerateAutoAntsScript();
+
             PrintSummary();
         }
 
@@ -169,6 +173,14 @@ namespace AntMessageSimulator
 
         static void Main(string[] args)
         {
+            /*
+             * TODO: This program needs to answer a couple of additional questions:
+             *  - Was there an FE-C (rollers) device connected, if so - ID and channel
+             *  - What was the total duration of the session
+             *  - Generate seperate file for times and speed (CSV?) as reported by rollers
+             *  - Include commands sent FROM Zwift/app to set resistance in the .ants script
+             */
+
             PrintWelcome();
             try
             {
