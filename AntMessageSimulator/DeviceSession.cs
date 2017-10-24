@@ -22,6 +22,12 @@ namespace AntMessageSimulator
             get { return messages; }
         }
 
+        public bool IsValid()
+        {
+            // Valid sessions must have a power meter OR FE-C associated.
+            return (PowerMeterId > 0 || FecId > 0);
+        }
+
         public override string ToString()
         {
             const string TO_STRING_TEMPLATE = "DeviceId: {0}, ChannelId: {1}, FecId: {2}, " + 

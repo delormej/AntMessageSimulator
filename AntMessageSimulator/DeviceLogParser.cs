@@ -19,12 +19,10 @@ namespace AntMessageSimulator
                 return false;
         }
 
-        private void AddSession()
+        private void AddNewSession()
         {
-            bool isValidSession = (currentSession.PowerMeterId > 0);
-
             // Don't save invalid sessions.
-            if (!isValidSession)
+            if (!currentSession.IsValid())
                 sessions.Remove(currentSession);
 
             currentSession = new DeviceSession();
@@ -34,7 +32,7 @@ namespace AntMessageSimulator
         private void AddMessageToSession(Message message)
         {
             if (IsTimestampRollover(message.Timestamp))
-                AddSession();
+                AddNewSession();
             else
                 currentSession.AddMessage(message);
         }
@@ -57,8 +55,8 @@ namespace AntMessageSimulator
 
         public DeviceLogParser()
         {
-            currentSession = new DeviceSession();
             sessions = new List<DeviceSession>();
+            currentSession = new DeviceSession();
             sessions.Add(currentSession);
         }
     }
