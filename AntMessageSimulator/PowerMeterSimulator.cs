@@ -133,10 +133,9 @@ namespace AntMessageSimulator
                 Console.WriteLine(session);
         }
 
-        private void GenerateAutoAntsScript()
+        private void GenerateAutoAntsScript(DeviceSession session, string outputFilename)
         {
             string script = "";
-            DeviceSession session = GetSingleSession();
 
             using (AutoAntsScriptGenerator generator = new AutoAntsScriptGenerator(session))
             {
@@ -146,9 +145,18 @@ namespace AntMessageSimulator
                 script = reader.ReadToEnd();
             }
 
-            PrintInfo("Writing output to file: " + destination);
+            PrintInfo("Writing output to file: " + outputFilename);
             // Write the file out.
-            File.WriteAllText(destination, script);
+            File.WriteAllText(outputFilename, script);
+        }
+
+        private string AppendToDestinationFilename(string value)
+        {
+            string name = Path.GetFileNameWithoutExtension(destination) + "-" + value;
+            string newDestination = destination.Replace(Path.GetFileName(destination),
+                name + Path.GetExtension(destination));
+
+            return newDestination;
         }
 
         private void Execute()
@@ -156,7 +164,13 @@ namespace AntMessageSimulator
             GetSessionsFromFile();
 
             if (destination != null)
-                GenerateAutoAntsScript();
+            {
+                for (int i = 0; i < sessions.Count; i++)
+                {
+                    GenerateAutoAntsScript(sessions[i],
+                        AppendToDestinationFilename(i.ToString()));
+                }
+            }
 
             PrintSummary();
         }
@@ -175,7 +189,6 @@ namespace AntMessageSimulator
         {
             /*
              * TODO: This program needs to answer a couple of additional questions:
-             *  - Was there an FE-C (rollers) device connected, if so - ID and channel
              *  - What was the total duration of the session
              *  - Generate seperate file for times and speed (CSV?) as reported by rollers
              *  - Include commands sent FROM Zwift/app to set resistance in the .ants script
