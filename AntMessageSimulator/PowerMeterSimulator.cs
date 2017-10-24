@@ -54,6 +54,9 @@ namespace AntMessageSimulator
         {
             DeviceLogParser parser = new DeviceLogParser();
             sessions = parser.Parse(source);
+
+            if (sessions.Count == 0)
+                throw new Exception("No sessions parsed from source: " + source);
         }
 
         private DeviceSession GetSingleSession()
@@ -61,7 +64,6 @@ namespace AntMessageSimulator
             if (sessionNumber == 0)
                 return GetLastSession();
             else
-            {
                 try
                 {
                     return sessions[sessionNumber];
@@ -70,24 +72,22 @@ namespace AntMessageSimulator
                 {
                     throw new Exception("Invalid session number.", exception);
                 }
-             }
         }
 
         DeviceSession GetLastSession()
         {
+            if (sessions.Count == 0)
+                throw new Exception("No sessions found.");
+
             return sessions[sessions.Count - 1];
         }
 
         private void ValidateSource(string path)
         {
             if (!File.Exists(path))
-            {
                 throw new FileNotFoundException("Missing source file.", path);
-            }
             else
-            {
                 source = path;
-            }
         }
 
         private void ValidateDestination(string value)

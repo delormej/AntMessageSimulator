@@ -8,34 +8,46 @@ namespace AntMessageSimulator
     /// </summary>
     public class DeviceSession
     {
-        #region String Constants
-        const byte DEVICE_TYPE_INDEX = 6;
-        const byte DEVICE_ID_MSB_INDEX = 5;
-        const byte DEVICE_ID_LSB_INDEX = 4;
-        const byte POWER_METER_DEVICE_TYPE = 0x0B;
-        const byte FEC_DEVICE_TYPE = 0x11;
-        #endregion
-
         private List<Message> messages;
 
-        public ushort EmotionId { get; private set; }
+        public ushort FecId { get; private set; }
+        public byte FecChannelId { get; private set; }
         public ushort PowerMeterId { get; private set; }
-        public byte ChannelId { get; private set; }
-        
+        public byte PowerMeterChannelId { get; private set; }
+
         public IEnumerable<Message> Messages
         {
+            // Do not allow changes to the underlying collection (List<T>), so 
+            // just expose IEnumerable<T> to allow interation.
             get { return messages; }
         }
 
         public override string ToString()
         {
-            const string TO_STRING_TEMPLATE = "DeviceId: {0}, ChannelId: {1}, Messages: {2}";
-            return string.Format(TO_STRING_TEMPLATE, PowerMeterId, ChannelId, messages.Count);
+            const string TO_STRING_TEMPLATE = "DeviceId: {0}, ChannelId: {1}, FecId: {2}, " + 
+                "FecChannelId: {3}, Messages: {4}";
+            return string.Format(TO_STRING_TEMPLATE, 
+                PowerMeterId, PowerMeterChannelId, FecId, FecChannelId, messages.Count);
         }
 
         public void AddMessage(Message message)
         {
-            // Ignore the message if it's not a channelid message and we don't yet have a ChannelId yet
+            /*
+             * It seems like this should be more extensible, without needing to change this
+             * method.  Should we be raising an event here? Clearly other events will be interesting.
+             */
+
+            if (PowerMeterId == 0 && message.IsPowerMeterIdEvent())
+            {
+                PowerMeterChannelId = (byte)message.GetChannelId();
+                PowerMeterId = message.GetDeviceId();
+            }
+            else if (FecId == 0 && message.IsFecIdEvent())
+            {
+                FecChannelId = (byte)message.GetChannelId();
+                FecId = message.GetDeviceId();
+            }
+
             messages.Add(message);
         }
 
@@ -46,36 +58,10 @@ namespace AntMessageSimulator
             else
                 return null;
         }
-
-        public static DeviceSession GetDeviceSession(Message message)
+        
+        public DeviceSession()
         {
-            DeviceSession session = null;
-
-            // Start a session when we see a set channel id for a power meter type.
-            if (message.ChannelId != null && message.EventId == (byte)
-                    ANT_Managed_Library.ANT_ReferenceLibrary.ANTMessageID.CHANNEL_ID_0x51)
-            {
-                if (message.Bytes[DEVICE_TYPE_INDEX] == POWER_METER_DEVICE_TYPE)
-                {
-                    ushort deviceId = (ushort)(message.Bytes[DEVICE_ID_MSB_INDEX] << 8 |
-                        message.Bytes[DEVICE_ID_LSB_INDEX]);
-
-                    session = new DeviceSession((byte)message.ChannelId, deviceId);
-                }
-                //else if (message.Bytes[DEVICE_TYPE_INDEX] == FEC_DEVICE_TYPE)
-                //{
-
-                //}
-            }
-
-            return session;
-        }
-
-        private DeviceSession(byte channelId, ushort deviceId)
-        {
-            this.ChannelId = channelId;
-            this.PowerMeterId = deviceId;
             messages = new List<Message>();
-        }
+        }            
     }
 }

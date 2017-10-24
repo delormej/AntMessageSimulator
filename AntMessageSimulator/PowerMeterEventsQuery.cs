@@ -28,8 +28,8 @@ namespace AntMessageSimulator
             IEnumerable<Message> messages =
                 from message in session.Messages
                 where message.IsBroadcastEvent() &&
-                    message.ChannelId == session.ChannelId &&
-                    message.MessageId < 0xF0    // Ignore manufacturer specific pages.
+                    message.GetChannelId() == session.PowerMeterChannelId &&
+                    message.GetMessageId() < 0xF0    // Ignore manufacturer specific pages.
                 select message;
 
             return messages;

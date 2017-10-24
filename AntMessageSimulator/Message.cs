@@ -19,11 +19,10 @@ namespace AntMessageSimulator
     /// </summary>
     public class Message
     {
-        // TODO: not sure if it's a good practice to expose these or if there 
-        // is a better way of achieving the end goal here...
+        #region String Constants
         public const byte EVENT_ID_POSITION = 2;
-        public const byte CHANNEL_ID_POSITION = 3;
-        public const byte MESSAGE_ID_POSTITION = 4;
+        const byte CHANNEL_ID_POSITION = 3;
+        const byte MESSAGE_ID_POSTITION = 4;
 
         const byte MAX_PAYLOAD_LENGTH = 8;
         const byte MESSAGE_HEADER_LENGTH = 4;
@@ -31,6 +30,13 @@ namespace AntMessageSimulator
         const byte MESSAGE_LENGTH_POSITION = 1;
         const byte TRANSMIT_TYPE_START_INDEX = 24;
         const byte TRANSMIT_TYPE_LENGTH = 2;
+
+        const byte DEVICE_TYPE_INDEX = 6;
+        const byte DEVICE_ID_MSB_INDEX = 5;
+        const byte DEVICE_ID_LSB_INDEX = 4;
+        const byte POWER_METER_DEVICE_TYPE = 0x0B;
+        const byte FEC_DEVICE_TYPE = 0x11;
+        #endregion
 
         private float timestamp;
         private byte[] bytes;
@@ -57,29 +63,49 @@ namespace AntMessageSimulator
         /// <summary>
         /// 0-8 Channel Id the message was sent on.
         /// </summary>
-        public byte? ChannelId
+        public byte? GetChannelId()
         {
-            get
-            {
-                if (IsParseableEvent())
-                    return this.bytes[CHANNEL_ID_POSITION];
-                else
-                    return null;
-            }
+            if (IsParseableEvent())
+                return this.bytes[CHANNEL_ID_POSITION];
+            else
+                return null;
         }
 
         /// <summary>
         /// The specific command of the payload.
         /// </summary>
-        public byte? MessageId
+        public byte? GetMessageId()
         {
-            get
-            {
-                if (IsBroadcastEvent())
-                    return this.bytes[MESSAGE_ID_POSTITION];
-                else
-                    return null;
-            }
+            if (IsBroadcastEvent())
+                return this.bytes[MESSAGE_ID_POSTITION];
+            else
+                return null;
+        }
+
+        public ushort GetDeviceId()
+        {
+            if (IsChannelIdEvent())
+                return (ushort)(Bytes[DEVICE_ID_MSB_INDEX] << 8 |
+                            Bytes[DEVICE_ID_LSB_INDEX]);
+            else
+                return 0;
+        }
+
+        public bool IsChannelIdEvent()
+        {
+            return EventId == (byte)ANT_Managed_Library.ANT_ReferenceLibrary.ANTMessageID.CHANNEL_ID_0x51;
+        }
+
+        public bool IsPowerMeterIdEvent()
+        {
+            return IsChannelIdEvent() && 
+                Bytes[DEVICE_TYPE_INDEX] == POWER_METER_DEVICE_TYPE;
+        }
+
+        public bool IsFecIdEvent()
+        {
+            return IsChannelIdEvent() &&
+                Bytes[DEVICE_TYPE_INDEX] == FEC_DEVICE_TYPE;
         }
 
         public byte[] Bytes { get { return this.bytes; } }

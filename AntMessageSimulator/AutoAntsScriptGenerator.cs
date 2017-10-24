@@ -77,8 +77,8 @@ r! [40][{0:X2}][41][00]
         {
             // Look for successful response.
             return string.Format("r [40][{0:X2}][{1:X2}][03]",
-                message.ChannelId,
-                message.MessageId);
+                message.GetChannelId(),
+                message.GetMessageId());
         }
 
         /// <summary>
@@ -117,14 +117,14 @@ r! [40][{0:X2}][41][00]
             byte deviceLsb = (byte)(session.PowerMeterId & 0xFF);
             byte deviceMsb = (byte)((session.PowerMeterId & 0xFF00) >> 8);
             writer.Write(CHANNEL_CONFIGURATION_BLOCK, 
-                session.ChannelId,
+                session.PowerMeterChannelId,
                 deviceLsb,
                 deviceMsb);
         }
 
         private void WriteChannelClose()
         {
-            writer.Write(CHANNEL_CLOSE_BLOCK, session.ChannelId);
+            writer.Write(CHANNEL_CLOSE_BLOCK, session.PowerMeterChannelId);
         }
 
         private void WriteBroadcastMessages()

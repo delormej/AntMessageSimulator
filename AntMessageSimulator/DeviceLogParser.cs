@@ -19,30 +19,24 @@ namespace AntMessageSimulator
                 return false;
         }
 
+        private void AddSession()
+        {
+            bool isValidSession = (currentSession.PowerMeterId > 0);
+
+            // Don't save invalid sessions.
+            if (!isValidSession)
+                sessions.Remove(currentSession);
+
+            currentSession = new DeviceSession();
+            sessions.Add(currentSession);
+        }
+
         private void AddMessageToSession(Message message)
         {
-            /* 
-             * A few things can happen here:
-             * 1) A new session gets generated.
-             * 2) A session can glean some state; device id, channel id, etc...
-             * 3) Needs to be extensible such that we can define new an interesting things we want from these messages
-             *      without changing this code.
-             */
-            if (currentSession == null)
-            {
-                currentSession = DeviceSession.GetDeviceSession(message);
-                if (currentSession != null)
-                    sessions.Add(currentSession);
-            }
+            if (IsTimestampRollover(message.Timestamp))
+                AddSession();
             else
-            {
-                if (IsTimestampRollover(message.Timestamp))
-                    // Start a new session.
-                    currentSession = null;
-                else
-                    // Add message to the session.
-                    currentSession.AddMessage(message);
-            }
+                currentSession.AddMessage(message);
         }
 
         /// <summary>
@@ -63,8 +57,9 @@ namespace AntMessageSimulator
 
         public DeviceLogParser()
         {
+            currentSession = new DeviceSession();
             sessions = new List<DeviceSession>();
-            currentSession = null;
+            sessions.Add(currentSession);
         }
     }
 }
