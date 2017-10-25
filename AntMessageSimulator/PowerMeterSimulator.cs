@@ -41,14 +41,21 @@ namespace AntMessageSimulator
 
         private static void PrintError(string message)
         {
+            ConsoleColor defaultColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("ERROR! " + message);
-            Console.WriteLine();
-            PrintUsage();
+            Console.ForegroundColor = defaultColor;
         }
 
         private static void PrintInfo(string message)
         {
-            Console.WriteLine(message);
+            /*
+             * TODO: This logic SHOULD NOT be in here... temporary hack.
+             */
+            if (message.Contains("ServoPosition = 800"))
+                PrintError(message);
+            else
+                Console.WriteLine(message);
         }
 
         private void GetSessionsFromFile()
@@ -252,6 +259,7 @@ namespace AntMessageSimulator
             catch (ApplicationException e)
             {
                 PrintError(e.Message);
+                PrintUsage();
             }
         }
 
