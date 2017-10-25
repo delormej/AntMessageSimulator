@@ -9,17 +9,6 @@ using System.Collections;
  */
 namespace AntMessageSimulator
 {
-    public class ApplicationException : Exception
-    {
-        public ApplicationException(string message) : base(message)
-        {
-        }
-
-        public ApplicationException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-    }
-
     // The act of parsing the log should implement the visitor pattern, such that other
     // operations, i.e. speed events or FE-C errors could be gleaned from this log.
 
@@ -141,6 +130,14 @@ namespace AntMessageSimulator
                 Console.WriteLine("\t{0}: {1}", enumerator.Index + 1, session);
         }
 
+        private void PrintIrtExtraInfoCommands(DeviceSession session)
+        {
+            PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
+            var events = query.FindAllIrtExtraInfoEvents();
+            foreach (var info in events)
+                PrintInfo(info.ToString());
+        }
+
         private void PrintFecCommand(Message message)
         {
             PrintInfo(message.GetPayloadAsString());
@@ -150,6 +147,7 @@ namespace AntMessageSimulator
         {
             PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
             var messages = query.FindAllFecResistanceCommands();
+
 
             foreach (Message message in messages)
                 PrintFecCommand(message);
@@ -161,7 +159,8 @@ namespace AntMessageSimulator
             foreach (var session in enumerator)
             {
                 if (session.FecId > 0)
-                    PrintFecCommands(session);
+                    //PrintFecCommands(session);
+                    PrintIrtExtraInfoCommands(session);
             }
         }
 
@@ -221,7 +220,7 @@ namespace AntMessageSimulator
                 WriteAutoAntsFiles();
 
             PrintSummary();
-            //PrintAllFecCommands();
+            PrintAllFecCommands();
         }
 
         /// <summary>
@@ -311,6 +310,16 @@ namespace AntMessageSimulator
             public IEnumerator<DeviceSession> GetEnumerator() { return this; }
             IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
             public void Dispose() { }
+        }
+    }
+    public class ApplicationException : Exception
+    {
+        public ApplicationException(string message) : base(message)
+        {
+        }
+
+        public ApplicationException(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }

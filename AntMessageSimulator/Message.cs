@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using ANT_Managed_Library;
 
 namespace AntMessageSimulator
 {
@@ -80,7 +81,7 @@ namespace AntMessageSimulator
         /// </summary>
         public byte GetMessageId()
         {
-            if (IsBroadcastEvent())
+            if (IsDataMessage())
                 return this.bytes[MESSAGE_ID_POSTITION];
             else
                 return 0;
@@ -97,7 +98,7 @@ namespace AntMessageSimulator
 
         public bool IsChannelIdEvent()
         {
-            return EventId == (byte)ANT_Managed_Library.ANT_ReferenceLibrary.ANTMessageID.CHANNEL_ID_0x51;
+            return EventId == (byte)ANT_ReferenceLibrary.ANTMessageID.CHANNEL_ID_0x51;
         }
         
         public bool IsTransmit()
@@ -145,10 +146,17 @@ namespace AntMessageSimulator
             return (this.EventId != SET_NETWORK_KEY_EVENT);
         }
 
-        public bool IsBroadcastEvent()
+        public bool IsDataMessage()
         {
-            return (this.EventId ==
-                (byte)ANT_Managed_Library.ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E);
+            switch ((ANT_ReferenceLibrary.ANTMessageID)this.EventId)
+            {
+                case ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E:
+                case ANT_ReferenceLibrary.ANTMessageID.ACKNOWLEDGED_DATA_0x4F:
+                case ANT_ReferenceLibrary.ANTMessageID.BURST_DATA_0x50:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         /// <summary>
