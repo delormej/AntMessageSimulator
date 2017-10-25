@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="AutoAntsScriptGenerator.cs" />
     <Compile Include="DeviceLogParser.cs" />
+    <Compile Include="FecCommandMessage.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="DeviceSession.cs" />
     <Compile Include="PowerMeterEventsQuery.cs" />

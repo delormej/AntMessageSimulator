@@ -97,11 +97,7 @@ r! [40][{0:X2}][41][00]
             StringBuilder script = new StringBuilder();
 
             script.Append("w ");
-
-            for (int i = Message.EVENT_ID_POSITION; i < message.PayloadLength; i++)
-                script.AppendFormat("[{0:X2}]", message.Bytes[i]);
-
-            script.AppendLine();
+            script.AppendLine(message.GetPayloadAsString());
             script.AppendLine(CreateResponseScriptLine(message));
 
             return script.ToString();

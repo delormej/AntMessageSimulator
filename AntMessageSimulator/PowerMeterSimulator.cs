@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Collections;
 
 /*
  * This program takes an ANT device log and simulates the power meter by opening an ANT+
@@ -8,6 +9,17 @@ using System.Collections.Generic;
  */
 namespace AntMessageSimulator
 {
+    public class ApplicationException : Exception
+    {
+        public ApplicationException(string message) : base(message)
+        {
+        }
+
+        public ApplicationException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+    }
+
     // The act of parsing the log should implement the visitor pattern, such that other
     // operations, i.e. speed events or FE-C errors could be gleaned from this log.
 
@@ -56,28 +68,21 @@ namespace AntMessageSimulator
             sessions = parser.Parse(source);
 
             if (sessions.Count == 0)
-                throw new Exception("No sessions parsed from source: " + source);
+                throw new ApplicationException("No sessions parsed from source: " + source);
         }
 
-        private DeviceSession GetSingleSession()
+        private DeviceSession GetSession()
         {
-            if (sessionNumber == 0)
-                return GetLastSession();
-            else
-                try
-                {
-                    return sessions[sessionNumber];
-                }
-                catch (IndexOutOfRangeException exception)
-                {
-                    throw new Exception("Invalid session number.", exception);
-                }
+            if (sessions.Count < sessionNumber)
+                throw new ApplicationException("Invalid session number.");
+
+            return sessions[sessionNumber - 1];
         }
 
         DeviceSession GetLastSession()
         {
             if (sessions.Count == 0)
-                throw new Exception("No sessions found.");
+                throw new ApplicationException("No sessions found.");
 
             return sessions[sessions.Count - 1];
         }
@@ -133,7 +138,31 @@ namespace AntMessageSimulator
                 Console.WriteLine(session);
         }
 
-        private void GenerateAutoAntsScript(DeviceSession session, string outputFilename)
+        private void PrintFecCommand(Message message)
+        {
+            PrintInfo(message.GetPayloadAsString());
+        }
+
+        private void PrintFecCommands(DeviceSession session)
+        {
+            PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
+            var messages = query.FindAllFecResistanceCommands();
+
+            foreach (Message message in messages)
+                PrintFecCommand(message);
+        }
+
+        private void PrintAllFecCommands()
+        {
+            SessionEnumerator enumerator = new SessionEnumerator(this);
+            foreach (var session in enumerator)
+            {
+                if (session.FecId > 0)
+                    PrintFecCommands(session);
+            }
+        }
+
+        private string GenerateAutoAntsScript(DeviceSession session)
         {
             string script = "";
 
@@ -145,9 +174,7 @@ namespace AntMessageSimulator
                 script = reader.ReadToEnd();
             }
 
-            PrintInfo("Writing output to file: " + outputFilename);
-            // Write the file out.
-            File.WriteAllText(outputFilename, script);
+            return script;
         }
 
         private string AppendToDestinationFilename(string value)
@@ -159,20 +186,39 @@ namespace AntMessageSimulator
             return newDestination;
         }
 
+        private string GetDestinationFilename(int index, int count)
+        {
+            string filename;
+            if (count > 1)
+                filename = AppendToDestinationFilename(index.ToString());
+            else
+                filename = destination;
+
+            return filename;
+        }
+
+        private void WriteAutoAntsFiles()
+        {
+            SessionEnumerator enumerator = new SessionEnumerator(this);
+            foreach (var session in enumerator)
+            {
+                string filename = GetDestinationFilename(enumerator.Index, enumerator.Count);
+                string script = GenerateAutoAntsScript(session);
+
+                PrintInfo("Writing output to file: " + filename);
+                File.WriteAllText(filename, script);
+            }
+        }
+
         private void Execute()
         {
             GetSessionsFromFile();
 
             if (destination != null)
-            {
-                for (int i = 0; i < sessions.Count; i++)
-                {
-                    GenerateAutoAntsScript(sessions[i],
-                        AppendToDestinationFilename(i.ToString()));
-                }
-            }
+                WriteAutoAntsFiles();
 
             PrintSummary();
+            PrintAllFecCommands();
         }
 
         /// <summary>
@@ -200,9 +246,71 @@ namespace AntMessageSimulator
                 PowerMeterSimulator simulator = new PowerMeterSimulator(args);
                 simulator.Execute();
             }
-            catch (Exception e)
+            catch (ApplicationException e)
             {
                 PrintError(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// This nestd helper class enacapsulates the state of iterating through the 
+        /// appropriate sessions.
+        /// </summary>
+        private class SessionEnumerator : IEnumerator<AntMessageSimulator.DeviceSession>, IEnumerable<DeviceSession>
+        {
+            int i, count;
+            PowerMeterSimulator parent;
+
+            public SessionEnumerator(PowerMeterSimulator parent)
+            {
+                this.parent = parent;
+                Reset();
+            }
+
+            public int Count { get { return count; } }
+
+            public int Index { get { return i; } }
+
+            DeviceSession IEnumerator<DeviceSession>.Current => parent.sessions[i];
+
+            object IEnumerator.Current => throw new NotImplementedException();
+
+            public void Dispose()
+            { }
+
+            public IEnumerator<DeviceSession> GetEnumerator()
+            {
+                return this;
+            }
+
+            public bool MoveNext()
+            {
+                if (++i < count)
+                    return true;
+                else
+                    return false;
+            }
+
+            public void Reset()
+            {
+                if (parent.sessionNumber > 0)
+                {
+                    i = parent.sessionNumber - 1;
+                    count = 1;
+
+                    if (i > parent.sessions.Count)
+                        throw new ApplicationException("Invalid session number: " + parent.sessionNumber);
+                }
+                else
+                {
+                    i = 0;
+                    count = parent.sessions.Count;
+                }
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                throw new NotImplementedException();
             }
         }
     }

@@ -23,6 +23,15 @@ namespace AntMessageSimulator
         //    return null;
         //}
 
+        public IEnumerable<Message> FindAllFecResistanceCommands()
+        {
+            var messages = from message in session.Messages
+                           where session.FecId > 0 && session.FecChannelId == message.GetChannelId() &&
+                               message.IsTransmit() && ((message.GetMessageId() ^ 0x48) < 4)
+                           select message;
+            return messages;
+        }
+
         public IEnumerable<Message> FindAllPowerMeterBroadcastEvents()
         {
             IEnumerable<Message> messages =

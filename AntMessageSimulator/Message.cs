@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace AntMessageSimulator
 {
-    public class MessageException : Exception
+    public class MessageException : ApplicationException
     {
         public MessageException(string message) : base(message)
         {
@@ -20,7 +21,7 @@ namespace AntMessageSimulator
     public class Message
     {
         #region String Constants
-        public const byte EVENT_ID_POSITION = 2;
+        const byte EVENT_ID_POSITION = 2;
         const byte CHANNEL_ID_POSITION = 3;
         const byte MESSAGE_ID_POSTITION = 4;
 
@@ -36,6 +37,9 @@ namespace AntMessageSimulator
         const byte DEVICE_ID_LSB_INDEX = 4;
         const byte POWER_METER_DEVICE_TYPE = 0x0B;
         const byte FEC_DEVICE_TYPE = 0x11;
+
+        const string TRANSMIT_TX = "Tx";
+        const string TRANSMIT_RX = "Rx";
         #endregion
 
         private float timestamp;
@@ -74,12 +78,12 @@ namespace AntMessageSimulator
         /// <summary>
         /// The specific command of the payload.
         /// </summary>
-        public byte? GetMessageId()
+        public byte GetMessageId()
         {
             if (IsBroadcastEvent())
                 return this.bytes[MESSAGE_ID_POSTITION];
             else
-                return null;
+                return 0;
         }
 
         public ushort GetDeviceId()
@@ -94,6 +98,11 @@ namespace AntMessageSimulator
         public bool IsChannelIdEvent()
         {
             return EventId == (byte)ANT_Managed_Library.ANT_ReferenceLibrary.ANTMessageID.CHANNEL_ID_0x51;
+        }
+        
+        public bool IsTransmit()
+        {
+            return transmitType == TRANSMIT_TX;
         }
 
         public bool IsPowerMeterIdEvent()
@@ -112,6 +121,14 @@ namespace AntMessageSimulator
 
         public byte PayloadLength {  get { return this.payloadLength; } }
 
+        public string GetPayloadAsString()
+        {
+            StringBuilder payload = new StringBuilder();
+            for (int i = EVENT_ID_POSITION; i < PayloadLength; i++)
+                payload.AppendFormat("[{0:X2}]", Bytes[i]);
+
+            return payload.ToString();
+        }
 
         /// <summary>
         /// Parses a single line from an ANT device log and represents as a Message object.
