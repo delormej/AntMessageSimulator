@@ -55,6 +55,31 @@ namespace AntMessageSimulator
             return data;
         }
 
+        private static float DecodeGrade(Message message)
+        {
+            ushort value = (ushort)(message.Bytes[5 + 4] | (message.Bytes[6 + 4] << 8));
+            value ^= 1 << 15;
+            float grade = value / 32768.0f;
+
+            return grade;
+        }
+
+        public static object GetTrackResistanceData(Message message)
+        {
+            if (message.GetMessageId() != 0x33)
+                throw new ApplicationException("Not a valid Track Resistance data message.");
+
+            var data = new
+            {
+                Timestamp = message.Timestamp,
+                Grade = DecodeGrade(message),
+                CoEff = message.Bytes[7 + 4]
+            
+            };
+
+            return data;
+        }
+
         public static object GetFecData(Message message)
         {
             object data = null;
@@ -70,6 +95,9 @@ namespace AntMessageSimulator
                     break;
                 case 0x10:
                     data = GetGeneralFeData(message);
+                    break;
+                case 0x33:
+                    data = GetTrackResistanceData(message);
                     break;
                 default:
                     data = null;
