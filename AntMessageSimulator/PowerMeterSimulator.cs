@@ -134,8 +134,11 @@ namespace AntMessageSimulator
         private void PrintSummary()
         {
             Console.WriteLine(string.Format("File contained {0} session(s).", sessions.Count));
-            foreach (var session in sessions)
-                Console.WriteLine(session);
+            Console.WriteLine("Working on these sessions:");
+
+            SessionEnumerator enumerator = new SessionEnumerator(this);
+            foreach (var session in enumerator)
+                Console.WriteLine("\t{0}: {1}", enumerator.Index + 1, session);
         }
 
         private void PrintFecCommand(Message message)
@@ -218,7 +221,7 @@ namespace AntMessageSimulator
                 WriteAutoAntsFiles();
 
             PrintSummary();
-            PrintAllFecCommands();
+            //PrintAllFecCommands();
         }
 
         /// <summary>
@@ -258,7 +261,8 @@ namespace AntMessageSimulator
         /// </summary>
         private class SessionEnumerator : IEnumerator<AntMessageSimulator.DeviceSession>, IEnumerable<DeviceSession>
         {
-            int i, count;
+            int index, count;
+            bool awaitingFirstMove;
             PowerMeterSimulator parent;
 
             public SessionEnumerator(PowerMeterSimulator parent)
@@ -268,24 +272,16 @@ namespace AntMessageSimulator
             }
 
             public int Count { get { return count; } }
-
-            public int Index { get { return i; } }
-
-            DeviceSession IEnumerator<DeviceSession>.Current => parent.sessions[i];
-
-            object IEnumerator.Current => throw new NotImplementedException();
-
-            public void Dispose()
-            { }
-
-            public IEnumerator<DeviceSession> GetEnumerator()
-            {
-                return this;
-            }
+            public int Index { get { return index; } }
 
             public bool MoveNext()
             {
-                if (++i < count)
+                if (awaitingFirstMove)
+                {
+                    awaitingFirstMove = false;
+                    return true;
+                }
+                if (++index < count)
                     return true;
                 else
                     return false;
@@ -295,23 +291,26 @@ namespace AntMessageSimulator
             {
                 if (parent.sessionNumber > 0)
                 {
-                    i = parent.sessionNumber - 1;
+                    index = parent.sessionNumber - 1;
                     count = 1;
 
-                    if (i > parent.sessions.Count)
+                    if (index >= parent.sessions.Count)
                         throw new ApplicationException("Invalid session number: " + parent.sessionNumber);
                 }
                 else
                 {
-                    i = 0;
+                    index = 0;
                     count = parent.sessions.Count;
                 }
+
+                awaitingFirstMove = true;
             }
 
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                throw new NotImplementedException();
-            }
+            DeviceSession IEnumerator<DeviceSession>.Current => parent.sessions[index];
+            object IEnumerator.Current => throw new NotImplementedException();
+            public IEnumerator<DeviceSession> GetEnumerator() { return this; }
+            IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
+            public void Dispose() { }
         }
     }
 }
