@@ -27,8 +27,8 @@ namespace AntMessageSimulator
         {
             var messages = from message in session.Messages
                            where session.FecId > 0 && session.FecChannelId == message.GetChannelId() &&
-                               message.GetMessageId() == 0xF1
-                           select GetIrtInfoFromMessage(message);
+                               message.GetMessageId() > 0
+                           select FecMessage.GetFecData(message);
 
             return messages;
         }
@@ -57,20 +57,6 @@ namespace AntMessageSimulator
                 select message;
 
             return messages;
-        }
-
-        private object GetIrtInfoFromMessage(Message message)
-        {
-            var irtExtraInfo = new
-            {
-                Timestamp = message.Timestamp,
-                ServoPosition = message.Bytes[1+4] | (message.Bytes[2+4] << 8),
-                Target = message.Bytes[3+4] | (message.Bytes[4+4] << 8),
-                FlyWheel = message.Bytes[5+4] | (message.Bytes[6+4] << 8),
-                PowerMeterPaired = (message.Bytes[7+4] | 0x80) >> 7
-            };
-
-            return irtExtraInfo;
         }
     }
 }

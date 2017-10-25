@@ -135,7 +135,8 @@ namespace AntMessageSimulator
             PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
             var events = query.FindAllIrtExtraInfoEvents();
             foreach (var info in events)
-                PrintInfo(info.ToString());
+                if (info != null)
+                    PrintInfo(info.ToString());
         }
 
         private void PrintFecCommand(Message message)
