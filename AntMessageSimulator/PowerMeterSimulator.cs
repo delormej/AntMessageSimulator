@@ -138,7 +138,7 @@ namespace AntMessageSimulator
                 Console.WriteLine("\t{0}: {1}", enumerator.Index + 1, session);
         }
 
-        private void PrintIrtExtraInfoCommands(DeviceSession session)
+        private void PrintFecCommands(DeviceSession session)
         {
             PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
             var events = query.FindAllFecEvents();
@@ -147,29 +147,13 @@ namespace AntMessageSimulator
                     PrintInfo(info.ToString());
         }
 
-        private void PrintFecCommand(Message message)
-        {
-            PrintInfo(message.GetPayloadAsString());
-        }
-
-        private void PrintFecCommands(DeviceSession session)
-        {
-            PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
-            var messages = query.FindAllFecResistanceCommands();
-
-
-            foreach (Message message in messages)
-                PrintFecCommand(message);
-        }
-
         private void PrintAllFecCommands()
         {
             SessionEnumerator enumerator = new SessionEnumerator(this);
             foreach (var session in enumerator)
             {
                 if (session.FecId > 0)
-                    //PrintFecCommands(session);
-                    PrintIrtExtraInfoCommands(session);
+                    PrintFecCommands(session);
             }
         }
 
