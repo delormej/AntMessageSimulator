@@ -18,6 +18,7 @@ namespace AntMessageSimulator
         private string destination;
         private string[] args;
         private int sessionNumber;
+        private bool printFec;
         private List<DeviceSession> sessions;
 
         private static void PrintWelcome()
@@ -140,7 +141,7 @@ namespace AntMessageSimulator
         private void PrintIrtExtraInfoCommands(DeviceSession session)
         {
             PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
-            var events = query.FindAllIrtExtraInfoEvents();
+            var events = query.FindAllFecEvents();
             foreach (var info in events)
                 if (info != null)
                     PrintInfo(info.ToString());
@@ -228,7 +229,9 @@ namespace AntMessageSimulator
                 WriteAutoAntsFiles();
 
             PrintSummary();
-            PrintAllFecCommands();
+
+            if (printFec)
+                PrintAllFecCommands();
         }
 
         /// <summary>

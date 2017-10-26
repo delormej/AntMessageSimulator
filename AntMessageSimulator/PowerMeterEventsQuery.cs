@@ -23,7 +23,7 @@ namespace AntMessageSimulator
         //    return null;
         //}
 
-        public System.Collections.IEnumerable FindAllIrtExtraInfoEvents()
+        public System.Collections.IEnumerable FindAllFecEvents()
         {
             var messages = from message in session.Messages
                            where session.FecId > 0 && session.FecChannelId == message.GetChannelId() &&
