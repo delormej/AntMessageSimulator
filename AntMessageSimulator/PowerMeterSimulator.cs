@@ -116,6 +116,14 @@ namespace AntMessageSimulator
             }
         }
 
+        private void ParseArgOption(string arg)
+        {
+            if (arg.ToUpper() == "FEC")
+                printFec = true;
+            else
+                throw new ApplicationException(arg + " is not a valid option.");
+        }
+
         private void ParseArgs()
         {
             if (args.Length == 0)
@@ -126,6 +134,10 @@ namespace AntMessageSimulator
                 ValidateDestinationOrSession(args[1]);
             if (args.Length > 2)
                 ValidateDestination(args[2]);
+
+            foreach (var arg in args)
+                if (arg.StartsWith("--"))
+                    ParseArgOption(arg.Substring(2, arg.Length - 2));
         }
 
         private void PrintSummary()
