@@ -33,8 +33,10 @@ namespace AntMessageSimulator
         private static void PrintUsage()
         {
             const string USAGE =
-                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {Optional: .ants output script}
-    Example:  simulator.exe ""C:\Program Files (x86)\Zwift\Device0.txt"" 1 Device0.ants
+                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {Optional: .ants output script} {Optional: --fec}
+    Example:  simulator.exe Device0.txt                     #Lists a session summary for each in the device log.
+    Example:  simulator.exe Device0.txt 1 Device0.ants      #Outputs an AutoANTs .ants script file generated from session #1.
+    Example:  simulator.exe Device0.txt 2 --fec             #Prints all FEC commands to console from the second session in the device log.
 ";
             Console.WriteLine(USAGE);
             Console.WriteLine();
