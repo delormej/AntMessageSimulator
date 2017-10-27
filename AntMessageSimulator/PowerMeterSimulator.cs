@@ -96,6 +96,9 @@ namespace AntMessageSimulator
 
         private void ValidateDestination(string value)
         {
+            if (ParseArgAsOption(value))
+                return;
+
             // Should be the destination filename.
             destination = value;
 
@@ -105,6 +108,9 @@ namespace AntMessageSimulator
 
         private void ValidateDestinationOrSession(string value)
         {
+            if (ParseArgAsOption(value))
+                return;
+
             if (!int.TryParse(value, out sessionNumber))
                 ValidateDestination(value);
         }
@@ -118,13 +124,24 @@ namespace AntMessageSimulator
             }
         }
 
-        private void ParseArgOption(string arg)
+        private void ParseArgOption(string value)
         {
-            if (arg.ToUpper() == "FEC")
+            if (value.ToUpper() == "FEC")
                 printFec = true;
             else
-                throw new ApplicationException(arg + " is not a valid option.");
+                throw new ApplicationException(value + " is not a valid option.");
         }
+
+        private bool ParseArgAsOption(string value)
+        {
+            bool isOption = value.StartsWith("--");
+
+            if (isOption)
+                ParseArgOption(value.Substring(2, value.Length - 2));
+
+            return isOption;
+        }
+
 
         private void ParseArgs()
         {
@@ -137,9 +154,9 @@ namespace AntMessageSimulator
             if (args.Length > 2)
                 ValidateDestination(args[2]);
 
-            foreach (var arg in args)
-                if (arg.StartsWith("--"))
-                    ParseArgOption(arg.Substring(2, arg.Length - 2));
+            for (int i = 3; i < args.Length; i++)
+                if (args[i].StartsWith("--"))
+                    ParseArgOption(args[i].Substring(2, args[i].Length - 2));
         }
 
         private void PrintSummary()
