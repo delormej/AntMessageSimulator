@@ -13,7 +13,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -52,11 +52,13 @@
   <ItemGroup>
     <Compile Include="AutoAntsScriptGenerator.cs" />
     <Compile Include="DeviceLogParser.cs" />
+    <Compile Include="ExecutionOptions.cs" />
     <Compile Include="FecMessage.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="DeviceSession.cs" />
-    <Compile Include="PowerMeterEventsQuery.cs" />
-    <Compile Include="PowerMeterSimulator.cs" />
+    <Compile Include="MessageQuery.cs" />
+    <Compile Include="Simulator.cs" />
+    <Compile Include="Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

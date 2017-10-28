@@ -9,6 +9,7 @@ namespace AntMessageSimulator
     {
         private DeviceSession session;
         private StreamWriter writer;
+        private DeviceType device;
 
         #region String Constants
         const string SCRIPT_HEADER =
@@ -48,9 +49,10 @@ r! [40][{0:X2}][41][00]
 ";
         #endregion
 
-        public AutoAntsScriptGenerator(DeviceSession session)
+        public AutoAntsScriptGenerator(DeviceSession session, DeviceType device)
         {
             this.session = session;
+            this.device = device;
         }
 
         public Stream CreateScriptStream()
@@ -60,7 +62,7 @@ r! [40][{0:X2}][41][00]
 
             WriteHeader();
             WriteChannelConfiguration();
-            WriteBroadcastMessages();
+            WriteMessages();
             WriteChannelClose();
 
             writer.Flush();
@@ -110,34 +112,61 @@ r! [40][{0:X2}][41][00]
 
         private void WriteChannelConfiguration()
         {
-            byte deviceLsb = (byte)(session.PowerMeterId & 0xFF);
-            byte deviceMsb = (byte)((session.PowerMeterId & 0xFF00) >> 8);
-            writer.Write(CHANNEL_CONFIGURATION_BLOCK, 
-                session.PowerMeterChannelId,
+            ushort deviceId = 0;
+            if (device == DeviceType.PowerMeter)
+                deviceId = session.PowerMeterId;
+            else if (device == DeviceType.FeC)
+                deviceId = session.FecId;
+
+            byte deviceLsb = (byte)(deviceId & 0xFF);
+            byte deviceMsb = (byte)((deviceId & 0xFF00) >> 8);
+            writer.Write(CHANNEL_CONFIGURATION_BLOCK,
+                GetChannelId(),
                 deviceLsb,
                 deviceMsb);
         }
 
         private void WriteChannelClose()
         {
-            writer.Write(CHANNEL_CLOSE_BLOCK, session.PowerMeterChannelId);
+            writer.Write(CHANNEL_CLOSE_BLOCK, GetChannelId());
         }
 
-        private void WriteBroadcastMessages()
+        private byte GetChannelId()
         {
-            IEnumerable<Message> messages = GetPowerMeterBroadcastMessages();
-            foreach (Message message in messages)
+            byte channelId = 0xFF; // Invalid channel.
+            if (device == DeviceType.PowerMeter)
+                channelId = session.PowerMeterChannelId;
+            else if (device == DeviceType.FeC)
+                channelId = session.FecChannelId;
+            return channelId;
+        }
+
+        private void WriteMessages()
+        {
+            foreach (Message message in GetMessages())
                 writer.Write(ToAutoAntScriptLine(message));
         }
 
-        /// <summary>
-        /// // Get Broadcast messages for the power meter channel.
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerable<Message> GetPowerMeterBroadcastMessages()
+        private IEnumerable<Message> GetMessages()
         {
-            PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
+            IEnumerable<Message> messages = null;
+            if (device == DeviceType.PowerMeter)
+                messages = GetPowerMeterMessages();
+            else if (device == DeviceType.FeC)
+                messages = GetFecMessages();
+            return messages;
+        }
+
+        private IEnumerable<Message> GetPowerMeterMessages()
+        {
+            MessageQuery query = new MessageQuery(session);
             return query.FindAllPowerMeterBroadcastEvents();
+        }
+
+        private IEnumerable<Message> GetFecMessages()
+        {
+            MessageQuery query = new MessageQuery(session);
+            return query.FindAllFecMessages();
         }
 
         public void Dispose()

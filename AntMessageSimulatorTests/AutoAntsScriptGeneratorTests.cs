@@ -35,9 +35,8 @@ namespace AntMessageSimulator.Tests
 
             // Use the last session to generate a script.
             using (AutoAntsScriptGenerator generator =
-                new AutoAntsScriptGenerator(sessions[sessions.Count - 1]))
+                new AutoAntsScriptGenerator(sessions[sessions.Count - 1], DeviceType.PowerMeter))
             {
-
                 Stream stream = generator.CreateScriptStream();
                 TextReader reader = new StreamReader(stream);
 
