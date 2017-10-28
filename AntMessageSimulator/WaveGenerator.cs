@@ -39,11 +39,18 @@ namespace AntMessageSimulator
                 if (lastEvent != null)
                 {
                     int seconds = (int)(speedEvent.Timestamp - lastEvent.Timestamp);
-                    if (!hasWrittenHeader)
-                        WriteHeader(seconds, lastEvent.Speed);
-                    else
-                        WriteLine(seconds, lastEvent.Speed);
+                    if (speedEvent.Speed != lastEvent.Speed && seconds > 0)
+                    {
+                        if (!hasWrittenHeader)
+                        {
+                            WriteHeader(seconds, lastEvent.Speed);
+                            hasWrittenHeader = true;
+                        }
+                        else
+                            WriteLine(seconds, lastEvent.Speed);
+                    }
                 }
+                
                 lastEvent = speedEvent;
             }
             WriteFinalLine(lastEvent);
