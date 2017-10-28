@@ -52,22 +52,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationException.cs" />
-    <Compile Include="AutoAntsScriptGenerator.cs" />
-    <Compile Include="ChannelConfiguration.cs" />
-    <Compile Include="DeviceLogParser.cs" />
-    <Compile Include="ExecutionOptions.cs" />
-    <Compile Include="FecMessage.cs" />
-    <Compile Include="Generator.cs" />
-    <Compile Include="JsonGenerator.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="DeviceSession.cs" />
-    <Compile Include="MessageQuery.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Simulator.cs" />
-    <Compile Include="Printer.cs" />
+    <Compile Include="Program\ApplicationException.cs" />
+    <Compile Include="Generators\AutoAntsScriptGenerator.cs" />
+    <Compile Include="Data\ChannelConfiguration.cs" />
+    <Compile Include="Program\DeviceLogParser.cs" />
+    <Compile Include="Data\ExecutionOptions.cs" />
+    <Compile Include="Data\FecMessage.cs" />
+    <Compile Include="Generators\Generator.cs" />
+    <Compile Include="Generators\JsonGenerator.cs" />
+    <Compile Include="Data\Message.cs" />
+    <Compile Include="Data\DeviceSession.cs" />
+    <Compile Include="Data\MessageQuery.cs" />
+    <Compile Include="Program\Program.cs" />
+    <Compile Include="Program\Simulator.cs" />
+    <Compile Include="Program\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WaveGenerator.cs" />
+    <Compile Include="Generators\WaveGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
