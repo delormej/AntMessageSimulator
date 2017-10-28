@@ -65,7 +65,7 @@ namespace AntMessageSimulator
 
         public bool WriteOutput()
         {
-            return destination != null && (outputAnts || OutputJson);
+            return destination != null && (outputAnts || outputJson || outputSpeed);
         }
 
         public ExecutionOptions(string[] args)
