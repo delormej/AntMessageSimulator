@@ -41,6 +41,8 @@ namespace AntMessageSimulator
 
         const string TRANSMIT_TX = "Tx";
         const string TRANSMIT_RX = "Rx";
+
+        const byte GENERAL_FE_DATA_PAGE = 0x10;
         #endregion
 
         private float timestamp;
@@ -157,6 +159,11 @@ namespace AntMessageSimulator
                 default:
                     return false;
             }
+        }
+
+        public bool IsGeneralFeData()
+        {
+            return (GetMessageId() == GENERAL_FE_DATA_PAGE);
         }
 
         /// <summary>

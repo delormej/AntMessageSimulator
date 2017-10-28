@@ -25,9 +25,7 @@ namespace AntMessageSimulator
         {
             GetSessionsFromFile();
             PrintSummary();
-
-            if (options.WriteOutput())
-                WriteOutput();
+            GenerateAndWriteOutput();
         }
 
         private void GetSessionsFromFile()
@@ -52,24 +50,30 @@ namespace AntMessageSimulator
             Printer.Info(string.Format("\t{0}: {1}", index + 1, session));
         }
 
-        private void WriteOutput()
+        private void GenerateAndWriteOutput()
         {
             SessionEnumerator enumerator = new SessionEnumerator(this);
+
+            if (options.OutputSpeed && enumerator.Count > 1)
+                throw new ApplicationException("You must select a single session to output speed.");
+
+            // TODO: Feels like we should implement polymorphism with an IGenerator object for each.
             foreach (var session in enumerator)
             {
-                string filename = options.GetDestinationFilename(enumerator.Index, enumerator.Count);
                 string content = null;
-
+                
                 if (options.OutputAnts)
                     content = GenerateAutoAntsScript(session);
                 else if (options.OutputJson)
                     content = GenerateJson(session);
+                else if (options.OutputSpeed)
+                    content = GenerateHz(session);
 
-                if (content != null)
+                if (options.WriteOutput() && content != null)
+                {
+                    string filename = options.GetDestinationFilename(enumerator.Index, enumerator.Count);
                     WriteFile(filename, content);
-                else
-                    throw new ApplicationException(string.Format("Unable to generate output for session: {0}",
-                        enumerator.Index + 1));
+                }
             }
         }
 
@@ -97,6 +101,12 @@ namespace AntMessageSimulator
             MessageQuery query = new MessageQuery(session);
             var events = query.FindAllFecEvents();
             return JsonConvert.SerializeObject(events);
+        }
+
+        private string GenerateHz(DeviceSession session)
+        {
+            WaveGenerator generator = new WaveGenerator(session);
+            return generator.CreateScript();
         }
                 
         /// <summary>

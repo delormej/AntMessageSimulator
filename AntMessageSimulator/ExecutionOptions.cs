@@ -18,6 +18,7 @@ namespace AntMessageSimulator
         private int sessionNumber;
         private bool outputAnts;
         private bool outputJson;
+        private bool outputSpeed;
         private DeviceType device;
 
         public string Source
@@ -48,6 +49,12 @@ namespace AntMessageSimulator
         {
             get { return outputJson;  }
             set { outputJson = value; }
+        }
+
+        public bool OutputSpeed
+        {
+            get { return outputSpeed; }
+            set { outputSpeed = value; }
         }
 
         public DeviceType Device
@@ -168,6 +175,8 @@ namespace AntMessageSimulator
                 outputJson = true;
             else if (value.ToUpper() == "ANTS")
                 outputAnts = true;
+            else if (value.ToUpper() == "HZ")
+                outputSpeed = true;
             else
                 throw new ApplicationException(value + " is not a valid option.");
         }

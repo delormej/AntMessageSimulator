@@ -41,12 +41,12 @@ namespace AntMessageSimulator
             return data;
         }
 
-        public static object GetGeneralFeData(Message message)
+        public static SpeedEvent GetGeneralFeData(Message message)
         {
             if (message.GetMessageId() != 0x10)
                 throw new ApplicationException("Not a valid General FE data message.");
 
-            var data = new
+            var data = new SpeedEvent()
             {
                 Timestamp = message.Timestamp,
                 Speed = (message.Bytes[4 + 4] | (message.Bytes[5 + 4] << 8)) / 1000F
@@ -132,5 +132,12 @@ namespace AntMessageSimulator
 
             return data;
         }
+    }
+
+
+    public class SpeedEvent
+    {
+        public float Timestamp { get; set; }
+        public float Speed { get; set; }
     }
 }

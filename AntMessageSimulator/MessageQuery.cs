@@ -5,11 +5,7 @@ using System.Linq;
 
 namespace AntMessageSimulator
 {
-    /// <summary>
-    /// Encapsulates logic to finds the relevant events to send over the wire.
-    /// For instance, if the rollers are attached, only send events when there is valid
-    /// speed.
-    /// </summary>
+    // TODO: Should these all be static methods instead? 
     public class MessageQuery
     {
         DeviceSession session;
@@ -18,8 +14,6 @@ namespace AntMessageSimulator
         {
             this.session = session;
         }
-        // TODO: implement method to get speed events.
-        //public IEnumerable<Message> FindEventsWithSpeed()
 
         public IEnumerable FindAllFecEvents()
         {
@@ -60,6 +54,13 @@ namespace AntMessageSimulator
                 select message;
 
             return NotNullItems(messages);
+        }
+
+        public IEnumerable FindAllGeneralFeMessages()
+        {
+            return from message in FindAllFecMessages()
+                         where message.IsGeneralFeData()
+                         select FecMessage.GetGeneralFeData(message);
         }
 
         private IEnumerable<T> NotNullItems<T>(IEnumerable<T> list)
