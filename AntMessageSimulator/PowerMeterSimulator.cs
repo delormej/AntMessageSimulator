@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Collections;
+using Newtonsoft.Json;
 
 /*
  * This program takes an ANT device log and simulates the power meter by opening an ANT+
@@ -19,6 +20,7 @@ namespace AntMessageSimulator
         private string[] args;
         private int sessionNumber;
         private bool printFec;
+        private bool outputJson;
         private List<DeviceSession> sessions;
 
         private static void PrintWelcome()
@@ -33,7 +35,7 @@ namespace AntMessageSimulator
         private static void PrintUsage()
         {
             const string USAGE =
-                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {Optional: .ants output script} {Optional: --fec}
+                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {output filename} {Optional: --ants | --fec | --json}
     Example:  simulator.exe Device0.txt                     #Lists a session summary for each in the device log.
     Example:  simulator.exe Device0.txt 1 Device0.ants      #Outputs an AutoANTs .ants script file generated from session #1.
     Example:  simulator.exe Device0.txt 2 --fec             #Prints all FEC commands to console from the second session in the device log.
@@ -55,7 +57,7 @@ namespace AntMessageSimulator
             /*
              * TODO: This logic SHOULD NOT be in here... temporary hack.
              */
-            if (message.Contains("ServoPosition = 800"))
+            if (message.Contains("ServoPosition\":800"))
                 PrintError(message);
             else
                 Console.WriteLine(message);
@@ -128,6 +130,8 @@ namespace AntMessageSimulator
         {
             if (value.ToUpper() == "FEC")
                 printFec = true;
+            else if (value.ToUpper() == "JSON")
+                outputJson = true;
             else
                 throw new ApplicationException(value + " is not a valid option.");
         }
@@ -169,19 +173,28 @@ namespace AntMessageSimulator
                 Console.WriteLine("\t{0}: {1}", enumerator.Index + 1, session);
         }
 
+        private IEnumerable NotNullItems(IEnumerable list)
+        {
+            foreach (var item in list)
+                if (item != null)
+                    yield return item;
+        }
+
         private void PrintFecCommands(DeviceSession session)
         {
             PowerMeterEventsQuery query = new PowerMeterEventsQuery(session);
-            var events = query.FindAllFecEvents();
-            foreach (var info in events)
-                if (info != null)
-                    PrintInfo(info.ToString());
+            var events = NotNullItems(query.FindAllFecEvents());
+
+            if (outputJson)
+                Console.Write(JsonConvert.SerializeObject(events));
+            else
+                foreach (var item in NotNullItems(events))
+                    PrintInfo(item.ToString());
         }
 
         private void PrintAllFecCommands()
         {
-            SessionEnumerator enumerator = new SessionEnumerator(this);
-            foreach (var session in enumerator)
+            foreach (var session in new SessionEnumerator(this))
             {
                 if (session.FecId > 0)
                     PrintFecCommands(session);
@@ -222,7 +235,7 @@ namespace AntMessageSimulator
 
             return filename;
         }
-
+        
         private void WriteAutoAntsFiles()
         {
             SessionEnumerator enumerator = new SessionEnumerator(this);
