@@ -31,40 +31,51 @@ namespace AntMessageSimulator
 
         public string CreateScript()
         {
-            float lastTimestamp = 0F;
-
+            SpeedEvent lastEvent = null;
+            bool hasWrittenHeader = false;
+            
             foreach (var speedEvent in GetSpeedEvents())
             {
-                if (lastTimestamp == 0)
+                if (lastEvent != null)
                 {
-                    lastTimestamp = speedEvent.Timestamp;
-                    WriteHeader(speedEvent.Speed);
+                    int seconds = (int)(speedEvent.Timestamp - lastEvent.Timestamp);
+                    if (!hasWrittenHeader)
+                        WriteHeader(seconds, lastEvent.Speed);
+                    else
+                        WriteLine(seconds, lastEvent.Speed);
                 }
-                else
-                {
-                    int seconds = (int)(lastTimestamp - speedEvent.Timestamp);
-                    WriteLine(seconds, speedEvent.Speed);
-                }
+                lastEvent = speedEvent;
             }
-            
+            WriteFinalLine(lastEvent);
+
             return content.ToString();
         }
 
         private IEnumerable<SpeedEvent> GetSpeedEvents()
         {
             MessageQuery query = new MessageQuery(session);
-            foreach (var message in query.FindAllGeneralFeMessages())
-                yield return message as SpeedEvent;
+            IEnumerable<SpeedEvent> events =
+                (IEnumerable<SpeedEvent>)query.FindAllGeneralFeMessages();
+
+            return events;
         }
 
-        private void WriteHeader(float speedMps)
+        private void WriteHeader(int durationSeconds, float speedMps)
         {
-            content.AppendFormat(WAVE_STRING_FORMAT, SQUARE_FUNCTION, CalculateHz(speedMps));
+            content.AppendFormat(WAVE_STRING_FORMAT, SQUARE_FUNCTION, 
+                CalculateHz(speedMps), durationSeconds);
         }
 
         private void WriteLine(int durationSeconds, float speedMps)
         {
-            content.AppendFormat(WAVE_STRING_FORMAT, NO_CHANGE_FUNCTION, CalculateHz(speedMps));
+            content.AppendFormat(WAVE_STRING_FORMAT, NO_CHANGE_FUNCTION, 
+                CalculateHz(speedMps), durationSeconds);
+        }
+
+        private void WriteFinalLine(SpeedEvent lastEvent)
+        {
+            int finalDuration = (int)(session.GetSessionDuration().TotalSeconds - lastEvent.Timestamp);
+            WriteLine(finalDuration, lastEvent.Speed);
         }
 
         private Single CalculateHz(float speedMph)

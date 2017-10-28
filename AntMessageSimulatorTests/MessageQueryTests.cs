@@ -14,9 +14,7 @@ namespace AntMessageSimulator.Tests
         [TestMethod()]
         public void FindAllGeneralFeMessagesTest()
         {
-            string path = @"..\..\..\AntMessageSimulatorTests\Device0.txt";
-            DeviceLogParser parser = new DeviceLogParser();
-            List<DeviceSession> sessions = parser.Parse(path);
+            List<DeviceSession> sessions = TestSetup.GetSessions();
 
             MessageQuery query = new MessageQuery(sessions[7]);
             IEnumerable<SpeedEvent> events = 
