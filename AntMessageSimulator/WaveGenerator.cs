@@ -22,39 +22,25 @@ namespace AntMessageSimulator
 
         DeviceSession session;
         StringBuilder content;
+        bool initialized;
+        private SpeedEvent lastEvent;
 
         public WaveGenerator(DeviceSession session)
         {
             this.session = session;
-            content = new StringBuilder();
         }
 
         public string CreateScript()
         {
-            SpeedEvent lastEvent = null;
-            bool hasWrittenHeader = false;
-            
+            Reset();
             foreach (var speedEvent in GetSpeedEvents())
             {
                 if (lastEvent != null)
-                {
-                    int seconds = (int)(speedEvent.Timestamp - lastEvent.Timestamp);
-                    if (speedEvent.Speed != lastEvent.Speed && seconds > 0)
-                    {
-                        if (!hasWrittenHeader)
-                        {
-                            WriteHeader(seconds, lastEvent.Speed);
-                            hasWrittenHeader = true;
-                        }
-                        else
-                            WriteLine(seconds, lastEvent.Speed);
-                    }
-                }
+                    WriteEvent(speedEvent);
                 
                 lastEvent = speedEvent;
             }
             WriteFinalLine(lastEvent);
-
             return content.ToString();
         }
 
@@ -67,7 +53,29 @@ namespace AntMessageSimulator
             return events;
         }
 
-        private void WriteHeader(int durationSeconds, float speedMps)
+        private void Reset()
+        {
+            lastEvent = null;
+            content = new StringBuilder();
+            initialized = false;
+        }
+
+        private void WriteEvent(SpeedEvent speedEvent)
+        {
+            int seconds = (int)(speedEvent.Timestamp - lastEvent.Timestamp);
+            if (seconds > 0 && speedEvent.Speed != lastEvent.Speed)
+            {
+                if (!initialized)
+                {
+                    WriteFirstLine(seconds, lastEvent.Speed);
+                    initialized = true;
+                }
+                else
+                    WriteLine(seconds, lastEvent.Speed);
+            }
+        }
+
+        private void WriteFirstLine(int durationSeconds, float speedMps)
         {
             content.AppendFormat(WAVE_STRING_FORMAT, SQUARE_FUNCTION, 
                 CalculateHz(speedMps), durationSeconds);
