@@ -53,21 +53,10 @@ namespace AntMessageSimulator
         private void GenerateAndWriteOutput()
         {
             SessionEnumerator enumerator = new SessionEnumerator(this);
-
-            if (options.OutputSpeed && enumerator.Count > 1)
-                throw new ApplicationException("You must select a single session to output speed.");
-
-            // TODO: Feels like we should implement polymorphism with an IGenerator object for each.
             foreach (var session in enumerator)
             {
-                string content = null;
-                
-                if (options.OutputAnts)
-                    content = GenerateAutoAntsScript(session);
-                else if (options.OutputJson)
-                    content = GenerateJson(session);
-                else if (options.OutputSpeed)
-                    content = GenerateHz(session);
+                Generator generator = CreateGenerator(session);
+                string content = generator.Generate();
 
                 if (options.WriteOutput() && content != null)
                 {
@@ -77,36 +66,24 @@ namespace AntMessageSimulator
             }
         }
 
+        private Generator CreateGenerator(DeviceSession session)
+        {
+            Generator generator = null;
+
+            if (options.OutputAnts)
+                generator = new AutoAntsScriptGenerator(session, options.Device);
+            else if (options.OutputJson)
+                generator = new JsonGenerator(session);
+            else if (options.OutputSpeed)
+                generator = new WaveGenerator(session);
+
+            return generator;
+        }
+
         private void WriteFile(string filename, string content)
         {
             Printer.Info("Writing output to file: " + filename);
             File.WriteAllText(filename, content);
-        }
-
-        private string GenerateAutoAntsScript(DeviceSession session)
-        {
-            string script = "";
-            using (AutoAntsScriptGenerator generator = 
-                new AutoAntsScriptGenerator(session, options.Device))
-            {
-                Stream stream = generator.CreateScriptStream();
-                TextReader reader = new StreamReader(stream);
-                script = reader.ReadToEnd();
-            }
-            return script;
-        }
-
-        private string GenerateJson(DeviceSession session)
-        {
-            MessageQuery query = new MessageQuery(session);
-            var events = query.FindAllFecEvents();
-            return JsonConvert.SerializeObject(events);
-        }
-
-        private string GenerateHz(DeviceSession session)
-        {
-            WaveGenerator generator = new WaveGenerator(session);
-            return generator.CreateScript();
         }
                 
         /// <summary>

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AntMessageSimulator
 {
-    public class AutoAntsScriptGenerator : IDisposable
+    public class AutoAntsScriptGenerator : Generator, IDisposable
     {
         private DeviceSession session;
         private StreamWriter writer;
@@ -73,6 +73,17 @@ r! [40][{0:X2}][41][00]
             this.session = session;
             this.device = device;
             config = new ChannelConfiguration(device, session);
+        }
+
+        public string Generate()
+        {
+            string script = "";
+            Stream stream = CreateScriptStream();
+            TextReader reader = new StreamReader(stream);
+            script = reader.ReadToEnd();
+            Dispose();
+                
+            return script;
         }
 
         /// <summary>

@@ -57,6 +57,8 @@
     <Compile Include="DeviceLogParser.cs" />
     <Compile Include="ExecutionOptions.cs" />
     <Compile Include="FecMessage.cs" />
+    <Compile Include="Generator.cs" />
+    <Compile Include="JsonGenerator.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="DeviceSession.cs" />
     <Compile Include="MessageQuery.cs" />

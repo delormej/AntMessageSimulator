@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AntMessageSimulator
 {
-    public class WaveGenerator
+    public class WaveGenerator : Generator
     {
         #region Constants
         /* Example lines:
@@ -30,7 +30,7 @@ namespace AntMessageSimulator
             this.session = session;
         }
 
-        public string CreateScript()
+        public string Generate()
         {
             Reset();
             foreach (var speedEvent in GetSpeedEvents())
