@@ -10,6 +10,7 @@ namespace AntMessageSimulator
         private DeviceSession session;
         private StreamWriter writer;
         private DeviceType device;
+        private ChannelConfiguration config;
 
         #region String Constants
         const string SCRIPT_HEADER =
@@ -20,15 +21,17 @@ w[4A]
 p2000
 
 ";
+        // {0} == ChannelId, {1} == Device Lsb, {2} == Device Msb, {3} DeviceId, {4} DeviceType
+        // {5} == ChannelPeriod Lsb, {6} == ChannelPeriod Msb, {7} == ChannelPeriod
         const string CHANNEL_CONFIGURATION_BLOCK =
     @"#Channel Configuration Block Begin
 w  [42][{0:X2}][10][00]     # Assign channel {0}, bidirectional master, network 0
 r! [40][{0:X2}][42][00]     # Wait for RESPONSE_NO_ERROR
 w  [46][00][B9][A5][21][FB][BD][72][C3][45]  # Set ANT+ key to network 0
 r! [40][00][46][00]
-w  [51][{0:X2}][{1:X2}][{2:X2}][0B][05]   #Set Channel ID. In this solution we've used Dev# xxxx, DevType 11, TxType 5
+w  [51][{0:X2}][{1:X2}][{2:X2}][{4:X2}][05]   #Set Channel ID. In this solution we've used Dev# {3}, DevType {4}, TxType 5
 r! [40][{0:X2}][51][00]
-w  [43][{0:X2}][F6][1F]     #Set Channel Period: (8182/32768) = 4.005Hz
+w  [43][{0:X2}][{5:X2}][{6:X2}]     #Set Channel Period: ({7}/32768)
 r! [40][{0:X2}][43][00]
 w  [45][{0:X2}][39]         #Set Channel RF Frequency
 r! [40][{0:X2}][45][00]
@@ -53,6 +56,7 @@ r! [40][{0:X2}][41][00]
         {
             this.session = session;
             this.device = device;
+            config = new ChannelConfiguration(device, session);
         }
 
         public Stream CreateScriptStream()
@@ -112,33 +116,20 @@ r! [40][{0:X2}][41][00]
 
         private void WriteChannelConfiguration()
         {
-            ushort deviceId = 0;
-            if (device == DeviceType.PowerMeter)
-                deviceId = session.PowerMeterId;
-            else if (device == DeviceType.FeC)
-                deviceId = session.FecId;
-
-            byte deviceLsb = (byte)(deviceId & 0xFF);
-            byte deviceMsb = (byte)((deviceId & 0xFF00) >> 8);
             writer.Write(CHANNEL_CONFIGURATION_BLOCK,
-                GetChannelId(),
-                deviceLsb,
-                deviceMsb);
+                config.ChannelId,
+                config.DeviceIdLsb,
+                config.DeviceIdMsb,
+                config.DeviceId,
+                config.DeviceTypeId,
+                config.ChannelPeriodLsb,
+                config.ChannelPeriodMsb,
+                config.ChannelPeriod);
         }
 
         private void WriteChannelClose()
         {
-            writer.Write(CHANNEL_CLOSE_BLOCK, GetChannelId());
-        }
-
-        private byte GetChannelId()
-        {
-            byte channelId = 0xFF; // Invalid channel.
-            if (device == DeviceType.PowerMeter)
-                channelId = session.PowerMeterChannelId;
-            else if (device == DeviceType.FeC)
-                channelId = session.FecChannelId;
-            return channelId;
+            writer.Write(CHANNEL_CLOSE_BLOCK, config.ChannelId);
         }
 
         private void WriteMessages()

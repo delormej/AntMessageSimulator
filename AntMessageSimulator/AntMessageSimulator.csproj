@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoAntsScriptGenerator.cs" />
+    <Compile Include="ChannelConfiguration.cs" />
     <Compile Include="DeviceLogParser.cs" />
     <Compile Include="ExecutionOptions.cs" />
     <Compile Include="FecMessage.cs" />
