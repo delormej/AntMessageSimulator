@@ -2,11 +2,9 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Collections;
-using Newtonsoft.Json;
 
 /*
  * TODO: 
- *  - Generate seperate file for speed to play back with PCLAB2000 Function Generator.
  *  - Add chart option that uploads json file to Azure blob, launches chart.html with path as param
   */
 namespace AntMessageSimulator
@@ -69,14 +67,12 @@ namespace AntMessageSimulator
         private Generator CreateGenerator(DeviceSession session)
         {
             Generator generator = null;
-
             if (options.OutputAnts)
                 generator = new AutoAntsScriptGenerator(session, options.Device);
             else if (options.OutputJson)
                 generator = new JsonGenerator(session);
             else if (options.OutputSpeed)
                 generator = new WaveGenerator(session);
-
             return generator;
         }
 
@@ -88,9 +84,9 @@ namespace AntMessageSimulator
                 
         /// <summary>
         /// This nestd helper class enacapsulates the state of iterating through the 
-        /// appropriate sessions.
+        /// appropriate sessions, respecting if simulator is run with a specific session #.
         /// </summary>
-        private class SessionEnumerator : IEnumerator<AntMessageSimulator.DeviceSession>, IEnumerable<DeviceSession>
+        private class SessionEnumerator : IEnumerator<DeviceSession>, IEnumerable<DeviceSession>
         {
             int index, count;
             bool awaitingFirstMove;
@@ -150,16 +146,6 @@ namespace AntMessageSimulator
             public IEnumerator<DeviceSession> GetEnumerator() { return this; }
             IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
             public void Dispose() { }
-        }
-    }
-    public class ApplicationException : Exception
-    {
-        public ApplicationException(string message) : base(message)
-        {
-        }
-
-        public ApplicationException(string message, Exception innerException) : base(message, innerException)
-        {
         }
     }
 }
