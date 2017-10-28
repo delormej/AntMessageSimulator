@@ -58,6 +58,7 @@
     <Compile Include="Message.cs" />
     <Compile Include="DeviceSession.cs" />
     <Compile Include="MessageQuery.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Simulator.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

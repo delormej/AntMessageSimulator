@@ -10,7 +10,7 @@ namespace AntMessageSimulator
         FeC
     }
 
-    internal class ExecutionOptions
+    public class ExecutionOptions
     {
         private string source;
         private string destination;
@@ -23,31 +23,37 @@ namespace AntMessageSimulator
         public string Source
         {
             get { return source;  }
+            set { source = value; }
         }
 
         public string Destination
         {
             get { return destination; }
+            set { destination = value; }
         }
 
         public int SessionNumber
         {
             get { return sessionNumber; }
+            set { sessionNumber = value; }
         }
 
         public bool OutputAnts
         {
             get { return outputAnts; }
+            set { outputAnts = value; }
         }
 
         public bool OutputJson
         {
             get { return outputJson;  }
+            set { outputJson = value; }
         }
 
         public DeviceType Device
         {
             get { return device;  }
+            set { device = value; }
         }
 
         public bool WriteOutput()

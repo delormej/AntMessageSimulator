@@ -6,10 +6,9 @@ using Newtonsoft.Json;
 
 /*
  * TODO: This program needs to answer a couple of additional questions:
- *  - What was the total duration of the session
- *  - Generate seperate file for times and speed (CSV?) as reported by rollers
- *  - Include commands sent FROM Zwift/app to set resistance in the .ants script
- */
+ *  - What was the total duration (HH:MM:SS) of the session
+ *  - Generate seperate file for speed to play back with PCLAB2000 Function Generator.
+  */
 namespace AntMessageSimulator
 {
     public class Simulator
@@ -17,31 +16,12 @@ namespace AntMessageSimulator
         private ExecutionOptions options;
         private List<DeviceSession> sessions;
 
-        static void Main(string[] args)
+        public Simulator(ExecutionOptions options)
         {
-            Printer.Welcome();
-            try
-            {
-                Simulator simulator = new Simulator(args);
-                simulator.Execute();
-            }
-            catch (ApplicationException e)
-            {
-                Printer.Error(e.Message);
-                Printer.Usage();
-            }
+            this.options = options;
         }
 
-        /// <summary>
-        /// Creates a new simulator with a variable list of arguments from the command line.
-        /// </summary>
-        /// <param name="args"></param>
-        public Simulator(string[] args)
-        {
-            options = new ExecutionOptions(args);
-        }
-
-        private void Execute()
+        public void Execute()
         {
             GetSessionsFromFile();
             PrintSummary();
