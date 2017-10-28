@@ -1,5 +1,6 @@
 ###ANT_SCRIPT_VERSION: 0.01
 
+# Auto Generated at: 10/28/2017 2:15:07 PM
 #System Reset (and pauses for 2 seconds)
 w[4A]
 p2000
@@ -9,9 +10,9 @@ w  [42][02][10][00]     # Assign channel 2, bidirectional master, network 0
 r! [40][02][42][00]     # Wait for RESPONSE_NO_ERROR
 w  [46][00][B9][A5][21][FB][BD][72][C3][45]  # Set ANT+ key to network 0
 r! [40][00][46][00]
-w  [51][02][E6][01][0B][05]   #Set Channel ID. In this solution we've used Dev# xxxx, DevType 11, TxType 5
+w  [51][02][E6][01][0B][05]   #Set Channel ID. In this solution we've used Dev# 486, DevType 11, TxType 5
 r! [40][02][51][00]
-w  [43][02][F6][1F]     #Set Channel Period: (8182/32768) = 4.005Hz
+w  [43][02][1F][1F]     #Set Channel Period: (8182/32768)
 r! [40][02][43][00]
 w  [45][02][39]         #Set Channel RF Frequency
 r! [40][02][45][00]

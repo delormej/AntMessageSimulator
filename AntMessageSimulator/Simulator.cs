@@ -5,8 +5,7 @@ using System.Collections;
 using Newtonsoft.Json;
 
 /*
- * TODO: This program needs to answer a couple of additional questions:
- *  - What was the total duration (HH:MM:SS) of the session
+ * TODO: 
  *  - Generate seperate file for speed to play back with PCLAB2000 Function Generator.
  *  - Add chart option that uploads json file to Azure blob, launches chart.html with path as param
   */
@@ -45,7 +44,12 @@ namespace AntMessageSimulator
             Printer.Info(string.Format("File contained {0} session(s).", sessions.Count));
             SessionEnumerator enumerator = new SessionEnumerator(this);
             foreach (var session in enumerator)
-                Printer.Info(string.Format("\t{0}: {1}", enumerator.Index + 1, session));
+                PrintSessionSummary(session, enumerator.Index);
+        }
+
+        private void PrintSessionSummary(DeviceSession session, int index)
+        {
+            Printer.Info(string.Format("\t{0}: {1}", index + 1, session));
         }
 
         private void WriteOutput()

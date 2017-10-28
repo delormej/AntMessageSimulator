@@ -30,10 +30,20 @@ namespace AntMessageSimulator
 
         public override string ToString()
         {
-            const string TO_STRING_TEMPLATE = "DeviceId: {0}, ChannelId: {1}, FecId: {2}, " + 
-                "FecChannelId: {3}, Messages: {4}";
+            const string TO_STRING_TEMPLATE = "Duration: {5:h\\:mm\\:ss}, DeviceId: {0}, " +
+                "ChannelId: {1}, FecId: {2}, FecChannelId: {3}, Messages: {4}";
             return string.Format(TO_STRING_TEMPLATE, 
-                PowerMeterId, PowerMeterChannelId, FecId, FecChannelId, messages.Count);
+                PowerMeterId, PowerMeterChannelId, FecId, FecChannelId, messages.Count, 
+                GetSessionDuration());
+        }
+
+        public TimeSpan GetSessionDuration()
+        {
+            float seconds = 0f;
+            if (messages.Count > 0)
+                seconds = messages[messages.Count - 1].Timestamp - messages[0].Timestamp;
+
+            return TimeSpan.FromSeconds(seconds);
         }
 
         public void AddMessage(Message message)

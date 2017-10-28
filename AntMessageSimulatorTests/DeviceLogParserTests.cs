@@ -13,6 +13,7 @@ namespace AntMessageSimulator.Tests
             DeviceLogParser parser = new DeviceLogParser();
             List<DeviceSession> sessions = parser.Parse(path);
             Assert.IsTrue(sessions.Count > 7);
+            Assert.IsTrue(sessions[7].GetSessionDuration().Minutes == 12);
         }
     }
 }
