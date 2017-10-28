@@ -13,9 +13,25 @@ namespace AntMessageSimulator
         private ChannelConfiguration config;
 
         #region String Constants
+
+        // # A write command looks like this:
+        //w [4E][01][10][10][FF][FF][00][10][00][01]
+        //  |-- Broadcast Event
+        //      |-- ChannelID
+        //          |-- Payload
+
+        // # A response command looks like this:
+        //r [40][01][01][03]
+        //  |-- Reponse Event
+        //      |-- ChannelID
+        //          |-- Message that was sent
+        //              |-- EVENT_TX
+        const string RESPONSE_COMMAND_FORMAT = "r [40][{0:X2}][{1:X2}][03]";
+
         const string SCRIPT_HEADER =
     @"###ANT_SCRIPT_VERSION: 0.01
 
+# Auto Generated at: {0}
 #System Reset (and pauses for 2 seconds)
 w[4A]
 p2000
@@ -59,6 +75,12 @@ r! [40][{0:X2}][41][00]
             config = new ChannelConfiguration(device, session);
         }
 
+        /// <summary>
+        /// Creates a readable stream containing the ANTS script.  
+        /// </summary>
+        /// <remarks>
+        /// Be sure to call Dispose() on the object when done reading.
+        /// </remarks>
         public Stream CreateScriptStream()
         {
             Stream stream = new MemoryStream();
@@ -79,39 +101,9 @@ r! [40][{0:X2}][41][00]
             return stream;
         }
 
-        private static string CreateResponseScriptLine(Message message)
-        {
-            // Look for successful response.
-            return string.Format("r [40][{0:X2}][{1:X2}][03]",
-                message.GetChannelId(),
-                message.GetMessageId());
-        }
-
-        /// <summary>
-        /// Returns a line of executable Auto ANT script.
-        /// </summary>
-        public static string ToAutoAntScriptLine(Message message)
-        {
-            // Write a message, then wait for a response.
-            //w [4E][01][10][10][FF][FF][00][10][00][01]
-            //r [40][01][01][03]
-            //  |-- Reponse Event
-            //      |-- ChannelID
-            //          |-- Message that was sent
-            //              |-- EVENT_TX
-
-            StringBuilder script = new StringBuilder();
-
-            script.Append("w ");
-            script.AppendLine(message.GetPayloadAsString());
-            script.AppendLine(CreateResponseScriptLine(message));
-
-            return script.ToString();
-        }
-
         private void WriteHeader()
         {
-            writer.Write(SCRIPT_HEADER);
+            writer.Write(SCRIPT_HEADER, DateTime.Now);
         }
 
         private void WriteChannelConfiguration()
@@ -125,11 +117,6 @@ r! [40][{0:X2}][41][00]
                 config.ChannelPeriodLsb,
                 config.ChannelPeriodMsb,
                 config.ChannelPeriod);
-        }
-
-        private void WriteChannelClose()
-        {
-            writer.Write(CHANNEL_CLOSE_BLOCK, config.ChannelId);
         }
 
         private void WriteMessages()
@@ -158,6 +145,32 @@ r! [40][{0:X2}][41][00]
         {
             MessageQuery query = new MessageQuery(session);
             return query.FindAllFecMessages();
+        }
+
+        /// <summary>
+        /// Returns a line of executable Auto ANT script.
+        /// </summary>
+        public static string ToAutoAntScriptLine(Message message)
+        {
+            StringBuilder script = new StringBuilder();
+
+            script.Append("w ");
+            script.AppendLine(message.GetPayloadAsString());
+            script.AppendLine(CreateResponseScriptLine(message));
+
+            return script.ToString();
+        }
+
+        private static string CreateResponseScriptLine(Message message)
+        {
+            return string.Format(RESPONSE_COMMAND_FORMAT,
+                message.GetChannelId(),
+                message.GetMessageId());
+        }
+
+        private void WriteChannelClose()
+        {
+            writer.Write(CHANNEL_CLOSE_BLOCK, config.ChannelId);
         }
 
         public void Dispose()
