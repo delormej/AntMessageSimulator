@@ -26,33 +26,45 @@ namespace AntMessageSimulator
         public WaveGenerator(DeviceSession session)
         {
             this.session = session;
-            this.content = new StringBuilder();
+            content = new StringBuilder();
         }
 
         public string CreateScript()
         {
-            StringBuilder wave = new StringBuilder();
-            // Dummy first line @1hz, 0 power
+            float lastTimestamp = 0F;
 
-            WriteHeader();
-
-            foreach (float speed in GetSpeeds())
-                wave.AppendFormat(WAVE_STRING_FORMAT, NO_CHANGE_FUNCTION, CalculateHz(speed));
-
-            return wave.ToString();
+            foreach (var speedEvent in GetSpeedEvents())
+            {
+                if (lastTimestamp == 0)
+                {
+                    lastTimestamp = speedEvent.Timestamp;
+                    WriteHeader(speedEvent.Speed);
+                }
+                else
+                {
+                    int seconds = (int)(lastTimestamp - speedEvent.Timestamp);
+                    WriteLine(seconds, speedEvent.Speed);
+                }
+            }
+            
+            return content.ToString();
         }
 
-        private void WriteHeader()
-        {
-            // 1st line sets initial function, contains a dummy speed.
-            content.AppendFormat(WAVE_STRING_FORMAT, SQUARE_FUNCTION, 1.0F /*DUMMY_HZ*/);
-        }
-
-        private IEnumerable<float> GetSpeeds()
+        private IEnumerable<SpeedEvent> GetSpeedEvents()
         {
             MessageQuery query = new MessageQuery(session);
-            foreach (SpeedEvent message in query.FindAllGeneralFeMessages())
-                yield return message.Speed;
+            foreach (var message in query.FindAllGeneralFeMessages())
+                yield return message as SpeedEvent;
+        }
+
+        private void WriteHeader(float speedMps)
+        {
+            content.AppendFormat(WAVE_STRING_FORMAT, SQUARE_FUNCTION, CalculateHz(speedMps));
+        }
+
+        private void WriteLine(int durationSeconds, float speedMps)
+        {
+            content.AppendFormat(WAVE_STRING_FORMAT, NO_CHANGE_FUNCTION, CalculateHz(speedMps));
         }
 
         private Single CalculateHz(float speedMph)

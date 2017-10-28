@@ -57,6 +57,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AutoAntsScriptGeneratorTests.cs" />
+    <Compile Include="MessageQueryTests.cs" />
     <Compile Include="MessageTests.cs" />
     <Compile Include="DeviceSessionTests.cs" />
     <Compile Include="DeviceLogParserTests.cs" />
