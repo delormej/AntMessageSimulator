@@ -8,6 +8,7 @@ using Newtonsoft.Json;
  * TODO: This program needs to answer a couple of additional questions:
  *  - What was the total duration (HH:MM:SS) of the session
  *  - Generate seperate file for speed to play back with PCLAB2000 Function Generator.
+ *  - Add chart option that uploads json file to Azure blob, launches chart.html with path as param
   */
 namespace AntMessageSimulator
 {
