@@ -22,7 +22,7 @@ namespace AntMessageSimulator
 
         public byte ChannelPeriodLsb
         {
-            get { return GetMsb(ChannelPeriod); }
+            get { return GetLsb(ChannelPeriod); }
         }
 
         public byte ChannelPeriodMsb
