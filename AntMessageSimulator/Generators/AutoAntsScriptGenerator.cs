@@ -127,7 +127,7 @@ r! [40][{0:X2}][4B][00]
         private IEnumerable<Message> GetFecMessages()
         {
             MessageQuery query = new MessageQuery(session);
-            return query.FindAllFecMessages();
+            return query.FindAllFecTransmitMessages();
         }
 
         /// <summary>

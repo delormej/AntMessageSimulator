@@ -20,6 +20,7 @@ namespace AntMessageSimulator
         private bool outputJson;
         private bool outputSpeed;
         private DeviceType device;
+        private ushort targetDeviceId;
 
         public string Source
         {
