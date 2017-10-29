@@ -93,15 +93,14 @@ namespace AntMessageSimulator
             WriteLine(finalDuration, lastEvent.Speed);
         }
 
-        private Single CalculateHz(float speedMph)
+        private Single CalculateHz(float speedMps)
         {
             const float METERS_PER_FLYWHEEL_REV = 0.11176f;
-            const float MPH_TO_KMH = 0.44704f;
-            float hz = 0.0f;
-
-            // TODO: Explain why this math works... /2 * 4, /2 ???
-            hz = ((((speedMph * MPH_TO_KMH) / METERS_PER_FLYWHEEL_REV) / 2.0f) * 4.0f) / 2.0f;
-
+            float hz = (speedMps / METERS_PER_FLYWHEEL_REV);
+            
+            // PCLab200 tool does not like 0, it has a special meaning.
+            if (hz == 0.0f)
+                hz = 0.01f;
             return hz;
         }
     }
