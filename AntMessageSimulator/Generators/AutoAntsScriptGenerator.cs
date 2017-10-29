@@ -158,11 +158,11 @@ r! [40][{0:X2}][4B][00]
             //      |-- ChannelID
             //          |-- Message that was sent
             //              |-- EVENT_TX
-            const string RESPONSE_COMMAND_FORMAT = "r [40][{0:X2}][{1:X2}][03]";
+            // ? is a wildcard
+            const string RESPONSE_COMMAND_FORMAT = "r [40][{0:X2}][?][03]";
 
             return string.Format(RESPONSE_COMMAND_FORMAT,
-                message.ChannelId,
-                message.GetMessageId());
+                message.ChannelId);
         }
 
         private void WriteChannelClose()
