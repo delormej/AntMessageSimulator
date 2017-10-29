@@ -23,7 +23,8 @@ namespace AntMessageSimulator
         {
             GetSessionsFromFile();
             PrintSummary();
-            GenerateAndWriteOutput();
+            if (options.WriteOutput())
+                GenerateAndWriteOutput();
         }
 
         private void GetSessionsFromFile()
@@ -53,15 +54,15 @@ namespace AntMessageSimulator
             SessionEnumerator enumerator = new SessionEnumerator(this);
             foreach (var session in enumerator)
             {
-                Generator generator = CreateGenerator(session);
-                string content = generator.Generate();
-
-                if (options.WriteOutput() && content != null)
-                {
-                    string filename = options.GetDestinationFilename(enumerator.Index, enumerator.Count);
-                    WriteFile(filename, content);
-                }
+                string content = Generate(session);
+                WriteOutput(content, enumerator.Index, enumerator.Count);
             }
+        }
+
+        private string Generate(DeviceSession session)
+        {
+            Generator generator = CreateGenerator(session);
+            return generator.Generate();
         }
 
         private Generator CreateGenerator(DeviceSession session)
@@ -70,10 +71,19 @@ namespace AntMessageSimulator
             if (options.OutputAnts)
                 generator = new AutoAntsScriptGenerator(session, options.Device);
             else if (options.OutputJson)
-                generator = new JsonGenerator(session);
+                generator = new JsonGenerator(session, options.Device);
             else if (options.OutputSpeed)
                 generator = new WaveGenerator(session);
             return generator;
+        }
+
+        private void WriteOutput(string content, int sessionIndex, int sessionCount)
+        {
+            if (content == null)
+                throw new ApplicationException("Nothing to write for session: " + sessionIndex + 1);
+
+            string filename = options.GetDestinationFilename(sessionIndex, sessionCount);
+            WriteFile(filename, content);
         }
 
         private void WriteFile(string filename, string content)
