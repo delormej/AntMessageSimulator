@@ -13,7 +13,7 @@ namespace AntMessageSimulator.Tests
 
             Assert.IsTrue(message.GetMessageId() == 0);
             Assert.IsTrue(message.GetDeviceId() == 486);
-            Assert.IsTrue(message.GetChannelId() == 1);
+            Assert.IsTrue(message.ChannelId == 1);
         }
     }
 }

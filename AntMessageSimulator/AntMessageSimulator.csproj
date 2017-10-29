@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\MessageException.cs" />
     <Compile Include="Program\ApplicationException.cs" />
     <Compile Include="Generators\AutoAntsScriptGenerator.cs" />
     <Compile Include="Data\ChannelConfiguration.cs" />

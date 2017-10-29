@@ -55,12 +55,12 @@ namespace AntMessageSimulator
 
             if (PowerMeterId == 0 && message.IsPowerMeterIdEvent())
             {
-                PowerMeterChannelId = (byte)message.GetChannelId();
+                PowerMeterChannelId = message.ChannelId;
                 PowerMeterId = message.GetDeviceId();
             }
             else if (FecId == 0 && message.IsFecIdEvent())
             {
-                FecChannelId = (byte)message.GetChannelId();
+                FecChannelId = message.ChannelId;
                 FecId = message.GetDeviceId();
             }
 
