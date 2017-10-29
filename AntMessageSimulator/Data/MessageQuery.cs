@@ -23,9 +23,13 @@ namespace AntMessageSimulator
 
         public IEnumerable<Message> FindAllFecMessages()
         {
+            if (session.FecId == 0)
+                throw new ApplicationException("Unable to find FE-C Messages as there is no FE-C device in the session.");
+
             var messages = from message in session.Messages
-                           where session.FecId > 0 && message.IsDataMessage() &&
-                           session.FecChannelId == message.ChannelId
+                           where session.FecChannelId == message.ChannelId &&
+                           message.IsDataMessage() &&
+                           message.IsTransmit()
                            select message;
 
             return NotNullItems(messages);
