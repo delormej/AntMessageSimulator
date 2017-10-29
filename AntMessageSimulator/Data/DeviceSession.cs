@@ -67,12 +67,16 @@ namespace AntMessageSimulator
             messages.Add(message);
         }
 
-        public Message GetLastMessage()
+        public float GetLastTimestamp()
         {
+            float timestamp = 0;
             if (messages.Count > 0)
-                return messages[messages.Count - 1];
-            else
-                return null;
+            {
+                Message message = messages[messages.Count - 1];
+                timestamp = message.Timestamp;
+            }
+
+            return timestamp;
         }
         
         public DeviceSession()

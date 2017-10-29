@@ -11,12 +11,7 @@ namespace AntMessageSimulator
 
         private bool IsTimestampRollover(float timestamp)
         {
-            Message lastMessage = currentSession.GetLastMessage();
-
-            if (lastMessage != null)
-                return timestamp < lastMessage.Timestamp;
-            else
-                return false;
+            return timestamp < currentSession.GetLastTimestamp();
         }
 
         private void AddNewSession()
