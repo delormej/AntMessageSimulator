@@ -175,7 +175,7 @@ r! [40][{0:X2}][41][00]
         private static string CreateResponseScriptLine(Message message)
         {
             return string.Format(RESPONSE_COMMAND_FORMAT,
-                message.GetChannelId(),
+                message.ChannelId,
                 message.GetMessageId());
         }
 

@@ -55,24 +55,28 @@ namespace AntMessageSimulator
 
             if (PowerMeterId == 0 && message.IsPowerMeterIdEvent())
             {
-                PowerMeterChannelId = (byte)message.GetChannelId();
+                PowerMeterChannelId = message.ChannelId;
                 PowerMeterId = message.GetDeviceId();
             }
             else if (FecId == 0 && message.IsFecIdEvent())
             {
-                FecChannelId = (byte)message.GetChannelId();
+                FecChannelId = message.ChannelId;
                 FecId = message.GetDeviceId();
             }
 
             messages.Add(message);
         }
 
-        public Message GetLastMessage()
+        public float GetLastTimestamp()
         {
+            float timestamp = 0;
             if (messages.Count > 0)
-                return messages[messages.Count - 1];
-            else
-                return null;
+            {
+                Message message = messages[messages.Count - 1];
+                timestamp = message.Timestamp;
+            }
+
+            return timestamp;
         }
         
         public DeviceSession()

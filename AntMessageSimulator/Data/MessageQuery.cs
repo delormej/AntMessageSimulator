@@ -24,8 +24,8 @@ namespace AntMessageSimulator
         public IEnumerable<Message> FindAllFecMessages()
         {
             var messages = from message in session.Messages
-                           where session.FecId > 0 && session.FecChannelId == message.GetChannelId() &&
-                               message.GetMessageId() > 0
+                           where session.FecId > 0 && message.IsDataMessage() &&
+                           session.FecChannelId == message.ChannelId
                            select message;
 
             return NotNullItems(messages);
@@ -37,8 +37,8 @@ namespace AntMessageSimulator
             const byte TRAINER_MESSAGE_TYPES = 4;
 
             var messages = from message in session.Messages
-                           where session.FecId > 0 && session.FecChannelId == message.GetChannelId() &&
-                               message.IsTransmit() && 
+                           where session.FecId > 0 && message.IsDataMessage() &&
+                           session.FecChannelId == message.ChannelId && message.IsTransmit() && 
                                ((message.GetMessageId() ^ TRAINER_MESSAGE_MASK) < TRAINER_MESSAGE_TYPES)
                            select message;
             return NotNullItems(messages);
@@ -49,7 +49,7 @@ namespace AntMessageSimulator
             IEnumerable<Message> messages =
                 from message in session.Messages
                 where message.IsDataMessage() &&
-                    message.GetChannelId() == session.PowerMeterChannelId &&
+                    message.ChannelId == session.PowerMeterChannelId &&
                     message.GetMessageId() < 0xF0    // Ignore manufacturer specific pages.
                 select message;
 
