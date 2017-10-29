@@ -5,17 +5,6 @@ using ANT_Managed_Library;
 
 namespace AntMessageSimulator
 {
-    public class MessageException : ApplicationException
-    {
-        public MessageException(string message) : base(message)
-        {
-        }
-
-        public MessageException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-    }
-
     /// <summary>
     /// Represents a message recorded to the ANT device log.
     /// </summary>

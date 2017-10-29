@@ -7,13 +7,8 @@ namespace AntMessageSimulator
 {
     public class AutoAntsScriptGenerator : Generator, IDisposable
     {
-        private DeviceSession session;
-        private StreamWriter writer;
-        private DeviceType device;
-        private ChannelConfiguration config;
-
+        // TODO: embed these string constants as resources in a seperate file.
         #region String Constants
-
         // # A write command looks like this:
         //w [4E][01][10][10][FF][FF][00][10][00][01]
         //  |-- Broadcast Event
@@ -66,8 +61,13 @@ r! [40][{0:X2}][41][00]
 #Channel Close Block End
 
 ";
-        #endregion
+        #endregion 
 
+        private DeviceSession session;
+        private StreamWriter writer;
+        private DeviceType device;
+        private ChannelConfiguration config;
+        
         public AutoAntsScriptGenerator(DeviceSession session, DeviceType device)
         {
             this.session = session;

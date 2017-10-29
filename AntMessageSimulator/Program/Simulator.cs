@@ -5,7 +5,9 @@ using System.Collections;
 
 /*
  * TODO: 
+ *  - Invoke AutoANTS libraries to play back the .ants script that send ANT+ messages on the wire.
  *  - Add chart option that uploads json file to Azure blob, launches chart.html with path as param
+ *  - Invoke PCLAB2000 libraries to execute function generator for speed simulation
   */
 namespace AntMessageSimulator
 {
@@ -32,14 +34,14 @@ namespace AntMessageSimulator
             DeviceLogParser parser = new DeviceLogParser();
             sessions = parser.Parse(options.Source);
             if (sessions.Count == 0)
-                throw new ApplicationException("No sessions parsed from source: " + 
+                throw new ApplicationException("No sessions parsed from source: " +
                     options.Source);
         }
 
         private void PrintSummary()
         {
             Printer.Info(string.Format("File contained {0} session(s).", sessions.Count));
-            SessionEnumerator enumerator = new SessionEnumerator(this);
+            var enumerator = GetSelectedSessions();
             foreach (var session in enumerator)
                 PrintSessionSummary(session, enumerator.Index);
         }
@@ -51,12 +53,17 @@ namespace AntMessageSimulator
 
         private void GenerateAndWriteOutput()
         {
-            SessionEnumerator enumerator = new SessionEnumerator(this);
+            var enumerator = GetSelectedSessions();
             foreach (var session in enumerator)
             {
                 string content = Generate(session);
                 WriteOutput(content, enumerator.Index, enumerator.Count);
             }
+        }
+
+        private SelectedSessionsEnumerator GetSelectedSessions()
+        {
+            return new SelectedSessionsEnumerator(sessions, options);
         }
 
         private string Generate(DeviceSession session)
@@ -90,72 +97,6 @@ namespace AntMessageSimulator
         {
             Printer.Info("Writing output to file: " + filename);
             File.WriteAllText(filename, content);
-        }
-                
-        /// <summary>
-        /// This nestd helper class enacapsulates the state of iterating through the 
-        /// appropriate sessions, respecting if simulator is run with a specific session #.
-        /// </summary>
-        private class SessionEnumerator : IEnumerator<DeviceSession>, IEnumerable<DeviceSession>
-        {
-            int index, count;
-            bool awaitingFirstMove;
-            Simulator parent;
-
-            public SessionEnumerator(Simulator parent)
-            {
-                this.parent = parent;
-                Reset();
-            }
-
-            public int Count
-            {
-                get { return count; }
-            }
-
-            public int Index
-            {
-                get { return index; }
-            }
-
-            public bool MoveNext()
-            {
-                if (awaitingFirstMove)
-                {
-                    awaitingFirstMove = false;
-                    return true;
-                }
-                if (++index < count)
-                    return true;
-                else
-                    return false;
-            }
-
-            public void Reset()
-            {
-                if (parent.options.SessionNumber > 0)
-                {
-                    index = parent.options.SessionNumber - 1;
-                    count = 1;
-
-                    if (index >= parent.sessions.Count)
-                        throw new ApplicationException("Invalid session number: " + 
-                            parent.options.SessionNumber);
-                }
-                else
-                {
-                    index = 0;
-                    count = parent.sessions.Count;
-                }
-
-                awaitingFirstMove = true;
-            }
-
-            DeviceSession IEnumerator<DeviceSession>.Current => parent.sessions[index];
-            object IEnumerator.Current => throw new NotImplementedException();
-            public IEnumerator<DeviceSession> GetEnumerator() { return this; }
-            IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
-            public void Dispose() { }
         }
     }
 }

@@ -52,7 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program\ApplicationException.cs" />
+    <Compile Include="Exceptions\MessageException.cs" />
+    <Compile Include="Exceptions\ApplicationException.cs" />
     <Compile Include="Generators\AutoAntsScriptGenerator.cs" />
     <Compile Include="Data\ChannelConfiguration.cs" />
     <Compile Include="Program\DeviceLogParser.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Data\DeviceSession.cs" />
     <Compile Include="Data\MessageQuery.cs" />
     <Compile Include="Program\Program.cs" />
+    <Compile Include="Data\SelectedSessionsEnumerator.cs" />
     <Compile Include="Program\Simulator.cs" />
     <Compile Include="Program\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
