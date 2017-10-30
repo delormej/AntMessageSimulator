@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using AntMessageSimulator;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AntMessageSimulator.Tests
 {
@@ -12,6 +13,12 @@ namespace AntMessageSimulator.Tests
             Message message = Message.MessageFromLine(line);
             Assert.IsTrue(message.ChannelId == 1);
             Assert.IsTrue(message.Timestamp == 32.859F);
+        }
+
+        [TestMethod()]
+        public void IsTransmitTest()
+        {
+            Assert.Fail();
         }
     }
 }

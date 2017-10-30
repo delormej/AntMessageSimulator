@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using AntMessageSimulator;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
 
@@ -48,6 +49,12 @@ namespace AntMessageSimulator.Tests
 
             // Write the file out.
             File.WriteAllText(destination, script);
+        }
+
+        [TestMethod()]
+        public void GenerateTest()
+        {
+            Assert.Fail();
         }
     }
 }
