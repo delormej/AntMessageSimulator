@@ -21,7 +21,7 @@ namespace AntMessageSimulator
 
         public string Generate()
         {
-            string script = "";
+            string script = string.Empty;
             Stream stream = CreateScriptStream();
             TextReader reader = new StreamReader(stream);
             script = reader.ReadToEnd();

@@ -72,7 +72,7 @@ namespace AntMessageSimulator
 
         private void WriteOutput(string content, int sessionIndex, int sessionCount)
         {
-            if (content == null)
+            if (content == string.Empty)
                 throw new ApplicationException("Nothing to write for session: " + sessionIndex + 1);
 
             if (options.OutputConsole)
