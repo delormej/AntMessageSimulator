@@ -33,8 +33,7 @@ namespace AntMessageSimulator
             DeviceLogParser parser = new DeviceLogParser();
             sessions = parser.Parse(options.Source);
             if (sessions.Count == 0)
-                throw new ApplicationException("No sessions parsed from source: " +
-                    options.Source);
+                throw new ApplicationException("No sessions parsed from source: " + options.Source);
         }
 
         private void PrintSummary()

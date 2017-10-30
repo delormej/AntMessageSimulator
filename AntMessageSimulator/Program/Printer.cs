@@ -21,13 +21,7 @@ namespace AntMessageSimulator
 
         public static void Info(string message)
         {
-            /*
-             * TODO: This logic SHOULD NOT be in here... temporary hack.
-             */
-            if (message.Contains("ServoPosition\":800"))
-                Error(message);
-            else
-                Console.WriteLine(message);
+            Console.WriteLine(message);
         }
 
         public static void Error(string message)
