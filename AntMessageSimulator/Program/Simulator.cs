@@ -67,22 +67,8 @@ namespace AntMessageSimulator
 
         private string Generate(DeviceSession session)
         {
-            Generator generator = CreateGenerator(session);
+            Generator generator = GeneratorFactory.Create(session, options);
             return generator.Generate();
-        }
-
-        private Generator CreateGenerator(DeviceSession session)
-        {
-            Generator generator = null;
-            if (options.OutputAnts)
-                generator = new AutoAntsScriptGenerator(session, options.Device);
-            else if (options.OutputJson)
-                generator = new JsonGenerator(session, options.Device);
-            else if (options.OutputSpeed)
-                generator = new WaveGenerator(session);
-            else if (options.OutputConsole)
-                generator = new ConsoleGenerator(session, options.Device);
-            return generator;
         }
 
         private void WriteOutput(string content, int sessionIndex, int sessionCount)
