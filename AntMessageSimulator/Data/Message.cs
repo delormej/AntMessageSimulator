@@ -93,6 +93,12 @@ namespace AntMessageSimulator
                 return 0;
         }
 
+        public override string ToString()
+        {
+            return string.Format("{{ Timestamp = {0:F3}, Payload = {1} }}", Timestamp,
+                GetPayloadAsString());
+        }
+
         public string GetPayloadAsString()
         {
             StringBuilder payload = new StringBuilder();
