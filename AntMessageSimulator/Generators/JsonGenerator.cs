@@ -23,7 +23,7 @@ namespace AntMessageSimulator
         {
             MessageQuery query = new MessageQuery(session);
             var events = query.FindAllFecEvents();
-            return JsonConvert.SerializeObject(events);
+            return JsonConvert.SerializeObject(events, Formatting.Indented);
         }
     }
 }
