@@ -16,11 +16,24 @@ namespace AntMessageSimulator
         private string destination;
         private string[] args;
         private int sessionNumber;
+        // TODO: this should now be an exclusive enum because cannot execute more than one of these at a time.
         private bool outputAnts;
         private bool outputJson;
         private bool outputSpeed;
+        private bool outputConsole;
         private DeviceType device;
         private ushort targetDeviceId;
+
+        public static string GetUsage()
+        {
+            const string USAGE =
+                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {output filename} {Optional: --ants | --fec | --json | --cout}
+    Example:  simulator.exe Device0.txt                     #Lists a session summary for each in the device log.
+    Example:  simulator.exe Device0.txt 1 Device0.ants      #Outputs an AutoANTs .ants script file generated from session #1.
+    Example:  simulator.exe Device0.txt 2 --fec --cout      #Prints all FEC commands from session 2 to console.
+";
+            return USAGE;
+        }
 
         public string Source
         {
@@ -58,6 +71,12 @@ namespace AntMessageSimulator
             set { outputSpeed = value; }
         }
 
+        public bool OutputConsole
+        {
+            get { return outputConsole; }
+            set { outputConsole = value; }
+        }
+
         public DeviceType Device
         {
             get { return device;  }
@@ -66,7 +85,8 @@ namespace AntMessageSimulator
 
         public bool WriteOutput()
         {
-            return destination != null && (outputAnts || outputJson || outputSpeed);
+            return (destination != null && (outputAnts || outputJson || outputSpeed)) ||
+                outputConsole;
         }
 
         public ExecutionOptions(string[] args)
@@ -178,6 +198,8 @@ namespace AntMessageSimulator
                 outputAnts = true;
             else if (value.ToUpper() == "HZ")
                 outputSpeed = true;
+            else if (value.ToUpper() == "COUT")
+                outputConsole = true;
             else
                 throw new ApplicationException(value + " is not a valid option.");
         }

@@ -52,10 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\SpeedEvent.cs" />
     <Compile Include="Exceptions\MessageException.cs" />
     <Compile Include="Exceptions\ApplicationException.cs" />
     <Compile Include="Generators\AutoAntsScriptGenerator.cs" />
     <Compile Include="Data\ChannelConfiguration.cs" />
+    <Compile Include="Generators\ConsoleGenerator.cs" />
     <Compile Include="Program\DeviceLogParser.cs" />
     <Compile Include="Data\ExecutionOptions.cs" />
     <Compile Include="Data\FecMessage.cs" />

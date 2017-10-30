@@ -134,11 +134,4 @@ namespace AntMessageSimulator
             return data;
         }
     }
-
-
-    public class SpeedEvent
-    {
-        public float Timestamp { get; set; }
-        public float Speed { get; set; }
-    }
 }

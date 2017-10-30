@@ -80,6 +80,8 @@ namespace AntMessageSimulator
                 generator = new JsonGenerator(session, options.Device);
             else if (options.OutputSpeed)
                 generator = new WaveGenerator(session);
+            else if (options.OutputConsole)
+                generator = new ConsoleGenerator(session, options.Device);
             return generator;
         }
 
@@ -88,8 +90,13 @@ namespace AntMessageSimulator
             if (content == null)
                 throw new ApplicationException("Nothing to write for session: " + sessionIndex + 1);
 
-            string filename = options.GetDestinationFilename(sessionIndex, sessionCount);
-            WriteFile(filename, content);
+            if (options.OutputConsole)
+                Printer.Info(content);
+            else
+            {
+                string filename = options.GetDestinationFilename(sessionIndex, sessionCount);
+                WriteFile(filename, content);
+            }
         }
 
         private void WriteFile(string filename, string content)
