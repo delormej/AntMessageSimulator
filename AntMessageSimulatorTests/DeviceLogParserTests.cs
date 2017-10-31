@@ -5,11 +5,21 @@ namespace AntMessageSimulator.Tests
 {
     public class TestSetup
     {
+        private static List<DeviceSession> sessions;
+        private static object lockObject = new object();
+
         public static List<DeviceSession> GetSessions()
         {
-            string path = @"..\..\..\AntMessageSimulatorTests\Device0.txt";
-            DeviceLogParser parser = new DeviceLogParser();
-            return parser.Parse(path);
+            lock (lockObject)
+            {
+                if (sessions == null)
+                {
+                    string path = @"..\..\..\AntMessageSimulatorTests\Device0.txt";
+                    DeviceLogParser parser = new DeviceLogParser();
+                    sessions = parser.Parse(path);
+                }
+                return sessions;
+            }
         }
     }
 

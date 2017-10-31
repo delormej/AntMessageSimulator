@@ -56,16 +56,16 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="AutoAntsScriptGeneratorTests.cs" />
+    <Compile Include="Generators\AutoAntsScriptGeneratorTests.cs" />
     <Compile Include="Data\ChannelConfigurationTests.cs" />
     <Compile Include="Data\FecMessageTests.cs" />
-    <Compile Include="MessageQueryTests.cs" />
-    <Compile Include="MessageTests.cs" />
-    <Compile Include="DeviceSessionTests.cs" />
+    <Compile Include="Data\MessageQueryTests.cs" />
+    <Compile Include="Data\MessageTests.cs" />
+    <Compile Include="Data\DeviceSessionTests.cs" />
     <Compile Include="DeviceLogParserTests.cs" />
     <Compile Include="Program\SimulatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WaveGeneratorTests.cs" />
+    <Compile Include="Generators\WaveGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

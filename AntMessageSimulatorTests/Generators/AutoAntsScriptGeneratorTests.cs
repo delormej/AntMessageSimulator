@@ -8,6 +8,14 @@ namespace AntMessageSimulator.Tests
     [TestClass()]
     public class AutoAntsScriptGeneratorTests
     {
+        List<DeviceSession> sessions = null;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            sessions = TestSetup.GetSessions();
+        }
+
         [TestMethod()]
         public void ToAutoAntScriptLineTest()
         {
@@ -23,16 +31,7 @@ namespace AntMessageSimulator.Tests
         [TestMethod()]
         public void CreateScriptStreamTest()
         {
-            string source = @"..\..\..\AntMessageSimulatorTests\Device0.txt";
-            string destination = @"..\..\..\AntMessageSimulatorTests\Device0.ants";
             string script = "";
-
-            // Clean up previous test run.
-            if (File.Exists(destination))
-                File.Delete(destination);
-
-            DeviceLogParser parser = new DeviceLogParser();
-            List<DeviceSession> sessions = parser.Parse(source);
 
             // Use the last session to generate a script.
             using (AutoAntsScriptGenerator generator =
@@ -40,21 +39,18 @@ namespace AntMessageSimulator.Tests
             {
                 Stream stream = generator.CreateScriptStream();
                 TextReader reader = new StreamReader(stream);
-
                 script = reader.ReadToEnd();
             }
-
-            // TODO: Define an actual length to test for here.
             Assert.IsTrue(script.Length > 1000);
-
-            // Write the file out.
-            File.WriteAllText(destination, script);
         }
 
         [TestMethod()]
         public void GenerateTest()
         {
-            Assert.Fail();
+            AutoAntsScriptGenerator generator = new AutoAntsScriptGenerator(
+                sessions[7],DeviceType.FeC);
+            string content = generator.Generate();
+            Assert.IsTrue(content.Length > 1000);
         }
     }
 }
