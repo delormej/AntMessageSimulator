@@ -14,6 +14,9 @@ namespace AntMessageSimulator.Tests
         [TestMethod()]
         public void ExecuteTest()
         {
+            //const string commandLine = "";
+            //ExecutionOptions options = new ExecutionOptions()
+            //Simulator simulator = new Simulator(options);
             Assert.Fail();
         }
     }
