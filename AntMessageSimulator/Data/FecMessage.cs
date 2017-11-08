@@ -18,7 +18,7 @@ namespace AntMessageSimulator
             {
                 Timestamp = message.Timestamp,
                 ServoPosition = message.Bytes[1 + 4] | (message.Bytes[2 + 4] << 8),
-                Target = message.Bytes[3 + 4] | (message.Bytes[4 + 4] << 8),
+                Target = DecodeTarget(message.Bytes[3 + 4], message.Bytes[4 + 4]),
                 FlyWheel = message.Bytes[5 + 4] | (message.Bytes[6 + 4] << 8),
                 PowerMeterPaired = (message.Bytes[7 + 4] & 0x80) >> 7
             };
@@ -132,6 +132,13 @@ namespace AntMessageSimulator
             }
 
             return data;
+        }
+
+        private static short DecodeTarget(byte lsb, byte msb)
+        {
+            // Encodes the resistance mode into the 2 most significant bits.
+            short target = (short)(lsb | ((msb & 0x3F) << 8));
+            return target;
         }
     }
 }
