@@ -29,7 +29,8 @@
 						title: "Trainer Power", */
 						dataLoader: {
 							//url: "http://localhost:31338/build/20171019T200653324Z.json",
-							url: "https://irt8413.blob.core.windows.net/vhds/" + getParameterByName('file'),
+							// https://irt8413.blob.core.windows.net
+							url: "/rides/" + getParameterByName('file'),
 							format: "json",
 							postProcess: function(data, config, chart) {
 								var newData = data.Trainer.concat(data.PowerMeter);
@@ -64,6 +65,13 @@
 							"valueAxis": "power-axis",
 							"valueField": "InstantPower"
 						},
+						{
+							"id": "AmGraph-3",
+							"title": "Target Power (Watts)",
+							"valueAxis": "power-axis",
+							"valueField": "Target",
+							"lineThickness": 3
+						},						
 						{
 							"lineColor": "lightblue",
 							"alphaField": "alpha",
