@@ -15,29 +15,15 @@ namespace AntMessageSimulator
         {
             this.session = session;
             this.device = device;
-            content = new StringBuilder();
         }
 
         public string Generate()
         {
+            content = new StringBuilder();
             WriteHeader();
             WriteLines();
             WriteFooter();
             return content.ToString();
-        }
-
-        private IEnumerable<Message> GetMessages()
-        {
-            MessageQuery query = new MessageQuery(session);
-            IEnumerable<Message> messages = null;
-
-            if (device == DeviceType.FeC)
-                throw new NotImplementedException("FEC not supported for C Array generation.");
-            else if (device == DeviceType.PowerMeter)
-                messages = query.FindAllPowerMeterBroadcastEvents()
-                    .Where(m => m.GetMessageId() == 0x20);
-
-            return messages;
         }
 
         private void WriteHeader()
@@ -52,6 +38,20 @@ namespace AntMessageSimulator
 
             foreach (var message in messages)
                 WriteLine(message);
+        }
+
+        private IEnumerable<Message> GetMessages()
+        {
+            MessageQuery query = new MessageQuery(session);
+            IEnumerable<Message> messages = null;
+
+            if (device == DeviceType.FeC)
+                throw new NotImplementedException("FEC not supported for C Array generation.");
+            else if (device == DeviceType.PowerMeter)
+                messages = query.FindAllPowerMeterBroadcastEvents()
+                    .Where(m => m.GetMessageId() == 0x20);
+
+            return messages;
         }
 
         private void WriteLine(Message message)
