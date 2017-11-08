@@ -15,8 +15,8 @@ namespace AntMessageSimulator
         const byte CHANNEL_ID_POSITION = 3;
         const byte MESSAGE_ID_POSTITION = 4;
 
-        const byte MAX_PAYLOAD_LENGTH = 8;
-        const byte MESSAGE_HEADER_LENGTH = 4;
+        internal const byte MAX_PAYLOAD_LENGTH = 8;
+        internal const byte MESSAGE_HEADER_LENGTH = 4;
         const byte SET_NETWORK_KEY_EVENT = 0x46;
         const byte MESSAGE_LENGTH_POSITION = 1;
         const byte TRANSMIT_TYPE_START_INDEX = 24;

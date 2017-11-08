@@ -60,6 +60,14 @@ namespace AntMessageSimulator
                          select FecMessage.GetGeneralFeData(message);
         }
 
+        public string FindProductVersion(byte channelId)
+        {
+            return (from message in session.Messages
+                   where message.ChannelId == channelId &&
+                   message.GetMessageId() == 0x51
+                   select ProductMessage.ParseProductVersion(message)).First();
+        }
+
         private IEnumerable<T> NotNullItems<T>(IEnumerable<T> list)
         {
             foreach (var item in list)

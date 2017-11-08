@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\ProductMessage.cs" />
     <Compile Include="Data\SpeedEvent.cs" />
     <Compile Include="Exceptions\MessageException.cs" />
     <Compile Include="Exceptions\ApplicationException.cs" />

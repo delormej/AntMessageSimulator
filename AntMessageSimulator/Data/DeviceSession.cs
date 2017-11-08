@@ -31,10 +31,11 @@ namespace AntMessageSimulator
         public override string ToString()
         {
             const string TO_STRING_TEMPLATE = "Duration: {5:h\\:mm\\:ss}, DeviceId: {0}, " +
-                "ChannelId: {1}, FecId: {2}, FecChannelId: {3}, Messages: {4}";
+                "ChannelId: {1}, FecId: {2} (v{6}), FecChannelId: {3}, Messages: {4}";
             return string.Format(TO_STRING_TEMPLATE, 
                 PowerMeterId, PowerMeterChannelId, FecId, FecChannelId, messages.Count, 
-                GetSessionDuration());
+                GetSessionDuration(),
+                GetFecVersion());
         }
 
         public TimeSpan GetSessionDuration()
@@ -82,6 +83,12 @@ namespace AntMessageSimulator
         public DeviceSession()
         {
             messages = new List<Message>();
-        }            
+        }   
+        
+        private string GetFecVersion()
+        {
+            MessageQuery query = new MessageQuery(this);
+            return query.FindProductVersion(FecChannelId);
+        }
     }
 }
