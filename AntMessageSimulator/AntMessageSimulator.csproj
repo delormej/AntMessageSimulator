@@ -57,6 +57,7 @@
     <Compile Include="Exceptions\ApplicationException.cs" />
     <Compile Include="Generators\AutoAntsScriptGenerator.cs" />
     <Compile Include="Data\ChannelConfiguration.cs" />
+    <Compile Include="Generators\CArrayGenerator.cs" />
     <Compile Include="Generators\ConsoleGenerator.cs" />
     <Compile Include="Generators\GeneratorFactory.cs" />
     <Compile Include="Program\DeviceLogParser.cs" />

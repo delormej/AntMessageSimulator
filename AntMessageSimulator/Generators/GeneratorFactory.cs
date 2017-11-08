@@ -11,6 +11,8 @@
                 generator = new JsonGenerator(session, options.Device);
             else if (options.OutputSpeed)
                 generator = new WaveGenerator(session);
+            else if (options.OutputCArray)
+                generator = new CArrayGenerator(session, options.Device);
             else if (options.OutputConsole)
                 generator = new ConsoleGenerator(session, options.Device);
             return generator;

@@ -21,13 +21,14 @@ namespace AntMessageSimulator
         private bool outputJson;
         private bool outputSpeed;
         private bool outputConsole;
+        private bool outputCArray;
         private DeviceType device;
         private ushort targetDeviceId;
 
         public static string GetUsage()
         {
             const string USAGE =
-                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {output filename} {Optional: --ants | --fec | --json | --cout}
+                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {output filename} {Optional: --ants | --fec | --json | --cout | --c}
     Example:  simulator.exe Device0.txt                     #Lists a session summary for each in the device log.
     Example:  simulator.exe Device0.txt 1 Device0.ants      #Outputs an AutoANTs .ants script file generated from session #1.
     Example:  simulator.exe Device0.txt 2 --fec --cout      #Prints all FEC commands from session 2 to console.
@@ -77,6 +78,12 @@ namespace AntMessageSimulator
             set { outputConsole = value; }
         }
 
+        public bool OutputCArray
+        {
+            get { return outputCArray; }
+            set { outputCArray = value; }
+        }
+
         public DeviceType Device
         {
             get { return device;  }
@@ -85,7 +92,7 @@ namespace AntMessageSimulator
 
         public bool WriteOutput()
         {
-            return (destination != null && (outputAnts || outputJson || outputSpeed)) ||
+            return (destination != null && (outputAnts || outputJson || outputSpeed || outputCArray)) ||
                 outputConsole;
         }
 
@@ -200,6 +207,8 @@ namespace AntMessageSimulator
                 outputSpeed = true;
             else if (value.ToUpper() == "COUT")
                 outputConsole = true;
+            else if (value.ToUpper() == "C")
+                outputCArray = true;
             else
                 throw new ApplicationException(value + " is not a valid option.");
         }
