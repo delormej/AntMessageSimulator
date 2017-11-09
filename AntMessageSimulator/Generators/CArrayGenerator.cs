@@ -48,8 +48,7 @@ namespace AntMessageSimulator
             if (device == DeviceType.FeC)
                 throw new NotImplementedException("FEC not supported for C Array generation.");
             else if (device == DeviceType.PowerMeter)
-                messages = query.FindAllPowerMeterBroadcastEvents()
-                    .Where(m => m.GetMessageId() == 0x20);
+                messages = query.FindAllPowerMeterBroadcastEvents();
 
             return messages;
         }
