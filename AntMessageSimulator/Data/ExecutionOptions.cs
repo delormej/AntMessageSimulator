@@ -3,13 +3,6 @@ using System.IO;
 
 namespace AntMessageSimulator
 {
-    public enum DeviceType
-    {
-        Unassigned = 0,
-        PowerMeter,    
-        FeC
-    }
-
     public class ExecutionOptions
     {
         private string source;

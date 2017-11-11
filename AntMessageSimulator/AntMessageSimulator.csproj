@@ -52,9 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\ProductMessage.cs" />
-    <Compile Include="Data\SpecificTrainerData.cs" />
-    <Compile Include="Data\SpeedEvent.cs" />
+    <Compile Include="Data\OptionTypes.cs" />
+    <Compile Include="Messages\ProductMessage.cs" />
+    <Compile Include="Messages\SpecificTrainerData.cs" />
+    <Compile Include="Messages\SpeedEvent.cs" />
     <Compile Include="Exceptions\MessageException.cs" />
     <Compile Include="Exceptions\ApplicationException.cs" />
     <Compile Include="Generators\AutoAntsScriptGenerator.cs" />
@@ -65,10 +66,10 @@
     <Compile Include="lib\Dynamic.cs" />
     <Compile Include="Program\DeviceLogParser.cs" />
     <Compile Include="Data\ExecutionOptions.cs" />
-    <Compile Include="Data\FecMessage.cs" />
+    <Compile Include="Messages\FecMessage.cs" />
     <Compile Include="Generators\Generator.cs" />
     <Compile Include="Generators\JsonGenerator.cs" />
-    <Compile Include="Data\Message.cs" />
+    <Compile Include="Messages\Message.cs" />
     <Compile Include="Data\DeviceSession.cs" />
     <Compile Include="Data\MessageQuery.cs" />
     <Compile Include="Program\Program.cs" />

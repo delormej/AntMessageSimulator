@@ -30,12 +30,8 @@ namespace AntMessageSimulator.Tests
         [TestMethod()]
         public void FindAllFecMessagesTest()
         {
-            var messages = sessions[7].Messages.AsQueryable().
-                Where("Timestamp > 300", null);
-
-            foreach (var message in messages)
-                Assert.IsNotNull(message);
-
+            var messages = sessions[7].Messages.AsQueryable().Where("Timestamp > 300 and Timestamp < 310", null);
+            Assert.IsTrue(messages.Count() > 190);
         }
 
         [TestMethod()]

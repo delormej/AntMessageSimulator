@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AntMessageSimulator\AntMessageSimulator.csproj">
-      <Project>{74C38A0F-8B94-42A3-AFE1-9839C86F178A}</Project>
+      <Project>{74c38a0f-8b94-42a3-afe1-9839c86f178a}</Project>
       <Name>AntMessageSimulator</Name>
     </ProjectReference>
   </ItemGroup>
