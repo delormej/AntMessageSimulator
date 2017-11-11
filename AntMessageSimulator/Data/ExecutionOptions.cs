@@ -5,18 +5,12 @@ namespace AntMessageSimulator
 {
     public class ExecutionOptions
     {
+        private string[] args;
         private string source;
         private string destination;
-        private string[] args;
         private int sessionNumber;
-        // TODO: this should now be an exclusive enum because cannot execute more than one of these at a time.
-        private bool outputAnts;
-        private bool outputJson;
-        private bool outputSpeed;
-        private bool outputConsole;
-        private bool outputCArray;
         private DeviceType device;
-        private ushort targetDeviceId;
+        private OperationType operation;
 
         public static string GetUsage()
         {
@@ -38,7 +32,14 @@ namespace AntMessageSimulator
         public string Destination
         {
             get { return destination; }
-            set { destination = value; }
+            set
+            {
+                if (!string.IsNullOrEmpty(value)
+                        && Path.GetFileName(value).IndexOfAny(Path.GetInvalidFileNameChars()) > 0)
+                    throw new ApplicationException("Invalid destination filename passed: " + value);
+                destination = value;
+                Output = OutputType.File;
+            }
         }
 
         public int SessionNumber
@@ -47,46 +48,35 @@ namespace AntMessageSimulator
             set { sessionNumber = value; }
         }
 
-        public bool OutputAnts
-        {
-            get { return outputAnts; }
-            set { outputAnts = value; }
+        public OperationType Operation {
+            get { return operation; }
+            set
+            {
+                if (operation != OperationType.Unassigned)
+                    throw new ApplicationException("You cannot choose more than one operation.");
+                else
+                    operation = value;
+            }
         }
 
-        public bool OutputJson
-        {
-            get { return outputJson;  }
-            set { outputJson = value; }
-        }
-
-        public bool OutputSpeed
-        {
-            get { return outputSpeed; }
-            set { outputSpeed = value; }
-        }
-
-        public bool OutputConsole
-        {
-            get { return outputConsole; }
-            set { outputConsole = value; }
-        }
-
-        public bool OutputCArray
-        {
-            get { return outputCArray; }
-            set { outputCArray = value; }
-        }
+        public OutputType Output { get; set; }
 
         public DeviceType Device
         {
             get { return device;  }
-            set { device = value; }
+            set
+            {
+                if (device == DeviceType.Unassigned)
+                    device = value;
+                else
+                    throw new ApplicationException(
+                        "You must choose --bp (Bike Power) OR --fec (FE-C Trainer), not both.");
+            }
         }
 
-        public bool WriteOutput()
+        public bool WriteToFile
         {
-            return (destination != null && (outputAnts || outputJson || outputSpeed || outputCArray)) ||
-                outputConsole;
+            get { return destination != null; }
         }
 
         public ExecutionOptions(string[] args)
@@ -128,7 +118,7 @@ namespace AntMessageSimulator
 
             ParseOptions();
             ValidateDeviceOrSetDefault(DeviceType.PowerMeter);
-            ValidateOutputOptions();
+            ValidateOperationOrSetDefault(OperationType.HumanReadable);
         }
 
         private void ValidateSource(string path)
@@ -152,11 +142,7 @@ namespace AntMessageSimulator
         {
             if (ParseArgAsOption(value))
                 return;
-
-            // Should be the destination filename.
-            destination = value;
-
-            // Clean up previous run.
+            Destination = value;
             DeleteDestination();
         }
 
@@ -189,59 +175,46 @@ namespace AntMessageSimulator
         private void ParseArgOption(string value)
         {
             if (value.ToUpper() == "FEC")
-                SetDeviceType(DeviceType.FeC);
+                Device = DeviceType.FeC;
             else if (value.ToUpper() == "BP")
-                SetDeviceType(DeviceType.PowerMeter);
+                Device = DeviceType.PowerMeter;
             else if (value.ToUpper() == "JSON")
-                outputJson = true;
+                Operation = OperationType.Json;
             else if (value.ToUpper() == "ANTS")
-                outputAnts = true;
+                Operation = OperationType.Ants;
             else if (value.ToUpper() == "HZ")
-                outputSpeed = true;
-            else if (value.ToUpper() == "COUT")
-                outputConsole = true;
+                Operation = OperationType.Hz;
             else if (value.ToUpper() == "C")
-                outputCArray = true;
+                Operation = OperationType.CArray;
+            else if (value.ToUpper() == "COUT")
+                Output = OutputType.Console;
+
             else
                 throw new ApplicationException(value + " is not a valid option.");
         }
-
-        private void SetDeviceType(DeviceType deviceType)
-        {
-            if (device == DeviceType.Unassigned)
-                device = deviceType;
-            else
-                throw new ApplicationException(
-                    "You must choose --bp (Bike Power) OR --fec (FE-C Trainer), not both.");
-        }
-
+        
         private void ValidateDeviceOrSetDefault(DeviceType deviceType)
         {
             if (device == DeviceType.Unassigned)
                 device = deviceType;
         }
 
-        private void ValidateOutputOptions()
-        {
-            if (outputAnts == false && outputJson == false && destination != null)
-                SetImplicitOutputType();
-            else if (outputAnts == true && outputJson == true)
-                throw new ApplicationException("You must choose --ants OR --json as output, not both.");
-            else if ((outputAnts == true || outputJson == true) && destination == null)
-                throw new ApplicationException("You must specify a destination file.");
-        }
-
         /// <summary>
         /// If the user has not specified --ants or --json, implicitly derive this from the 
         /// extension of the destination parameter.
         /// </summary>
-        private void SetImplicitOutputType()
+        private void ValidateOperationOrSetDefault(OperationType defaultOperation)
         {
-            string extension = Path.GetExtension(destination);
-            if (extension == ".ants")
-                outputAnts = true;
-            else if (extension == ".json")
-                outputJson = true;
+            if (destination != null)
+            {
+                string extension = Path.GetExtension(destination);
+                if (extension == ".ants")
+                    Operation = OperationType.Ants;
+                else if (extension == ".json")
+                    Operation = OperationType.Json;
+            }
+            else
+                Operation = defaultOperation;
         }
     }
 }

@@ -23,7 +23,12 @@ namespace AntMessageSimulator
         {
             MessageQuery query = new MessageQuery(session);
             var events = query.FindAllFecEvents();
-            return JsonConvert.SerializeObject(events, Formatting.Indented);
+            string output = JsonConvert.SerializeObject(events, Formatting.Indented);
+
+            if (output.Length > 10)
+                return output;
+            else
+                throw new ApplicationException("No events were found to generate JSON with.");
         }
     }
 }

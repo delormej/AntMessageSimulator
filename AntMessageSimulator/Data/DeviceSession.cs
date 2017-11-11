@@ -87,8 +87,15 @@ namespace AntMessageSimulator
         
         private string GetFecVersion()
         {
-            MessageQuery query = new MessageQuery(this);
-            return query.FindProductVersion(FecChannelId);
+            if (FecId > 0)
+            {
+                MessageQuery query = new MessageQuery(this);
+                return query.FindProductVersion(FecChannelId);
+            }
+            else
+            {
+                return ":n/a";
+            }
         }
     }
 }

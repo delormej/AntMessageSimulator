@@ -61,7 +61,7 @@
     <Compile Include="Generators\AutoAntsScriptGenerator.cs" />
     <Compile Include="Data\ChannelConfiguration.cs" />
     <Compile Include="Generators\CArrayGenerator.cs" />
-    <Compile Include="Generators\ConsoleGenerator.cs" />
+    <Compile Include="Generators\HumanReadableGenerator.cs" />
     <Compile Include="Generators\GeneratorFactory.cs" />
     <Compile Include="lib\Dynamic.cs" />
     <Compile Include="Program\DeviceLogParser.cs" />

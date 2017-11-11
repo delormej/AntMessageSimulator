@@ -4,12 +4,12 @@ using System.Text;
 
 namespace AntMessageSimulator
 {
-    public class ConsoleGenerator : Generator
+    public class HumanReadableGenerator : Generator
     {
         DeviceSession session;
         DeviceType device;
 
-        public ConsoleGenerator(DeviceSession session, DeviceType device)
+        public HumanReadableGenerator(DeviceSession session, DeviceType device)
         {
             this.session = session;
             this.device = device;

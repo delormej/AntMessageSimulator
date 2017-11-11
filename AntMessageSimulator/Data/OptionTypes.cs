@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace AntMessageSimulator
 {
     public enum DeviceType
@@ -11,13 +10,16 @@ namespace AntMessageSimulator
 
     public enum OutputType
     {
-        File,
         Console,
-        Simulator
+        File,
+        Simulator   /* Chart, SpeedHz, Ants */
     }
 
     public enum OperationType
     {
+        Unassigned,
+        SummaryOnly,
+        HumanReadable,
         Ants,
         Json,
         Hz,

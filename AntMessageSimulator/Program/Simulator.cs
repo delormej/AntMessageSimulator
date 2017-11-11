@@ -24,7 +24,7 @@ namespace AntMessageSimulator
         {
             GetSessionsFromFile();
             PrintSummary();
-            if (options.WriteOutput())
+            if (options.Operation > OperationType.SummaryOnly)
                 GenerateAndWriteOutput();
         }
 
@@ -75,9 +75,9 @@ namespace AntMessageSimulator
             if (content == string.Empty)
                 throw new ApplicationException("Nothing to write for session: " + sessionIndex + 1);
 
-            if (options.OutputConsole)
+            if (options.Output == OutputType.Console)
                 Printer.Info(content);
-            else
+            else if (options.Output == OutputType.File)
             {
                 string filename = options.GetDestinationFilename(sessionIndex, sessionCount);
                 WriteFile(filename, content);
