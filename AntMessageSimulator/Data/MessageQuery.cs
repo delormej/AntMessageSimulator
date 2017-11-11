@@ -24,7 +24,7 @@ namespace AntMessageSimulator
         public IEnumerable<Message> FindAllFecMessages()
         {
             var messages = from message in session.Messages
-                           where session.FecId > 0 && message.IsDataMessage() &&
+                           where session.FecId > 0 && message.IsDataMessage &&
                            session.FecChannelId == message.ChannelId
                            select message;
 
@@ -35,8 +35,8 @@ namespace AntMessageSimulator
         {
             var messages = from message in session.Messages
                            where session.FecChannelId == message.ChannelId &&
-                           message.IsDataMessage() &&
-                           message.IsTransmit()
+                           message.IsDataMessage &&
+                           message.IsTransmit
                            select message;
             return NotNullItems(messages);
         }
@@ -45,9 +45,9 @@ namespace AntMessageSimulator
         {
             IEnumerable<Message> messages =
                 from message in session.Messages
-                where message.IsDataMessage() &&
+                where message.IsDataMessage &&
                     message.ChannelId == session.PowerMeterChannelId &&
-                    message.GetMessageId() < 0xF0    // Ignore manufacturer specific pages.
+                    message.MessageId < 0xF0    // Ignore manufacturer specific pages.
                 select message;
 
             return NotNullItems(messages);
@@ -56,7 +56,7 @@ namespace AntMessageSimulator
         public IEnumerable FindAllGeneralFeMessages()
         {
             return from message in FindAllFecMessages()
-                         where message.IsGeneralFeData()
+                         where message.IsGeneralFeData
                          select FecMessage.GetGeneralFeData(message);
         }
 
@@ -64,7 +64,7 @@ namespace AntMessageSimulator
         {
             return (from message in session.Messages
                    where message.ChannelId == channelId &&
-                   message.GetMessageId() == 0x51
+                   message.MessageId == 0x51
                    select ProductMessage.ParseProductVersion(message)).First();
         }
 

@@ -54,15 +54,15 @@ namespace AntMessageSimulator
              * method.  Should we be raising an event here? Clearly other events will be interesting.
              */
 
-            if (PowerMeterId == 0 && message.IsPowerMeterIdEvent())
+            if (PowerMeterId == 0 && message.IsPowerMeterIdEvent)
             {
                 PowerMeterChannelId = message.ChannelId;
-                PowerMeterId = message.GetDeviceId();
+                PowerMeterId = message.DeviceId;
             }
-            else if (FecId == 0 && message.IsFecIdEvent())
+            else if (FecId == 0 && message.IsFecIdEvent)
             {
                 FecChannelId = message.ChannelId;
-                FecId = message.GetDeviceId();
+                FecId = message.DeviceId;
             }
 
             messages.Add(message);

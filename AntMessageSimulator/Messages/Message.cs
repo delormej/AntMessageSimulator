@@ -73,24 +73,89 @@ namespace AntMessageSimulator
 
         public byte PayloadLength { get { return this.payloadLength; } }
 
+        public bool IsTransmit
+        {
+            get
+            {
+                return transmitType == TRANSMIT_TX;
+            }
+        }
+
+        public bool IsChannelIdEvent
+        {
+            get
+            {
+                return EventId == (byte)ANT_ReferenceLibrary.ANTMessageID.CHANNEL_ID_0x51;
+            }
+        }
+
+        public bool IsPowerMeterIdEvent
+        {
+            get
+            {
+                return IsChannelIdEvent &&
+                    Bytes[DEVICE_TYPE_INDEX] == POWER_METER_DEVICE_TYPE;
+            }
+        }
+
+        public bool IsFecIdEvent
+        {
+            get
+            {
+                return IsChannelIdEvent &&
+                    Bytes[DEVICE_TYPE_INDEX] == FEC_DEVICE_TYPE;
+            }
+        }
+
+        public bool IsDataMessage
+        {
+            get
+            {
+                switch ((ANT_ReferenceLibrary.ANTMessageID)this.EventId)
+                {
+                    case ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E:
+                    case ANT_ReferenceLibrary.ANTMessageID.ACKNOWLEDGED_DATA_0x4F:
+                    case ANT_ReferenceLibrary.ANTMessageID.BURST_DATA_0x50:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public bool IsGeneralFeData
+        {
+            get
+            {
+                return (MessageId == GENERAL_FE_DATA_PAGE);
+            }
+        }
+
+
         /// <summary>
         /// The specific command of the payload.
         /// </summary>
-        public byte GetMessageId()
+        public byte MessageId
         {
-            if (IsDataMessage())
-                return this.bytes[MESSAGE_ID_POSTITION];
-            else
-                return 0;
+            get
+            {
+                if (IsDataMessage)
+                    return this.bytes[MESSAGE_ID_POSTITION];
+                else
+                    return 0;
+            }
         }
 
-        public ushort GetDeviceId()
+        public ushort DeviceId
         {
-            if (IsChannelIdEvent())
-                return (ushort)(Bytes[DEVICE_ID_MSB_INDEX] << 8 |
-                            Bytes[DEVICE_ID_LSB_INDEX]);
-            else
-                return 0;
+            get
+            {
+                if (IsChannelIdEvent)
+                    return (ushort)(Bytes[DEVICE_ID_MSB_INDEX] << 8 |
+                                Bytes[DEVICE_ID_LSB_INDEX]);
+                else
+                    return 0;
+            }
         }
 
         public override string ToString()
@@ -108,45 +173,6 @@ namespace AntMessageSimulator
             return payload.ToString();
         }
 
-        public bool IsChannelIdEvent()
-        {
-            return EventId == (byte)ANT_ReferenceLibrary.ANTMessageID.CHANNEL_ID_0x51;
-        }
-        
-        public bool IsTransmit()
-        {
-            return transmitType == TRANSMIT_TX;
-        }
-
-        public bool IsPowerMeterIdEvent()
-        {
-            return IsChannelIdEvent() && 
-                Bytes[DEVICE_TYPE_INDEX] == POWER_METER_DEVICE_TYPE;
-        }
-
-        public bool IsFecIdEvent()
-        {
-            return IsChannelIdEvent() &&
-                Bytes[DEVICE_TYPE_INDEX] == FEC_DEVICE_TYPE;
-        }
-        
-        public bool IsDataMessage()
-        {
-            switch ((ANT_ReferenceLibrary.ANTMessageID)this.EventId)
-            {
-                case ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E:
-                case ANT_ReferenceLibrary.ANTMessageID.ACKNOWLEDGED_DATA_0x4F:
-                case ANT_ReferenceLibrary.ANTMessageID.BURST_DATA_0x50:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        public bool IsGeneralFeData()
-        {
-            return (GetMessageId() == GENERAL_FE_DATA_PAGE);
-        }
 
         /// <summary>
         /// Returns the acceptable payload length + ant header length from the 

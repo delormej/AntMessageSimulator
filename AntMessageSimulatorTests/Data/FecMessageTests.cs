@@ -16,8 +16,8 @@ namespace AntMessageSimulator.Tests
         {
             string line = "  2176.203 { 410420203} Rx - [A4][14][4E][01][19][7F][FF][B7][00][CB][00][31][E0][89][E0][11][05][10][00][68][00][6B][CD][68]";
             Message message = Message.MessageFromLine(line);
-            var data = FecMessage.GetSpecificTrainerData(message);
-            Assert.IsTrue(GetDynamicObjectProperty<int>(data, "InstantPower") == 203);
+            SpecificTrainerData data = FecMessage.GetSpecificTrainerData(message);
+            Assert.IsTrue(data.InstantPower == 203);
         }
 
         [TestMethod()]

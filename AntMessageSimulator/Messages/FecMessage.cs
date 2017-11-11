@@ -11,7 +11,7 @@ namespace AntMessageSimulator
         /// <returns></returns>
         public static object GetIrtInfoFromMessage(Message message)
         {
-            if (message.GetMessageId() != 0xF1)
+            if (message.MessageId != 0xF1)
                 throw new ApplicationException("Not a valid Irt Extra Info message.");
 
             var data = new
@@ -26,9 +26,9 @@ namespace AntMessageSimulator
             return data;
         }
 
-        public static object GetSpecificTrainerData(Message message)
+        public static SpecificTrainerData GetSpecificTrainerData(Message message)
         {
-            if (message.GetMessageId() != 0x19)
+            if (message.MessageId != 0x19)
                 throw new ApplicationException("Not a valid Specific Trainer data message.");
 
             var data = new SpecificTrainerData()
@@ -44,7 +44,7 @@ namespace AntMessageSimulator
 
         public static SpeedEvent GetGeneralFeData(Message message)
         {
-            if (message.GetMessageId() != 0x10)
+            if (message.MessageId != 0x10)
                 throw new ApplicationException("Not a valid General FE data message.");
 
             var data = new SpeedEvent()
@@ -73,7 +73,7 @@ namespace AntMessageSimulator
 
         public static object GetTrackResistanceData(Message message)
         {
-            if (message.GetMessageId() != 0x33)
+            if (message.MessageId != 0x33)
                 throw new ApplicationException("Not a valid Track Resistance data message.");
 
             var data = new
@@ -88,7 +88,7 @@ namespace AntMessageSimulator
 
         public static object GetCommandStatusData(Message message)
         {
-            if (message.GetMessageId() != 0x47)
+            if (message.MessageId != 0x47)
                 throw new ApplicationException("Not a valid Command Status data message.");
 
             var data = new
@@ -108,7 +108,7 @@ namespace AntMessageSimulator
             object data = null;
 
             // Determine the message type
-            switch (message.GetMessageId())
+            switch (message.MessageId)
             {
                 case 0xF1: // IrtExtraInfoPage
                     data = GetIrtInfoFromMessage(message);
