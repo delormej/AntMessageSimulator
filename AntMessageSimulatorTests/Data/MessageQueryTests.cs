@@ -1,21 +1,24 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AntMessageSimulator;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Dynamic;
 
 namespace AntMessageSimulator.Tests
 {
     [TestClass()]
     public class MessageQueryTests
     {
+        List<DeviceSession> sessions;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            sessions = TestSetup.GetSessions();
+        }
+
         [TestMethod()]
         public void FindAllGeneralFeMessagesTest()
         {
-            List<DeviceSession> sessions = TestSetup.GetSessions();
-
             MessageQuery query = new MessageQuery(sessions[7]);
             IEnumerable<SpeedEvent> events =
                 (IEnumerable<SpeedEvent>)query.FindAllGeneralFeMessages();
@@ -27,7 +30,12 @@ namespace AntMessageSimulator.Tests
         [TestMethod()]
         public void FindAllFecMessagesTest()
         {
-            Assert.Fail();
+            var messages = sessions[7].Messages.AsQueryable().
+                Where("Timestamp > 300", null);
+
+            foreach (var message in messages)
+                Assert.IsNotNull(message);
+
         }
 
         [TestMethod()]
