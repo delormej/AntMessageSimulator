@@ -58,8 +58,8 @@ namespace AntMessageSimulator
         {
             return (from message in session.Messages
                    where message.ChannelId == channelId &&
-                   message.MessageId == 0x51
-                   select ProductMessage.ParseProductVersion(message)).FirstOrDefault();
+                   message is ProductMessage
+                   select ((ProductMessage)message).Version).First();
         }
 
         private IEnumerable<T> NotNullItems<T>(IEnumerable<T> list)

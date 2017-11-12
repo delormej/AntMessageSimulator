@@ -22,6 +22,8 @@ namespace AntMessageSimulator
                     return new TrackResistanceMessage(message);
                 case 0x47:
                     return new CommandStatusMessage(message);
+                case 0x51:
+                    return new ProductMessage(message);
                 default:
                     return message;
             }

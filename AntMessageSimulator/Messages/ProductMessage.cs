@@ -1,14 +1,24 @@
 ﻿
 namespace AntMessageSimulator
 {
-    public class ProductMessage
+    public class ProductMessage : Message
     {
-        public static string ParseProductVersion(Message message)
+        public string Version { get; private set; }
+
+        public ProductMessage(Message message) : base(message)
+        {
+            if (message.MessageId != 0x51)
+                throw new ApplicationException("Message is not a valid product message.");
+
+            Version = GetVersion(message);
+        }
+
+        private string GetVersion(Message message)
         {
             const string format = "{0}.{1}.{2}";
-            byte build = message.Bytes[2 + Message.MESSAGE_HEADER_LENGTH];
-            byte major = (byte)(message.Bytes[3 + Message.MESSAGE_HEADER_LENGTH] >> 4);
-            byte minor = (byte)(message.Bytes[3 + Message.MESSAGE_HEADER_LENGTH] & 0x0F);
+            byte build = message.Bytes[2 + MESSAGE_HEADER_LENGTH];
+            byte major = (byte)(message.Bytes[3 + MESSAGE_HEADER_LENGTH] >> 4);
+            byte minor = (byte)(message.Bytes[3 + MESSAGE_HEADER_LENGTH] & 0x0F);
 
             return string.Format(format, major, minor, build);
         }
