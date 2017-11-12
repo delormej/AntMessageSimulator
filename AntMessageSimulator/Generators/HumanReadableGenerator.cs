@@ -21,7 +21,7 @@ namespace AntMessageSimulator
             IEnumerable events = null;
 
             if (device == DeviceType.FeC)
-                events = query.FindAllFecEvents();
+                events = query.FindAllFecMessages();
             else if (device == DeviceType.PowerMeter)
                 events = query.FindAllPowerMeterBroadcastEvents();
 

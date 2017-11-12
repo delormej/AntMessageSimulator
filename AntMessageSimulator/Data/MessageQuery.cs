@@ -15,12 +15,6 @@ namespace AntMessageSimulator
             this.session = session;
         }
 
-        public IEnumerable FindAllFecEvents()
-        {
-            foreach (var message in FindAllFecMessages())
-                yield return FecMessage.GetFecData(message);
-        }
-
         public IEnumerable<Message> FindAllFecMessages()
         {
             var messages = from message in session.Messages
@@ -65,7 +59,7 @@ namespace AntMessageSimulator
             return (from message in session.Messages
                    where message.ChannelId == channelId &&
                    message.MessageId == 0x51
-                   select ProductMessage.ParseProductVersion(message)).First();
+                   select ProductMessage.ParseProductVersion(message)).FirstOrDefault();
         }
 
         private IEnumerable<T> NotNullItems<T>(IEnumerable<T> list)

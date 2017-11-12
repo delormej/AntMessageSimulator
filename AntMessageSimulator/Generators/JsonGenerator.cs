@@ -22,7 +22,7 @@ namespace AntMessageSimulator
         public string Generate()
         {
             MessageQuery query = new MessageQuery(session);
-            var events = query.FindAllFecEvents();
+            var events = query.FindAllFecMessages();
             string output = JsonConvert.SerializeObject(events, Formatting.Indented);
 
             if (output.Length > 10)
