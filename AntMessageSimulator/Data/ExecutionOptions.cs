@@ -118,7 +118,7 @@ namespace AntMessageSimulator
 
             ParseOptions();
             ValidateDeviceOrSetDefault(DeviceType.PowerMeter);
-            ValidateOperationOrSetDefault(OperationType.HumanReadable);
+            ValidateOperationOrSetDefault(OperationType.SummaryOnly);
         }
 
         private void ValidateSource(string path)

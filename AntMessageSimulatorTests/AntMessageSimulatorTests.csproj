@@ -57,6 +57,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Data\ExecutionOptionsTests.cs" />
     <Compile Include="Generators\AutoAntsScriptGeneratorTests.cs" />
     <Compile Include="Data\ChannelConfigurationTests.cs" />
     <Compile Include="Data\FecMessageTests.cs" />

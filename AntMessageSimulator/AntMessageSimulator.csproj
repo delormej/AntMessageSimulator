@@ -71,7 +71,6 @@
     <Compile Include="Messages\TrackResistanceMessage.cs" />
     <Compile Include="Program\DeviceLogParser.cs" />
     <Compile Include="Data\ExecutionOptions.cs" />
-    <Compile Include="Messages\FecMessage.cs" />
     <Compile Include="Generators\Generator.cs" />
     <Compile Include="Generators\JsonGenerator.cs" />
     <Compile Include="Messages\Message.cs" />

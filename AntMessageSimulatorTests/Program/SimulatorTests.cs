@@ -24,6 +24,15 @@ namespace AntMessageSimulator.Tests
         }
 
         [TestMethod()]
+        public void ExecuteSummaryTest()
+        {
+            ExecutionOptions options = new ExecutionOptions(new string[] { inputFile });
+            Simulator simulator = new Simulator(options);
+            simulator.Execute();
+            
+        }
+
+        [TestMethod()]
         public void ExecuteTest()
         {
             ExecutionOptions options = new ExecutionOptions(args);
