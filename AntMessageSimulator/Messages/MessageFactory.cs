@@ -16,6 +16,10 @@ namespace AntMessageSimulator
                     return new IrtExtraInfoMessage(message);
                 case 0x19:
                     return new SpecificTrainerDataMessage(message);
+                case 0x10:
+                    return new GeneralFEDataMessage(message);
+                case 0x33:
+                    return new TrackResistanceMessage(message);
                 default:
                     return message;
             }

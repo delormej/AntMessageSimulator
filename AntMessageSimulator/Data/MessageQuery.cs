@@ -57,7 +57,7 @@ namespace AntMessageSimulator
         {
             return from message in FindAllFecMessages()
                          where message.IsGeneralFeData
-                         select FecMessage.GetGeneralFeData(message);
+                         select new GeneralFEDataMessage(message);
         }
 
         public string FindProductVersion(byte channelId)

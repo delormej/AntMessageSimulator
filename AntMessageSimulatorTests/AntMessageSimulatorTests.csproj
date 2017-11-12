@@ -64,8 +64,10 @@
     <Compile Include="Data\MessageTests.cs" />
     <Compile Include="Data\DeviceSessionTests.cs" />
     <Compile Include="DeviceLogParserTests.cs" />
+    <Compile Include="Messages\GeneralFEDataMessageTests.cs" />
     <Compile Include="Messages\IrtExtraInfoMessageTests.cs" />
     <Compile Include="Messages\SpecificTrainerDataMessageTests.cs" />
+    <Compile Include="Messages\TrackResistanceMessageTests.cs" />
     <Compile Include="Program\SimulatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Generators\WaveGeneratorTests.cs" />
