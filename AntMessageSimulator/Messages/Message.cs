@@ -166,7 +166,16 @@ namespace AntMessageSimulator
             }
         }
 
-        public Message() {}
+        public Message()
+        {
+        }
+
+        public Message(Message message)
+        {
+            Timestamp = message.Timestamp;
+            TransmitType = message.TransmitType;
+            Bytes = message.Bytes;
+        }
 
         /// <summary>
         /// Creates a message object from a string representing a line in a device log.

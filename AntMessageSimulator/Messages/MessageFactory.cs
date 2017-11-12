@@ -10,10 +10,15 @@ namespace AntMessageSimulator
         public static Message MessageFromLine(string line)
         {
             Message message = new Message(line);
-            if (message.MessageId == 0xF1)
-                return new IrtExtraInfoMessage(message);
-
-            return message;
+            switch (message.MessageId)
+            {
+                case 0xF1:
+                    return new IrtExtraInfoMessage(message);
+                case 0x19:
+                    return new SpecificTrainerDataMessage(message);
+                default:
+                    return message;
+            }
         }
 
     }

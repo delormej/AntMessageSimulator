@@ -4,22 +4,6 @@ namespace AntMessageSimulator
 {
     public class FecMessage
     {
-        public static SpecificTrainerData GetSpecificTrainerData(Message message)
-        {
-            if (message.MessageId != 0x19)
-                throw new ApplicationException("Not a valid Specific Trainer data message.");
-
-            var data = new SpecificTrainerData()
-            {
-                Timestamp = message.Timestamp,
-                // Uses 1.5 bytes
-                InstantPower = (short)(( (message.Bytes[6 + 4] & 0x0F) << 8) | message.Bytes[5 + 4]),
-                TargetPowerLimits = (byte)(message.Bytes[7 + 4] & 0x03), /* 0 - Trainer Operating at target power, 1 - Speed is too low, 2 - speed is too high, 3 - target power limit reached */
-                TrainerFEState = (byte)((message.Bytes[7 + 4] & 0x70) >> 4) /* 1 = Off, 2 = READY, 3 = IN_USE, 4 = Finished (Paused) */
-            };
-            return data;
-        }
-
         public static SpeedEvent GetGeneralFeData(Message message)
         {
             if (message.MessageId != 0x10)
@@ -93,7 +77,7 @@ namespace AntMessageSimulator
                     throw new NotImplementedException();
                     break;
                 case 0x19: // SpecificTrainerDataPage
-                    data = GetSpecificTrainerData(message);
+                    throw new NotImplementedException();
                     break;
                 case 0x10:
                     data = GetGeneralFeData(message);

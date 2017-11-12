@@ -12,15 +12,6 @@ namespace AntMessageSimulator.Tests
     public class FecMessageTests
     {
         [TestMethod()]
-        public void GetSpecificTrainerDataTest()
-        {
-            string line = "  2176.203 { 410420203} Rx - [A4][14][4E][01][19][7F][FF][B7][00][CB][00][31][E0][89][E0][11][05][10][00][68][00][6B][CD][68]";
-            Message message = MessageFactory.MessageFromLine(line);
-            SpecificTrainerData data = FecMessage.GetSpecificTrainerData(message);
-            Assert.IsTrue(data.InstantPower == 203);
-        }
-
-        [TestMethod()]
         public void GetGeneralFeDataTest()
         {
             string line = "  4069.735 { 187267906} Rx - [A4][14][4E][02][10][19][00][00][00][00][FF][24][E0][89][E0][11][05][10][00][69][00][C0][C0][CA]";

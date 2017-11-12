@@ -56,7 +56,7 @@
     <Compile Include="Messages\IrtExtraInfoMessage.cs" />
     <Compile Include="Messages\MessageFactory.cs" />
     <Compile Include="Messages\ProductMessage.cs" />
-    <Compile Include="Messages\SpecificTrainerData.cs" />
+    <Compile Include="Messages\SpecificTrainerDataMessage.cs" />
     <Compile Include="Messages\SpeedEvent.cs" />
     <Compile Include="Exceptions\MessageException.cs" />
     <Compile Include="Exceptions\ApplicationException.cs" />

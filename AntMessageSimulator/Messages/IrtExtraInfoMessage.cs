@@ -8,8 +8,6 @@ namespace AntMessageSimulator
             if (message.MessageId != 0xF1)
                 throw new ApplicationException("Not a valid Irt Extra Info message.");
 
-            Timestamp = message.Timestamp;
-            TransmitType = message.TransmitType;
             ServoPosition = DecodeServoPostion(message);
             Target = DecodeTarget(message);
             FlyWheel = DecodeFlyWheel(message);
