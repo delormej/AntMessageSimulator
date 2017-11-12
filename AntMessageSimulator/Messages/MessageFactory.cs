@@ -20,10 +20,11 @@ namespace AntMessageSimulator
                     return new GeneralFEDataMessage(message);
                 case 0x33:
                     return new TrackResistanceMessage(message);
+                case 0x47:
+                    return new CommandStatusMessage(message);
                 default:
                     return message;
             }
         }
-
     }
 }
