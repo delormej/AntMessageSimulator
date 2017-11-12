@@ -4,28 +4,6 @@ namespace AntMessageSimulator
 {
     public class FecMessage
     {
-        /// <summary>
-        /// Parses the Irt Extra info message.
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public static object GetIrtInfoFromMessage(Message message)
-        {
-            if (message.MessageId != 0xF1)
-                throw new ApplicationException("Not a valid Irt Extra Info message.");
-
-            var data = new
-            {
-                Timestamp = message.Timestamp,
-                ServoPosition = message.Bytes[1 + 4] | (message.Bytes[2 + 4] << 8),
-                Target = DecodeTarget(message.Bytes[3 + 4], message.Bytes[4 + 4]),
-                FlyWheel = message.Bytes[5 + 4] | (message.Bytes[6 + 4] << 8),
-                PowerMeterPaired = (message.Bytes[7 + 4] & 0x80) >> 7
-            };
-
-            return data;
-        }
-
         public static SpecificTrainerData GetSpecificTrainerData(Message message)
         {
             if (message.MessageId != 0x19)
@@ -111,7 +89,8 @@ namespace AntMessageSimulator
             switch (message.MessageId)
             {
                 case 0xF1: // IrtExtraInfoPage
-                    data = GetIrtInfoFromMessage(message);
+                    //data = GetIrtInfoFromMessage(message);
+                    throw new NotImplementedException();
                     break;
                 case 0x19: // SpecificTrainerDataPage
                     data = GetSpecificTrainerData(message);
@@ -132,13 +111,6 @@ namespace AntMessageSimulator
             }
 
             return data;
-        }
-
-        private static short DecodeTarget(byte lsb, byte msb)
-        {
-            // Encodes the resistance mode into the 2 most significant bits.
-            short target = (short)(lsb | ((msb & 0x3F) << 8));
-            return target;
         }
     }
 }

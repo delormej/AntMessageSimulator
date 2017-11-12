@@ -1,6 +1,12 @@
 ﻿
 namespace AntMessageSimulator
 {
+    public enum TransmitType
+    {
+        Tx,
+        Rx
+    }
+
     public enum DeviceType
     {
         Unassigned = 0,

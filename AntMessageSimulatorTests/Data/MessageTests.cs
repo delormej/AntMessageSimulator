@@ -12,7 +12,7 @@ namespace AntMessageSimulator.Tests
         [TestInitialize]
         public void Setup()
         {
-            message = Message.MessageFromLine(line);
+            message = MessageFactory.MessageFromLine(line);
         }
 
         [TestMethod()]

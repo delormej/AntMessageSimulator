@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\OptionTypes.cs" />
+    <Compile Include="Messages\IrtExtraInfoMessage.cs" />
+    <Compile Include="Messages\MessageFactory.cs" />
     <Compile Include="Messages\ProductMessage.cs" />
     <Compile Include="Messages\SpecificTrainerData.cs" />
     <Compile Include="Messages\SpeedEvent.cs" />

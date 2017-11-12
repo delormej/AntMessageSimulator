@@ -41,7 +41,7 @@ namespace AntMessageSimulator
             // Open the file.
             foreach (var line in File.ReadLines(path))
             {
-                Message message = Message.MessageFromLine(line);
+                Message message = MessageFactory.MessageFromLine(line);
                 AddMessageToSession(message);
             }
 
