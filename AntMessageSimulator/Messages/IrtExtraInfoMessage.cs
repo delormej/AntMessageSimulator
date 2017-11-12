@@ -3,7 +3,7 @@ namespace AntMessageSimulator
 {
     public class IrtExtraInfoMessage : Message
     {
-        public IrtExtraInfoMessage(Message message)
+        public IrtExtraInfoMessage(Message message) : base(message)
         {
             if (message.MessageId != 0xF1)
                 throw new ApplicationException("Not a valid Irt Extra Info message.");
