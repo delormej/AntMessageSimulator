@@ -7,7 +7,7 @@ namespace AntMessageSimulator
 
         public GeneralFEDataMessage(Message message) : base(message)
         {
-            if (message.MessageId != 0x10)
+            if (message.MessageId != GENERAL_FEDATA_PAGE)
                 throw new ApplicationException("Not a valid General FE data message.");
             Speed = GetSpeedMps(message);
         }

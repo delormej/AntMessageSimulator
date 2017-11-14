@@ -9,7 +9,7 @@ namespace AntMessageSimulator
 
         public CommandStatusMessage(Message message) : base(message)
         {
-            if (message.MessageId != 0x47)
+            if (message.MessageId != COMMAND_STATUS_PAGE)
                 throw new ApplicationException("Not a valid Command Status data message.");
 
             LastCommand = GetLastCommand(message);

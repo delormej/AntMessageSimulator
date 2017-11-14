@@ -7,7 +7,7 @@ namespace AntMessageSimulator
 
         public ProductMessage(Message message) : base(message)
         {
-            if (message.MessageId != 0x51)
+            if (message.MessageId != PRODUCT_PAGE)
                 throw new ApplicationException("Message is not a valid product message.");
 
             Version = GetVersion(message);

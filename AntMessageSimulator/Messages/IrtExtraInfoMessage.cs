@@ -5,7 +5,7 @@ namespace AntMessageSimulator
     {
         public IrtExtraInfoMessage(Message message) : base(message)
         {
-            if (message.MessageId != 0xF1)
+            if (message.MessageId != IRT_EXTRAINFO_PAGE)
                 throw new ApplicationException("Not a valid Irt Extra Info message.");
 
             ServoPosition = DecodeServoPostion(message);

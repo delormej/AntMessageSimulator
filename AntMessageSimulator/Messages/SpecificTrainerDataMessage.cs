@@ -10,7 +10,7 @@ namespace AntMessageSimulator
 
         public SpecificTrainerDataMessage(Message message) : base(message)
         {
-            if (message.MessageId != 0x19)
+            if (message.MessageId != SPECIFIC_TRAINER_DATA_PAGE)
                 throw new ApplicationException("Not a valid Specific Trainer data message.");
 
             InstantPower = GetInstantPower(message);

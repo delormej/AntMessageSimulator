@@ -37,6 +37,7 @@ namespace AntMessageSimulator
         public const byte IRT_EXTRAINFO_PAGE = 0xF1;
         public const byte SPECIFIC_TRAINER_DATA_PAGE = 0x19;
         public const byte GENERAL_FEDATA_PAGE = 0x10;
+        public const byte PRODUCT_PAGE = 0x51;
         #endregion
 
         private float timestamp;
