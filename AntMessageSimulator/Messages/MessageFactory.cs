@@ -12,15 +12,15 @@ namespace AntMessageSimulator
             Message message = new Message(line);
             switch (message.MessageId)
             {
-                case 0xF1:
+                case Message.IRT_EXTRAINFO_PAGE:
                     return new IrtExtraInfoMessage(message);
-                case 0x19:
+                case Message.SPECIFIC_TRAINER_DATA_PAGE:
                     return new SpecificTrainerDataMessage(message);
-                case 0x10:
+                case Message.GENERAL_FEDATA_PAGE:
                     return new GeneralFEDataMessage(message);
-                case 0x33:
+                case Message.TRACK_RESISTANCE_PAGE:
                     return new TrackResistanceMessage(message);
-                case 0x47:
+                case Message.COMMAND_STATUS_PAGE:
                     return new CommandStatusMessage(message);
                 case 0x51:
                     return new ProductMessage(message);

@@ -8,7 +8,7 @@ namespace AntMessageSimulator
 
         public TrackResistanceMessage(Message message) : base(message)
         {
-            if (message.MessageId != 0x33)
+            if (message.MessageId != TRACK_RESISTANCE_PAGE)
                 throw new ApplicationException("Not a valid Track Resistance data message.");
 
             Grade = DecodeGrade(message);
