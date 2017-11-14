@@ -23,7 +23,7 @@ namespace AntMessageSimulator.Tests
             IEnumerable<SpeedEvent> events =
                 (IEnumerable<SpeedEvent>)query.FindAllGeneralFeMessages();
             float sum = events.Sum(s => s.Speed);
-            Assert.IsTrue(sum > 1000F);
+            Assert.IsTrue(sum == 59067.4961F);
             Assert.IsTrue(events.Count() == 6463);
         }
 
@@ -37,13 +37,10 @@ namespace AntMessageSimulator.Tests
         [TestMethod()]
         public void FindAllFecTransmitMessagesTest()
         {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void FindAllFecTransmitMessagesTest1()
-        {
-            Assert.Fail();
+            MessageQuery query = new MessageQuery(sessions[7]);
+            IEnumerable<Message> events = query.FindAllFecMessages();
+            int count = events.Count();
+            Assert.IsTrue(events.Count() == 17406);
         }
     }
 }

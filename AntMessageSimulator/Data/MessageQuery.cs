@@ -50,16 +50,28 @@ namespace AntMessageSimulator
         public IEnumerable FindAllGeneralFeMessages()
         {
             return from message in FindAllFecMessages()
-                         where message.IsGeneralFeData
+                         where message is GeneralFEDataMessage
                          select new GeneralFEDataMessage(message);
         }
 
         public string FindProductVersion(byte channelId)
         {
-            return (from message in session.Messages
-                   where message.ChannelId == channelId &&
-                   message is ProductMessage
-                   select ((ProductMessage)message).Version).First();
+            List<Message> msgs = (from message in session.Messages
+                                 where message.ChannelId == channelId
+                                 select message).ToList();
+
+            foreach (var msg in msgs)
+            {
+                ProductMessage message = msg as ProductMessage;
+                if (message != null)
+                    return message.Version;
+            }
+
+            return "";
+                    //return (from message in session.Messages
+                    //       where message.ChannelId == channelId &&
+                    //       message is ProductMessage
+                    //       select ((ProductMessage)message).Version).First();
         }
 
         private IEnumerable<T> NotNullItems<T>(IEnumerable<T> list)

@@ -20,7 +20,6 @@ namespace AntMessageSimulator
 
         private byte GetLastCommand(Message message)
         {
-            //string.Format("{0:X2}", message.Bytes[1 + 4]),
             return message.Bytes[1 + MESSAGE_HEADER_LENGTH];
         }
 
