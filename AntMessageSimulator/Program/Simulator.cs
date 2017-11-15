@@ -39,7 +39,8 @@ namespace AntMessageSimulator
         private void PrintSummary()
         {
             Printer.Info(string.Format("File contained {0} session(s).", sessions.Count));
-            Printer.Info(options.Query);
+            if (!string.IsNullOrEmpty(options.Query))
+                Printer.Info("Query = " + options.Query);
             var enumerator = GetSelectedSessions();
             foreach (var session in enumerator)
                 PrintSessionSummary(session, enumerator.Index);
