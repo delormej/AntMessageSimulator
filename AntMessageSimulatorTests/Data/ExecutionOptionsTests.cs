@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AntMessageSimulator;
+using System.Collections;
+using System.Linq;
 
 namespace AntMessageSimulator.Tests
 {
@@ -21,6 +23,15 @@ namespace AntMessageSimulator.Tests
             Assert.IsTrue(options.Operation == OperationType.SummaryOnly);
             Assert.IsFalse(options.WriteToFile);
             Assert.IsTrue(options.SessionNumber == 0);
+        }
+
+        [TestMethod()]
+        public void TestQuery()
+        {
+            string[] query = { "--q", "\"Timestamp > 300 and TimeStamp < 500.10\"" };
+            string[] newArgs = args.Union(query).ToArray<string>();
+            ExecutionOptions options = new ExecutionOptions(newArgs);
+            Assert.IsTrue(options.Query == "Timestamp > 300 and TimeStamp < 500.10");
         }
     }
 }

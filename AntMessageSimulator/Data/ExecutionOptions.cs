@@ -79,6 +79,8 @@ namespace AntMessageSimulator
             get { return destination != null; }
         }
 
+        public string Query { get; set; }
+
         public ExecutionOptions(string[] args)
         {
             this.args = args;
@@ -131,17 +133,15 @@ namespace AntMessageSimulator
 
         private void ValidateDestinationOrSession(string value)
         {
-            if (ParseArgAsOption(value))
-                return;
-
             if (!int.TryParse(value, out sessionNumber))
                 ValidateDestination(value);
         }
 
         private void ValidateDestination(string value)
         {
-            if (ParseArgAsOption(value))
+            if (Path.GetFileName(value).IndexOfAny(Path.GetInvalidFileNameChars()) > 0)
                 return;
+
             Destination = value;
             DeleteDestination();
         }
@@ -159,21 +159,13 @@ namespace AntMessageSimulator
         {
             for (int i = 3; i < args.Length; i++)
                 if (args[i].StartsWith("--"))
-                    ParseArgOption(args[i].Substring(2, args[i].Length - 2));
+                    ParseArgOption(i);
         }
 
-        private bool ParseArgAsOption(string value)
+        private void ParseArgOption(int argIndex)
         {
-            bool isOption = value.StartsWith("--");
+            string value = args[argIndex].Substring(2, args[argIndex].Length - 2);
 
-            if (isOption)
-                ParseArgOption(value.Substring(2, value.Length - 2));
-
-            return isOption;
-        }
-
-        private void ParseArgOption(string value)
-        {
             if (value.ToUpper() == "FEC")
                 Device = DeviceType.FeC;
             else if (value.ToUpper() == "BP")
@@ -188,7 +180,8 @@ namespace AntMessageSimulator
                 Operation = OperationType.CArray;
             else if (value.ToUpper() == "COUT")
                 Output = OutputType.Console;
-
+            else if (value.ToUpper().StartsWith("Q"))
+                Query = args[argIndex + 1].Replace("\"", "");
             else
                 throw new ApplicationException(value + " is not a valid option.");
         }
