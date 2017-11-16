@@ -44,5 +44,16 @@ namespace AntMessageSimulator
         {
             return 1 == ((message.Bytes[7 + MESSAGE_HEADER_LENGTH] & 0x80) >> 7);
         }
+        
+        public override string ToString()
+        {
+            const string format = "{{ Timestamp = {0:F3}, ServoPosition = {1:G}, Target = {2:G}, Flywheel = {3:G}, PowerMeterPaired  = {4} }}";
+            return string.Format(format,
+                Timestamp,
+                ServoPosition,
+                Target,
+                FlyWheel,
+                PowerMeterPaired);
+        }
     }
 }

@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections;
 using System.Text;
+using System.Linq.Dynamic;
 
 namespace AntMessageSimulator
 {
     public class HumanReadableGenerator : Generator
     {
         DeviceSession session;
-        DeviceType device;
+        ExecutionOptions options;
 
-        public HumanReadableGenerator(DeviceSession session, DeviceType device)
+        public HumanReadableGenerator(DeviceSession session, ExecutionOptions options)
         {
             this.session = session;
-            this.device = device;
+            this.options = options;
         }
 
         public string Generate()
@@ -20,9 +21,9 @@ namespace AntMessageSimulator
             MessageQuery query = new MessageQuery(session);
             IEnumerable events = null;
 
-            if (device == DeviceType.FeC)
-                events = query.FindAllFecMessages();
-            else if (device == DeviceType.PowerMeter)
+            if (options.Device == DeviceType.FeC)
+                events = query.FindAllFecMessages().Where("MessageId != 79");
+            else if (options.Device == DeviceType.PowerMeter)
                 events = query.FindAllPowerMeterBroadcastEvents();
 
             return GetEventPerLine(events);
@@ -31,10 +32,15 @@ namespace AntMessageSimulator
         private string GetEventPerLine(IEnumerable messages)
         {
             StringBuilder content = new StringBuilder();
-            foreach (var message in messages)
-                content.AppendLine(message.ToString());
+            foreach (Message message in messages)
+                content.AppendLine(GetString(message));
 
             return content.ToString();
+        }
+
+        private string GetString(Message message)
+        {
+            return message.ToString();
         }
     }
 }

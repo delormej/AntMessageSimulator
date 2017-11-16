@@ -54,5 +54,13 @@ namespace AntMessageSimulator.Tests
             Assert.IsTrue(options.Output == OutputType.Console);
             Assert.IsTrue(options.Operation == OperationType.Json);
         }
+
+        [TestMethod()]
+        public void TestHumanReadable()
+        {
+            string[] newArgs = { "C:\\users\\jason\\OneDrive\\InsideRide\\Tech\\Ride Logs\\Jeff Reed\\2017-11-15-Device0.txt", "--fec", "--h", "--cout" };
+            ExecutionOptions options = new ExecutionOptions(newArgs);
+            Assert.IsTrue(options.Operation == OperationType.HumanReadable);
+        }
     }
 }

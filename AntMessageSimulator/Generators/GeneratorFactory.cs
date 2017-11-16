@@ -14,7 +14,7 @@
             else if (options.Operation == OperationType.CArray)
                 generator = new CArrayGenerator(session, options.Device);
             else if (options.Operation == OperationType.HumanReadable)
-                generator = new HumanReadableGenerator(session, options.Device);
+                generator = new HumanReadableGenerator(session, options);
             return generator;
         }
     }

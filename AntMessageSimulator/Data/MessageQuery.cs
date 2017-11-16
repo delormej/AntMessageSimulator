@@ -15,7 +15,7 @@ namespace AntMessageSimulator
             this.session = session;
         }
 
-        public IEnumerable<Message> FindAllFecMessages()
+        public IQueryable<Message> FindAllFecMessages()
         {
             var messages = from message in session.Messages
                            where session.FecId > 0 && message.IsDataMessage &&
@@ -25,7 +25,7 @@ namespace AntMessageSimulator
             return NotNullItems(messages);
         }
 
-        public IEnumerable<Message> FindAllFecTransmitMessages()
+        public IQueryable<Message> FindAllFecTransmitMessages()
         {
             var messages = from message in session.Messages
                            where session.FecChannelId == message.ChannelId &&
@@ -74,11 +74,9 @@ namespace AntMessageSimulator
                     //       select ((ProductMessage)message).Version).First();
         }
 
-        private IEnumerable<T> NotNullItems<T>(IEnumerable<T> list)
+        private IQueryable<T> NotNullItems<T>(IEnumerable<T> list)
         {
-            foreach (var item in list)
-                if (item != null)
-                    yield return item;
+            return list.Where(l => l != null).AsQueryable();
         }
     }
 }
