@@ -36,5 +36,11 @@ namespace AntMessageSimulator
             /* 1 = Off, 2 = READY, 3 = IN_USE, 4 = Finished (Paused) */
             return (byte)((message.Bytes[7 + MESSAGE_HEADER_LENGTH] & 0x70) >> 4);
         }
+
+        public override string ToString()
+        {
+            const string format = "{{ Timestamp = {0:F3}, InstantPower = {1}, TargetPowerLimits = {2}, TrainerFEState = {3} }}";
+            return string.Format(format, Timestamp, InstantPower, TargetPowerLimits, TrainerFEState);
+        }
     }
 }

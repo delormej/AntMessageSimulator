@@ -29,5 +29,11 @@ namespace AntMessageSimulator
         {
             return message.Bytes[7 + MESSAGE_HEADER_LENGTH];
         }
+
+        public override string ToString()
+        {
+            const string format = "{{ Timestamp = {0:F3}, Grade = {1:F3}, CoEff = {2} }}";
+            return string.Format(format, Timestamp, Grade, CoEff);
+        }
     }
 }

@@ -28,5 +28,11 @@ namespace AntMessageSimulator
             //memcpy((uint8_t*)&(ant_product_page[4]), (uint32_t*)&(SERIAL_NUMBER), sizeof(uint32_t));
             return "";
         }
+
+        public override string ToString()
+        {
+            const string format = "{{ Timestamp = {0:F3}, Version = {1} }}";
+            return string.Format(format, Timestamp, Version);
+        }
     }
 }
