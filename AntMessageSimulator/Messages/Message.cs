@@ -181,6 +181,7 @@ namespace AntMessageSimulator
             Timestamp = message.Timestamp;
             TransmitType = message.TransmitType;
             Bytes = message.Bytes;
+            PayloadLength = message.PayloadLength;
         }
 
         /// <summary>
