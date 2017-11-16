@@ -11,6 +11,7 @@ namespace AntMessageSimulator
         private StreamWriter writer;
         private DeviceType device;
         private ChannelConfiguration config;
+        private Message lastMessage;
         
         public AutoAntsScriptGenerator(DeviceSession session, DeviceType device)
         {
@@ -133,7 +134,7 @@ r! [40][{0:X2}][4B][00]
         /// <summary>
         /// Returns a line of executable Auto ANT script.
         /// </summary>
-        public static string ToAutoAntScriptLine(Message message)
+        private string ToAutoAntScriptLine(Message message)
         {
             StringBuilder script = new StringBuilder();
 
@@ -141,11 +142,19 @@ r! [40][{0:X2}][4B][00]
             script.AppendLine(message.GetPayloadAsString());
             script.AppendLine(CreateResponseScriptLine(message));
 
+            lastMessage = message;
+
             return script.ToString();
         }
 
-        private static string CreateResponseScriptLine(Message message)
+        private string CreateResponseScriptLine(Message message)
         {
+            int pause = 0;
+            if (lastMessage != null)
+                pause = (int)((message.Timestamp - lastMessage.Timestamp) * 1000);
+            else
+                pause = (int)(message.Timestamp * 1000)-250;
+
             // # A write command looks like this:
             //w [4E][01][10][10][FF][FF][00][10][00][01]
             //  |-- Broadcast Event
@@ -159,10 +168,14 @@ r! [40][{0:X2}][4B][00]
             //          |-- Message that was sent
             //              |-- EVENT_TX
             // ? is a wildcard
-            const string RESPONSE_COMMAND_FORMAT = "r [40][{0:X2}][?][03]";
-
-            return string.Format(RESPONSE_COMMAND_FORMAT,
-                message.ChannelId);
+            //const string RESPONSE_COMMAND_FORMAT = "r [40][{0:X2}][?][03]";
+            if (pause > 0)
+            {
+                const string format = "p{0}";
+                return string.Format(format, pause);
+            }
+            else
+                return "";
         }
 
         private void WriteChannelClose()

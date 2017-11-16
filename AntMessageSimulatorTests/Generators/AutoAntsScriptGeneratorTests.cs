@@ -17,6 +17,7 @@ namespace AntMessageSimulator.Tests
             sessions = TestSetup.GetSessions();
         }
 
+        /*
         [TestMethod()]
         public void ToAutoAntScriptLineTest()
         {
@@ -27,7 +28,7 @@ namespace AntMessageSimulator.Tests
 
             // Just compare the first 10 chars.
             Assert.AreEqual<string>(expected.Substring(0, 10), script.Substring(0, 10));
-        }
+        }*/
 
         [TestMethod()]
         public void CreateScriptStreamTest()
