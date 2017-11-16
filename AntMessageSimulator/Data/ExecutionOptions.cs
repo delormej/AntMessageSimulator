@@ -198,11 +198,23 @@ namespace AntMessageSimulator
             else if (value.ToUpper() == "COUT")
                 Output = OutputType.Console;
             else if (value.ToUpper().StartsWith("Q"))
-                Query = args[argIndex + 1].Replace("\"", "");
+                Query = ParseQuery(argIndex);
             else
                 throw new ApplicationException(value + " is not a valid option.");
         }
-        
+
+        private string ParseQuery(int argIndex)
+        {
+            try
+            {
+                return args[argIndex + 1].Replace("\"", "");
+            }
+            catch
+            {
+                throw new ApplicationException("Invalid query string");
+            }
+        }
+
         private void ValidateDeviceOrSetDefault(DeviceType deviceType)
         {
             if (device == DeviceType.Unassigned)
