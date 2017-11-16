@@ -193,6 +193,8 @@ namespace AntMessageSimulator
                 Operation = OperationType.Hz;
             else if (value.ToUpper() == "C")
                 Operation = OperationType.CArray;
+            else if (value.ToUpper() == "R")
+                Operation = OperationType.HumanReadable;
             else if (value.ToUpper() == "COUT")
                 Output = OutputType.Console;
             else if (value.ToUpper().StartsWith("Q"))
