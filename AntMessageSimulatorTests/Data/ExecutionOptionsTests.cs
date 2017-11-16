@@ -28,10 +28,10 @@ namespace AntMessageSimulator.Tests
         [TestMethod()]
         public void TestQuery()
         {
-            string[] query = { "--q", "\"Timestamp > 300 and TimeStamp < 500.10\"" };
+            string[] query = { "--q", "\"Timestamp > 300 && Timestamp < 500.10\"" };
             string[] newArgs = args.Union(query).ToArray();
             ExecutionOptions options = new ExecutionOptions(newArgs);
-            Assert.IsTrue(options.Query == "Timestamp > 300 and TimeStamp < 500.10");
+            Assert.IsTrue(options.Query == "Timestamp > && Timestamp < 500.10");
         }
 
         [TestMethod()]

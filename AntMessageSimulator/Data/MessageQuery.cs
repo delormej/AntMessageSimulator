@@ -35,7 +35,7 @@ namespace AntMessageSimulator
             return NotNullItems(messages);
         }
 
-        public IEnumerable<Message> FindAllPowerMeterBroadcastEvents()
+        public IQueryable<Message> FindAllPowerMeterBroadcastEvents()
         {
             IEnumerable<Message> messages =
                 from message in session.Messages
