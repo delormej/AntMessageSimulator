@@ -114,9 +114,9 @@ namespace AntMessageSimulator
             if (args.Length > 0)
                 ValidateSource(args[0]);
             if (args.Length > 1)
-                ValidateDestinationOrSession(args[1]);
+                ValidateDestinationOrSession(1);
             if (args.Length > 2)
-                ValidateDestination(args[2]);
+                ValidateDestination(2);
 
             ParseOptions();
             ValidateDeviceOrSetDefault(DeviceType.PowerMeter);
@@ -131,14 +131,22 @@ namespace AntMessageSimulator
                 source = path;
         }
 
-        private void ValidateDestinationOrSession(string value)
+        private void ValidateDestinationOrSession(int argIndex)
         {
+            if (ArgIsOption(argIndex))
+                return;
+
+            string value = args[argIndex];
             if (!int.TryParse(value, out sessionNumber))
-                ValidateDestination(value);
+                ValidateDestination(argIndex);
         }
 
-        private void ValidateDestination(string value)
+        private void ValidateDestination(int argIndex)
         {
+            if (ArgIsOption(argIndex))
+                return;
+
+            string value = args[argIndex];
             if (Path.GetFileName(value).IndexOfAny(Path.GetInvalidFileNameChars()) > 0)
                 return;
 
@@ -157,9 +165,14 @@ namespace AntMessageSimulator
 
         private void ParseOptions()
         {
-            for (int i = 3; i < args.Length; i++)
-                if (args[i].StartsWith("--"))
+            for (int i = 1; i < args.Length; i++)
+                if (ArgIsOption(i))
                     ParseArgOption(i);
+        }
+
+        private bool ArgIsOption(int argIndex)
+        {
+            return args[argIndex].StartsWith("--");
         }
 
         private void ParseArgOption(int argIndex)
