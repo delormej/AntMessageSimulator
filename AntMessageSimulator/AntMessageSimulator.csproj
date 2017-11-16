@@ -56,6 +56,7 @@
     <Compile Include="Data\SpeedEvent.cs" />
     <Compile Include="Messages\CommandStatusMessage.cs" />
     <Compile Include="Messages\GeneralFEDataMessage.cs" />
+    <Compile Include="Messages\GeneralSettingsMessage.cs" />
     <Compile Include="Messages\IrtExtraInfoMessage.cs" />
     <Compile Include="Messages\MessageFactory.cs" />
     <Compile Include="Messages\ProductMessage.cs" />

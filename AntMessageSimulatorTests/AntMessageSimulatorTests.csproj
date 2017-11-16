@@ -67,6 +67,7 @@
     <Compile Include="DeviceLogParserTests.cs" />
     <Compile Include="Messages\CommandStatusMessageTests.cs" />
     <Compile Include="Messages\GeneralFEDataMessageTests.cs" />
+    <Compile Include="Messages\GeneralSettingsMessageTests.cs" />
     <Compile Include="Messages\IrtExtraInfoMessageTests.cs" />
     <Compile Include="Messages\ProductMessageTests.cs" />
     <Compile Include="Messages\SpecificTrainerDataMessageTests.cs" />

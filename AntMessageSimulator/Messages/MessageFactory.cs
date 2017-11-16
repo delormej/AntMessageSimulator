@@ -22,7 +22,9 @@ namespace AntMessageSimulator
                     return new TrackResistanceMessage(message);
                 case Message.COMMAND_STATUS_PAGE:
                     return new CommandStatusMessage(message);
-                case 0x51:
+                case Message.GENERAL_SETTINGS_PAGE:
+                    return new GeneralSettingsMessage(message);
+                case Message.PRODUCT_PAGE:
                     return new ProductMessage(message);
                 default:
                     return message;

@@ -38,6 +38,8 @@ namespace AntMessageSimulator
         public const byte SPECIFIC_TRAINER_DATA_PAGE = 0x19;
         public const byte GENERAL_FEDATA_PAGE = 0x10;
         public const byte PRODUCT_PAGE = 0x51;
+        public const byte GENERAL_SETTINGS_PAGE = 0x11;
+
         #endregion
 
         private float timestamp;
