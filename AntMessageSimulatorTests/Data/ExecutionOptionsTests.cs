@@ -44,5 +44,15 @@ namespace AntMessageSimulator.Tests
             Assert.IsTrue(options.Output == OutputType.File);
             Assert.IsTrue(options.Device == DeviceType.FeC);
         }
+
+        [TestMethod()]
+        public void TestFecConsoleOut()
+        {
+            string[] newArgs = { "C:\\users\\jason\\OneDrive\\InsideRide\\Tech\\Ride Logs\\Jeff Reed\\2017-11-15-Device0.txt", "--fec", "--json", "--cout" };
+            ExecutionOptions options = new ExecutionOptions(newArgs);
+            Assert.IsTrue(options.Device == DeviceType.FeC);
+            Assert.IsTrue(options.Output == OutputType.Console);
+            Assert.IsTrue(options.Operation == OperationType.Json);
+        }
     }
 }

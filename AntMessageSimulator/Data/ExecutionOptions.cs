@@ -52,7 +52,9 @@ namespace AntMessageSimulator
             get { return operation; }
             set
             {
-                if (operation != OperationType.Unassigned)
+                if (operation == value)
+                    return;
+                else if (operation != OperationType.Unassigned)
                     throw new ApplicationException("You cannot choose more than one operation.");
                 else
                     operation = value;
@@ -219,7 +221,7 @@ namespace AntMessageSimulator
                 else if (extension == ".json")
                     Operation = OperationType.Json;
             }
-            else
+            else if (operation == OperationType.Unassigned)
                 Operation = defaultOperation;
         }
     }
