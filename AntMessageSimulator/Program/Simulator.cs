@@ -14,6 +14,7 @@ namespace AntMessageSimulator
     {
         private ExecutionOptions options;
         private List<DeviceSession> sessions;
+        private CloudStorage storage;
 
         public Simulator(ExecutionOptions options)
         {
@@ -53,6 +54,8 @@ namespace AntMessageSimulator
 
         private void GenerateAndWriteOutput()
         {
+            if (options.CloudUpload)
+                storage = new CloudStorage();
             var enumerator = GetSelectedSessions();
             foreach (var session in enumerator)
             {
@@ -90,6 +93,14 @@ namespace AntMessageSimulator
         {
             Printer.Info("Writing output to file: " + filename);
             File.WriteAllText(filename, content);
+            if (options.CloudUpload)
+                CloudUpload(filename);
+        }
+
+        private void CloudUpload(string filename)
+        {
+            Printer.Info(string.Format("Uploading {0} to cloud.", Path.GetFileName(filename)));
+            storage.Upload(filename);
         }
     }
 }

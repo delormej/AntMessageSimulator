@@ -62,5 +62,13 @@ namespace AntMessageSimulator.Tests
             ExecutionOptions options = new ExecutionOptions(newArgs);
             Assert.IsTrue(options.Operation == OperationType.HumanReadable);
         }
+
+        [TestMethod()]
+        public void TestCloudUpload()
+        {
+            string[] newArgs = { inputFile, "--fec", "--h", "--cout", "--u" };
+            ExecutionOptions options = new ExecutionOptions(newArgs);
+            Assert.IsTrue(options.CloudUpload == true);
+        }
     }
 }

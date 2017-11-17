@@ -63,6 +63,8 @@ namespace AntMessageSimulator
 
         public OutputType Output { get; set; }
 
+        public bool CloudUpload { get; set; }
+
         public DeviceType Device
         {
             get { return device;  }
@@ -197,6 +199,8 @@ namespace AntMessageSimulator
                 Operation = OperationType.HumanReadable;
             else if (value.ToUpper() == "COUT")
                 Output = OutputType.Console;
+            else if (value.ToUpper() == "U")
+                CloudUpload = true;
             else if (value.ToUpper().StartsWith("Q"))
                 Query = ParseQuery(argIndex);
             else
