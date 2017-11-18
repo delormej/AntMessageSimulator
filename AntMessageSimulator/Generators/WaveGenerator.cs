@@ -34,12 +34,7 @@ namespace AntMessageSimulator
         {
             Reset();
             foreach (var speedEvent in GetSpeedEvents())
-            {
-                if (lastEvent != null)
-                    WriteEvent(speedEvent);
-                
-                lastEvent = speedEvent;
-            }
+                WriteEvent(speedEvent);
             WriteFinalLine(lastEvent);
             return content.ToString();
         }
@@ -62,7 +57,9 @@ namespace AntMessageSimulator
 
         private void WriteEvent(SpeedEvent speedEvent)
         {
-            int seconds = (int)(speedEvent.Timestamp - lastEvent.Timestamp);
+            int seconds = 0;
+            if (lastEvent != null)
+                seconds = (int)(speedEvent.Timestamp - lastEvent.Timestamp);
             if (seconds > 0 && speedEvent.Speed != lastEvent.Speed)
             {
                 if (!initialized)
@@ -72,7 +69,10 @@ namespace AntMessageSimulator
                 }
                 else
                     WriteLine(seconds, lastEvent.Speed);
+                lastEvent = speedEvent;
             }
+            else if (lastEvent == null)
+                lastEvent = speedEvent;
         }
 
         private void WriteFirstLine(int durationSeconds, float speedMps)
