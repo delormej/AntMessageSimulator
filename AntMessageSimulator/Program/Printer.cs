@@ -6,9 +6,8 @@ namespace AntMessageSimulator
     {
         public static void Welcome()
         {
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-            string version = fvi.FileVersion;
+            var fvi = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            string version = fvi.ToString(3);
             Console.WriteLine("ANT+ Message Simulator version: " + version);
             Console.WriteLine();
         }
