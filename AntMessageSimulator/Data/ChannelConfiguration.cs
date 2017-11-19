@@ -30,6 +30,10 @@ namespace AntMessageSimulator
             get { return GetMsb(ChannelPeriod); }
         }
 
+        public byte ChannelType { get; internal set; }
+
+        public string ChannelDescription { get; internal set; }
+
         public ChannelConfiguration(DeviceType deviceType, DeviceSession session)
         {
             if (deviceType == DeviceType.PowerMeter)
@@ -40,6 +44,8 @@ namespace AntMessageSimulator
                 // ANT+ Bike Power Device Type spec
                 DeviceTypeId = 0x0B;
                 ChannelPeriod = 8182;
+                ChannelType = 0x10; // bidirectional master
+                ChannelDescription = "bi-directional master"; 
             }
             else if (deviceType == DeviceType.FeC)
             {
@@ -49,6 +55,8 @@ namespace AntMessageSimulator
                 // ANT+ FE-C Device Type spec
                 DeviceTypeId = 0x11;
                 ChannelPeriod = 8192;
+                ChannelType = 0x00; // slave
+                ChannelDescription = "slave";
             }
         }
 

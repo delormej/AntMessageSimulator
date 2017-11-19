@@ -77,7 +77,7 @@ p2000
             // {5} == ChannelPeriod Lsb, {6} == ChannelPeriod Msb, {7} == ChannelPeriod
             const string CHANNEL_CONFIGURATION_BLOCK =
         @"#Channel Configuration Block Begin
-w  [42][{0:X2}][10][00]     # Assign channel {0}, bidirectional master, network 0
+w  [42][{0:X2}][{8:X2}][00]     # Assign channel {0}, {9}, network 0
 r! [40][{0:X2}][42][00]     # Wait for RESPONSE_NO_ERROR
 w  [46][00][B9][A5][21][FB][BD][72][C3][45]  # Set ANT+ key to network 0
 r! [40][00][46][00]
@@ -100,7 +100,9 @@ r! [40][{0:X2}][4B][00]
                 config.DeviceTypeId,
                 config.ChannelPeriodLsb,
                 config.ChannelPeriodMsb,
-                config.ChannelPeriod);
+                config.ChannelPeriod,
+                config.ChannelType,
+                config.ChannelDescription);
         }
 
         private void WriteMessages()
