@@ -69,6 +69,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\PowerAverager.cs" />
     <Compile Include="Data\OptionTypes.cs" />
     <Compile Include="Data\SpeedEvent.cs" />
     <Compile Include="lib\CloudStorage.cs" />

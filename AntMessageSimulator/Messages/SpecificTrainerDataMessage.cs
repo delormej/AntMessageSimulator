@@ -4,9 +4,10 @@ namespace AntMessageSimulator
 {
     public class SpecificTrainerDataMessage : Message
     {
-        public short InstantPower;
-        public byte TargetPowerLimits;
-        public byte TrainerFEState;
+        public short InstantPower { get; private set; }
+        public double AveragePower { get; private set; }
+        public byte TargetPowerLimits { get; private set; }
+        public byte TrainerFEState { get; private set; }
 
         public SpecificTrainerDataMessage(Message message) : base(message)
         {
@@ -14,6 +15,7 @@ namespace AntMessageSimulator
                 throw new ApplicationException("Not a valid Specific Trainer data message.");
 
             InstantPower = GetInstantPower(message);
+            AveragePower = PowerAverager.Average(InstantPower);
             TargetPowerLimits = GetTargetPowerLimits(message);
             TrainerFEState = GetTrainerFEState(message);
         }
@@ -39,8 +41,8 @@ namespace AntMessageSimulator
 
         public override string ToString()
         {
-            const string format = "{{ Timestamp = {0:F3}, InstantPower = {1}, TargetPowerLimits = {2}, TrainerFEState = {3} }}";
-            return string.Format(format, Timestamp, InstantPower, TargetPowerLimits, TrainerFEState);
+            const string format = "{{ Timestamp = {0:F3}, InstantPower = {1}, AveragePower = {4:F1} TargetPowerLimits = {2}, TrainerFEState = {3} }}";
+            return string.Format(format, Timestamp, InstantPower, TargetPowerLimits, TrainerFEState, AveragePower);
         }
     }
 }
