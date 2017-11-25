@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace AntMessageSimulator
 {
-    public static class PowerAverager
+    public class PowerAverager
     {
         const int QUEUE_LENGTH = 4;
-        private static Queue<short> values = new Queue<short>(QUEUE_LENGTH);
+        private Queue<short> values = new Queue<short>(QUEUE_LENGTH);
 
-        public static double Average(short instantPower)
+        public double Average(short instantPower)
         {
             values.Enqueue(instantPower);
             double average = values.Average(m => (int)m);
-            if (values.Count > 4)
+            if (values.Count > QUEUE_LENGTH)
                 values.Dequeue(); // drop the oldest 
             return average;
         }

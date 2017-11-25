@@ -9,13 +9,15 @@ namespace AntMessageSimulator
         public byte TargetPowerLimits { get; private set; }
         public byte TrainerFEState { get; private set; }
 
+        private static PowerAverager powerAverager = new PowerAverager();
+
         public SpecificTrainerDataMessage(Message message) : base(message)
         {
             if (message.MessageId != SPECIFIC_TRAINER_DATA_PAGE)
                 throw new ApplicationException("Not a valid Specific Trainer data message.");
 
             InstantPower = GetInstantPower(message);
-            AveragePower = PowerAverager.Average(InstantPower);
+            AveragePower = powerAverager.Average(InstantPower);
             TargetPowerLimits = GetTargetPowerLimits(message);
             TrainerFEState = GetTrainerFEState(message);
         }
