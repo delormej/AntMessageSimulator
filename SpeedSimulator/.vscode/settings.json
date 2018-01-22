@@ -1,0 +1,9 @@
+{
+    "C_Cpp.intelliSenseEngineFallback": "Disabled",
+    "files.associations": {
+        "stdint.h": "c",
+        "stdint-gcc.h": "c",
+        "stdio.h": "c",
+        "ftd2xx.h": "c"
+    }
+}

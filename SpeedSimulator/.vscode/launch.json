@@ -1,0 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GCC Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            /* NOTE: hardcoded path required until this feature is available: https://github.com/Microsoft/vscode/issues/38685 */
+            "program": "/mnt/c/Users/Jason/dev/AntMessageSimulator/SpeedSimulator/a.out",
+            "args": ["-fThreading"],
+            "stopAtEntry": false,
+            "cwd": "/mnt/c/Users/Jason/dev/AntMessageSimulator/SpeedSimulator/",
+            "environment": [],
+            "externalConsole": true,
+            "windows": {
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            }, 
+            "pipeTransport": {
+                "pipeCwd": "",
+                "pipeProgram": "c:\\windows\\sysnative\\bash.exe",
+                "pipeArgs": ["-c"],
+                "debuggerPath": "/usr/bin/gdb"
+            },
+            "sourceFileMap": {
+                "/mnt/c": "c:\\"
+            }
+        }            
+    ]
+}
