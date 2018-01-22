@@ -6,7 +6,7 @@
         {
             "label": "build gcc",
             "type": "shell",
-            "command": "gcc speed.c -std=c99 -o speed -I .",
+            "command": "C:\\MinGW\\bin\\gcc.exe\\gcc speed.c -std=c99 -o speed -I .",
             "args": [
             ],
             "group": {

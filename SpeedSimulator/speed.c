@@ -58,20 +58,34 @@ void SS_SetSpeedMph(float mph) {
 
 }
 
-int main() {
-    writeRegister(40);
-    return 0;
-
-    FT_DEVICE ft_device = FT_DEVICE_232R;
-    FT_HANDLE handle;
-
-    /* Initialize, open device, set bitbang mode w/5 outputs */
-    if(FT_Open(0, &handle) != FT_OK) {
-        printf("Can't open device");
-        return 1;
+void printDeviceCount() {
+    FT_STATUS ftStatus;
+    DWORD numDevices;
+    ftStatus = FT_ListDevices(&numDevices, NULL, FT_LIST_NUMBER_ONLY);
+    if (ftStatus == FT_OK) {
+        printf("Num devices: %i\r\n", numDevices);
     }
-    FT_SetBitMode(handle, W_CLK | FQ_UD | DATA | RESET, 1);
-    FT_SetBaudRate(handle, FT_BAUD_9600);  /* Actually 9600 * 16 */
+    else {
+        printf("ERROR: %i\r\n", ftStatus);
+    }
+}
+
+int main() {
+    printDeviceCount();
+
+    // writeRegister(40);
+    // return 0;
+
+    // FT_DEVICE ft_device = FT_DEVICE_232R;
+    // FT_HANDLE handle;
+
+    // /* Initialize, open device, set bitbang mode w/5 outputs */
+    // if(FT_Open(0, &handle) != FT_OK) {
+    //     printf("Can't open device");
+    //     return 1;
+    // }
+    // FT_SetBitMode(handle, W_CLK | FQ_UD | DATA | RESET, 1);
+    // FT_SetBaudRate(handle, FT_BAUD_9600);  /* Actually 9600 * 16 */
 
     /* Endless loop: dump precomputed PWM data to the device */
     //for(;;) FT_Write(handle, &data, (DWORD)sizeof(data), &bytes);
