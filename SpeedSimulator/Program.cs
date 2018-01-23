@@ -19,7 +19,10 @@ namespace speed
         {
             OpenDevice();
             SetBitBangMode();
-            SetSpeedMph(15f);
+            //SetSpeedMph(15f);
+            UInt32 frequency = GetFrequencyTuningWord(8.5f);
+            ulong register = GetRegisterWithFrequency(frequency);
+            WriteRegister(register);
             Console.WriteLine("Press any key to close...");
             Console.ReadKey();
             CloseDevice();
@@ -58,8 +61,12 @@ namespace speed
 
         static UInt32 GetFrequencyTuningWord(float speedMps)
         {
-            UInt32 frequency = (UInt32)GetHzFromMps(speedMps);
-            UInt32 tuningWord = frequency * 4294967295 / AD9850_CLOCK;  // 2^32 == 4294967296 
+            // NOTES from: https://code.google.com/archive/p/ad9850-arduino/source/default/source
+            // < system clock > * < frequency tuning word> / 2 ^ 32
+            // < desired frequency > *4294967296.0 / 125.0e6;
+
+            UInt32 hz = (UInt32)GetHzFromMps(speedMps);
+            UInt32 tuningWord = hz * 4294967295 / AD9850_CLOCK;  // 2^32 == 4294967296 
             return tuningWord;
         }
 
@@ -108,15 +115,24 @@ namespace speed
             }
         }
 
-        static void WriteRegister(long register)
+        static ulong GetRegisterWithFrequency(UInt32 frequency)
         {
-            // Write 40 bits to DATA.
+            ulong register = frequency << 8;
+            // Last 8 bits are all 0s.
+            return register;
+        }
+
+        static void WriteRegister(ulong register)
+        {
             for (int i = 0; i < 40; i++)
             {
-                if ((register & ((long)1 << i)) > 0)
+                if ((register & ((ulong)1 << i)) > 0)
                     WriteDataBit();
                 else
+                {
+                    Clear();
                     Pulse(W_CLK);
+                }
             }
             Pulse(FQ_UD); 
         }
