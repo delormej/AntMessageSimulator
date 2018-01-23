@@ -19,10 +19,10 @@ namespace speed
         {
             OpenDevice();
             SetBitBangMode();
-            //SetSpeedMph(15f);
-            UInt32 frequency = GetFrequencyTuningWord(8.5f);
-            ulong register = GetRegisterWithFrequency(frequency);
-            WriteRegister(register);
+            SetSpeedMph(15f);
+            //UInt32 frequency = GetFrequencyTuningWord(8.5f);
+            //ulong register = GetRegisterWithFrequency(frequency);
+            //WriteRegister(register);
             Console.WriteLine("Press any key to close...");
             Console.ReadKey();
             CloseDevice();
