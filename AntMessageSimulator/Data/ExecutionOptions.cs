@@ -12,17 +12,6 @@ namespace AntMessageSimulator
         private DeviceType device;
         private OperationType operation;
 
-        public static string GetUsage()
-        {
-            const string USAGE =
-                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {output filename} {Optional: --ants | --fec | --json | --cout | --c}
-    Example:  simulator.exe Device0.txt                     #Lists a session summary for each in the device log.
-    Example:  simulator.exe Device0.txt 1 Device0.ants      #Outputs an AutoANTs .ants script file generated from session #1.
-    Example:  simulator.exe Device0.txt 2 --fec --cout      #Prints all FEC commands from session 2 to console.
-";
-            return USAGE;
-        }
-
         public string Source
         {
             get { return source;  }
@@ -114,7 +103,7 @@ namespace AntMessageSimulator
         private void ParseArgs()
         {
             if (args.Length == 0)
-                throw new ArgumentException("Invalid number of parameters.");
+                throw new ApplicationException("Invalid number of parameters.");
             if (args.Length > 0)
                 ValidateSource(args[0]);
             if (args.Length > 1)
@@ -205,6 +194,17 @@ namespace AntMessageSimulator
                 Query = ParseQuery(argIndex);
             else
                 throw new ApplicationException(value + " is not a valid option.");
+        }
+
+        public static string GetUsage()
+        {
+            const string USAGE =
+                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {output filename} {[device type]: --fec | --bp} {[output type]: --json | --ants | --hz | --c | --h | --cout } {[copy to clipboard]: -U} {[query] -Qselect x from y
+    Example:  simulator.exe Device0.txt                     #Lists a session summary for each in the device log.
+    Example:  simulator.exe Device0.txt 1 Device0.ants      #Outputs an AutoANTs .ants script file generated from session #1.
+    Example:  simulator.exe Device0.txt 2 --fec --cout      #Prints all FEC commands from session 2 to console.
+";
+            return USAGE;
         }
 
         private string ParseQuery(int argIndex)
