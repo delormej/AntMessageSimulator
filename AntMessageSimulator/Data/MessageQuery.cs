@@ -74,6 +74,23 @@ namespace AntMessageSimulator
                     //       select ((ProductMessage)message).Version).First();
         }
 
+        public IQueryable<Message> FindAllPowerMeterAndFecMessages()
+        {
+            IEnumerable<Message> messages =
+                from message in session.Messages
+                where IsMessageForDevice(message)
+                select message;
+
+            return NotNullItems(messages);
+        }
+
+        private bool IsMessageForDevice(Message message)
+        {
+            return (message.IsDataMessage &&
+                (session.FecId > 0 && session.FecChannelId == message.ChannelId) ||
+                (session.PowerMeterId > 0 && session.PowerMeterId == message.ChannelId));
+        }
+
         private IQueryable<T> NotNullItems<T>(IEnumerable<T> list)
         {
             return list.Where(l => l != null).AsQueryable();
