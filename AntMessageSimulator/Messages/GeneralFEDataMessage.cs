@@ -3,6 +3,8 @@ namespace AntMessageSimulator
 {
     public class GeneralFEDataMessage : Message, SpeedEvent
     {
+        public new const byte Page = 0x10;
+
         public float Speed { get; private set; }
         public float AverageSpeed { get; private set; }
 
@@ -10,7 +12,7 @@ namespace AntMessageSimulator
 
         public GeneralFEDataMessage(Message message) : base(message)
         {
-            if (message.MessageId != GENERAL_FEDATA_PAGE)
+            if (message.MessageId != Page)
                 throw new ApplicationException("Not a valid General FE data message.");
             Speed = GetSpeedMps(message);
             AverageSpeed = (float)speedAverager.Average(message.ChannelId, Speed);

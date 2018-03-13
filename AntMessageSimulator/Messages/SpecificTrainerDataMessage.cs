@@ -4,6 +4,8 @@ namespace AntMessageSimulator
 {
     public class SpecificTrainerDataMessage : Message
     {
+        public new const byte Page = 0x19;
+
         public short InstantPower { get; private set; }
         public double AveragePower { get; private set; }
         public byte TargetPowerLimits { get; private set; }
@@ -13,7 +15,7 @@ namespace AntMessageSimulator
 
         public SpecificTrainerDataMessage(Message message) : base(message)
         {
-            if (message.MessageId != SPECIFIC_TRAINER_DATA_PAGE)
+            if (message.MessageId != Page)
                 throw new ApplicationException("Not a valid Specific Trainer data message.");
 
             InstantPower = GetInstantPower(message);

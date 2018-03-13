@@ -40,27 +40,14 @@ namespace AntMessageSimulator
         public static Message MessageFromLine(string line)
         {
             Message message = new Message(line);
-            Type t = messageTypes[message.MessageId];
-            
-            switch (message.MessageId)
+            if (messageTypes.ContainsKey(message.MessageId))
             {
-                case IrtExtraInfoMessage.Page:
-                    //return new IrtExtraInfoMessage(message);
-                    return Activator.CreateInstance(t, message) as Message;
-                case Message.SPECIFIC_TRAINER_DATA_PAGE:
-                    return new SpecificTrainerDataMessage(message);
-                case Message.GENERAL_FEDATA_PAGE:
-                    return new GeneralFEDataMessage(message);
-                case Message.TRACK_RESISTANCE_PAGE:
-                    return new TrackResistanceMessage(message);
-                case Message.COMMAND_STATUS_PAGE:
-                    return new CommandStatusMessage(message);
-                case Message.GENERAL_SETTINGS_PAGE:
-                    return new GeneralSettingsMessage(message);
-                case Message.PRODUCT_PAGE:
-                    return new ProductMessage(message);
-                default:
-                    return message;
+                Type t = messageTypes[message.MessageId];
+                return Activator.CreateInstance(t, message) as Message;
+            }
+            else
+            {
+                return message;
             }
         }
     }

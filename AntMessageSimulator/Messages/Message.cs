@@ -30,15 +30,6 @@ namespace AntMessageSimulator
 
         const string TRANSMIT_TX = "TX";
         const string TRANSMIT_RX = "RX";
-
-        const byte GENERAL_FE_DATA_PAGE = 0x10;
-        public const byte TRACK_RESISTANCE_PAGE = 0x33;
-        public const byte COMMAND_STATUS_PAGE = 0x47;
-        public const byte SPECIFIC_TRAINER_DATA_PAGE = 0x19;
-        public const byte GENERAL_FEDATA_PAGE = 0x10;
-        public const byte PRODUCT_PAGE = 0x51;
-        public const byte GENERAL_SETTINGS_PAGE = 0x11;
-
         #endregion
 
         private float timestamp;
