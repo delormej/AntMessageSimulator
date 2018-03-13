@@ -88,6 +88,7 @@
     <Compile Include="Generators\HumanReadableGenerator.cs" />
     <Compile Include="Generators\GeneratorFactory.cs" />
     <Compile Include="lib\Dynamic.cs" />
+    <Compile Include="Messages\StandardPowerOnly.cs" />
     <Compile Include="Messages\TrackResistanceMessage.cs" />
     <Compile Include="Program\DeviceLogParser.cs" />
     <Compile Include="Data\ExecutionOptions.cs" />
