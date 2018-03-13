@@ -4,12 +4,14 @@ namespace AntMessageSimulator
 {
     public class CommandStatusMessage : Message
     {
+        public new const byte Page = 0x47;
+
         public byte LastCommand { get; private set; }
         public byte Status { get; private set; }
 
         public CommandStatusMessage(Message message) : base(message)
         {
-            if (message.MessageId != COMMAND_STATUS_PAGE)
+            if (message.MessageId != Page)
                 throw new ApplicationException("Not a valid Command Status data message.");
 
             LastCommand = GetLastCommand(message);

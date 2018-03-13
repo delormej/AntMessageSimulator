@@ -3,9 +3,11 @@ namespace AntMessageSimulator
 {
     public class IrtExtraInfoMessage : Message
     {
+        public new const byte Page = 0xF1;
+
         public IrtExtraInfoMessage(Message message) : base(message)
         {
-            if (message.MessageId != IRT_EXTRAINFO_PAGE)
+            if (message.MessageId != Page)
                 throw new ApplicationException("Not a valid Irt Extra Info message.");
 
             ServoPosition = DecodeServoPostion(message);

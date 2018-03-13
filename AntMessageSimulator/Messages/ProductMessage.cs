@@ -3,11 +3,13 @@ namespace AntMessageSimulator
 {
     public class ProductMessage : Message
     {
+        public new const byte Page = 0x51;
+
         public string Version { get; private set; }
 
         public ProductMessage(Message message) : base(message)
         {
-            if (message.MessageId != PRODUCT_PAGE)
+            if (message.MessageId != Page)
                 throw new ApplicationException("Message is not a valid product message.");
 
             Version = GetVersion(message);

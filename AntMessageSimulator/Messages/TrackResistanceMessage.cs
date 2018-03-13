@@ -3,12 +3,14 @@ namespace AntMessageSimulator
 {
     public class TrackResistanceMessage : Message
     {
+        public new const byte Page = 0x33;
+
         public float Grade { get; private set; }
         public byte CoEff { get; private set; }
 
         public TrackResistanceMessage(Message message) : base(message)
         {
-            if (message.MessageId != TRACK_RESISTANCE_PAGE)
+            if (message.MessageId != Page)
                 throw new ApplicationException("Not a valid Track Resistance data message.");
 
             Grade = DecodeGrade(message);

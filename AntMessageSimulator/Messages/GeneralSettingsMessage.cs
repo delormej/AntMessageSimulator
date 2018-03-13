@@ -4,9 +4,11 @@ namespace AntMessageSimulator
 {
     public class GeneralSettingsMessage : Message
     {
+        public new const byte Page = 0x11;
+
         public GeneralSettingsMessage(Message message) : base(message)
         {
-            if (message.MessageId != GENERAL_SETTINGS_PAGE)
+            if (message.MessageId != Page)
                 throw new ApplicationException("Not a valid General Settings page.");
 
             ResistanceLevel = ParseResistanceLevel();
