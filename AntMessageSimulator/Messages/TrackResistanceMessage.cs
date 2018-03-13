@@ -1,5 +1,5 @@
 ﻿
-namespace AntMessageSimulator
+namespace AntMessageSimulator.Messages.Fec
 {
     public class TrackResistanceMessage : Message
     {

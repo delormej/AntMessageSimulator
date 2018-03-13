@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AntMessageSimulator
+namespace AntMessageSimulator.Messages.Fec
 {
     public class CommandStatusMessage : Message
     {

@@ -30,6 +30,7 @@ namespace AntMessageSimulator
                 if (pageField == null)
                     continue;
                 byte page = (byte)pageField.GetValue(null);
+                var s = t.Namespace;
                 yield return new KeyValuePair<byte, Type>(page, t);
             }
         }
