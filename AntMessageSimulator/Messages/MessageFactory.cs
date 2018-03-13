@@ -27,6 +27,23 @@ namespace AntMessageSimulator
         public static Message MessageFromLine(DeviceType deviceType, string line)
         {
             Message message = new Message(line);
+            return CreateMessageTypeInstance(deviceType, message);
+        }
+
+        public static Message MessageFromLine(DeviceSession session, string line)
+        {
+            DeviceType deviceType = DeviceType.Unassigned;
+            Message message = new Message(line);
+            if (message.ChannelId == session.FecChannelId)
+                deviceType = DeviceType.FeC;
+            else if (message.ChannelId == session.PowerMeterChannelId)
+                deviceType = DeviceType.PowerMeter;
+
+            return CreateMessageTypeInstance(deviceType, message);
+        }
+
+        private static Message CreateMessageTypeInstance(DeviceType deviceType, Message message)
+        {
             Type t = GetMessageType(deviceType, message.MessageId);
             if (t != null)
                 return Activator.CreateInstance(t, message) as Message;

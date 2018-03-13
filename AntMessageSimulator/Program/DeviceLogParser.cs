@@ -43,7 +43,7 @@ namespace AntMessageSimulator
             {
                 try
                 {
-                    Message message = MessageFactory.MessageFromLine(line);
+                    Message message = MessageFactory.MessageFromLine(currentSession, line);
                     AddMessageToSession(message);
                 }
                 catch (MessageException)
