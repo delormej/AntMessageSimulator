@@ -199,7 +199,7 @@ namespace AntMessageSimulator
         public static string GetUsage()
         {
             const string USAGE =
-                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {output filename} {[device type]: --fec | --bp} {[output type]: --json | --ants | --hz | --c | --h | --cout } {[copy to clipboard]: -U} {[query] -Qselect x from y
+                @"    Usage:    simulator.exe {Device Log} {Optional: Session Number} {output filename} {[device type]: --fec | --bp} {[output type]: --json | --ants | --hz | --c | --h | --cout } {[upload to cloud]: --u} {[query] -Qselect x from y
     Example:  simulator.exe Device0.txt                     #Lists a session summary for each in the device log.
     Example:  simulator.exe Device0.txt 1 Device0.ants      #Outputs an AutoANTs .ants script file generated from session #1.
     Example:  simulator.exe Device0.txt 2 --fec --cout      #Prints all FEC commands from session 2 to console.

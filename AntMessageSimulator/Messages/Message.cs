@@ -297,7 +297,7 @@ namespace AntMessageSimulator
             else if (transmit.ToUpper() == TRANSMIT_TX)
                 return TransmitType.Tx;
             else
-                throw new ApplicationException("Invalid Transmit Type: " + value);
+                throw new MessageException("Invalid Transmit Type: " + value);
         }
 
         /// <summary>
