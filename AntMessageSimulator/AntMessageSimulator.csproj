@@ -73,13 +73,13 @@
     <Compile Include="Data\OptionTypes.cs" />
     <Compile Include="Data\SpeedEvent.cs" />
     <Compile Include="lib\CloudStorage.cs" />
-    <Compile Include="Messages\CommandStatusMessage.cs" />
-    <Compile Include="Messages\GeneralFEDataMessage.cs" />
-    <Compile Include="Messages\GeneralSettingsMessage.cs" />
-    <Compile Include="Messages\IrtExtraInfoMessage.cs" />
+    <Compile Include="Messages\Fec\CommandStatusMessage.cs" />
+    <Compile Include="Messages\Fec\GeneralFEDataMessage.cs" />
+    <Compile Include="Messages\Fec\GeneralSettingsMessage.cs" />
+    <Compile Include="Messages\Fec\IrtExtraInfoMessage.cs" />
     <Compile Include="Messages\MessageFactory.cs" />
-    <Compile Include="Messages\ProductMessage.cs" />
-    <Compile Include="Messages\SpecificTrainerDataMessage.cs" />
+    <Compile Include="Messages\Common\ProductMessage.cs" />
+    <Compile Include="Messages\Fec\SpecificTrainerDataMessage.cs" />
     <Compile Include="Exceptions\MessageException.cs" />
     <Compile Include="Exceptions\ApplicationException.cs" />
     <Compile Include="Generators\AutoAntsScriptGenerator.cs" />
@@ -88,8 +88,8 @@
     <Compile Include="Generators\HumanReadableGenerator.cs" />
     <Compile Include="Generators\GeneratorFactory.cs" />
     <Compile Include="lib\Dynamic.cs" />
-    <Compile Include="Messages\StandardPowerOnly.cs" />
-    <Compile Include="Messages\TrackResistanceMessage.cs" />
+    <Compile Include="Messages\BikePower\StandardPowerOnly.cs" />
+    <Compile Include="Messages\Fec\TrackResistanceMessage.cs" />
     <Compile Include="Program\DeviceLogParser.cs" />
     <Compile Include="Data\ExecutionOptions.cs" />
     <Compile Include="Generators\Generator.cs" />
@@ -119,6 +119,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Messages\BikePower\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

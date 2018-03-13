@@ -10,8 +10,8 @@ namespace AntMessageSimulator
     public enum DeviceType
     {
         Unassigned = 0,
-        PowerMeter,
-        FeC
+        PowerMeter = 0x0B,
+        FeC = 0x11
     }
 
     public enum OutputType

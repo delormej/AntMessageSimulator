@@ -41,8 +41,15 @@ namespace AntMessageSimulator
             // Open the file.
             foreach (var line in File.ReadLines(path))
             {
-                Message message = MessageFactory.MessageFromLine(line);
-                AddMessageToSession(message);
+                try
+                {
+                    Message message = MessageFactory.MessageFromLine(line);
+                    AddMessageToSession(message);
+                }
+                catch (MessageException)
+                {
+                    // TODO: ignore and move on for now, but we should log this somewhere??
+                }
             }
 
             return sessions;

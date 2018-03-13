@@ -7,13 +7,64 @@ namespace AntMessageSimulator
 {
     public class MessageFactory
     {
-        private static IDictionary<byte, Type> messageTypes;
+        private static IDictionary<string, IDictionary<byte, Type>> namespaces;
 
         static MessageFactory()
         {
-            messageTypes = new Dictionary<byte, Type>();
-            foreach (var kv in ReflectMessageTypes())
-                messageTypes.Add(kv);
+            namespaces = new Dictionary<string, IDictionary<byte, Type>>();
+            foreach (var type in ReflectMessageTypes())
+                GetNamespace(type.Value.Namespace).Add(type);
+        }
+        
+        /// <summary>
+        /// Parses a single line from an ANT device log and represents as a Message object.
+        /// </summary>
+        public static Message MessageFromLine(string line)
+        {
+            return MessageFromLine(DeviceType.Unassigned, line);
+        }
+
+        public static Message MessageFromLine(DeviceType deviceType, string line)
+        {
+            Message message = new Message(line);
+            Type t = GetMessageType(deviceType, message.MessageId);
+            if (t != null)
+                return Activator.CreateInstance(t, message) as Message;
+            else
+                return message;
+        }
+
+        private static Type GetMessageType(DeviceType deviceType, byte messageId)
+        {
+            Type t = null;
+            if (deviceType == DeviceType.Unassigned)
+            {
+                foreach (var ns in namespaces)
+                {
+                    t = GetMessageTypeFromNamespace(ns.Value, messageId);
+                    if (t != null)
+                        break;
+                }
+            }
+            else
+            {
+                var deviceTypeMessages = GetNamespace(deviceType);
+                if (deviceTypeMessages == null)
+                    deviceTypeMessages = namespaces["Common"];
+                t = GetMessageTypeFromNamespace(deviceTypeMessages, messageId);
+            }
+            return t;
+        }
+
+        private static Type GetMessageTypeFromNamespace(IDictionary<byte, Type> ns, byte messageId)
+        {
+            if (ns.ContainsKey(messageId))
+            {
+                Type t = ns[messageId];
+                return t;
+            }
+            else
+                return null;
         }
 
         private static IEnumerable<KeyValuePair<byte, Type>> ReflectMessageTypes()
@@ -34,21 +85,30 @@ namespace AntMessageSimulator
             }
         }
 
-        /// <summary>
-        /// Parses a single line from an ANT device log and represents as a Message object.
-        /// </summary>
-        public static Message MessageFromLine(string line)
+        private static IDictionary<byte, Type> GetNamespace(DeviceType deviceType)
         {
-            Message message = new Message(line);
-            if (messageTypes.ContainsKey(message.MessageId))
+            string ns;
+            switch (deviceType)
             {
-                Type t = messageTypes[message.MessageId];
-                return Activator.CreateInstance(t, message) as Message;
+                case DeviceType.FeC:
+                    ns = "Fec";
+                    break;
+                case DeviceType.PowerMeter:
+                    ns = "BikePower";
+                    break;
+                default:
+                    ns = "Common";
+                    break;
             }
-            else
-            {
-                return message;
-            }
+            return GetNamespace(ns);
+        }
+
+        private static IDictionary<byte, Type> GetNamespace(string ns) 
+        {
+            string name = ns.Split('.').Last();
+            if (!namespaces.ContainsKey(name))
+                namespaces.Add(name, new Dictionary<byte, Type>());
+            return namespaces[name];
         }
     }
 }

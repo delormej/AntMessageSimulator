@@ -1,10 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AntMessageSimulator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AntMessageSimulator.Messages.Fec;
 
 namespace AntMessageSimulator.Tests
 {

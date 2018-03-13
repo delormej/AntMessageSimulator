@@ -1,5 +1,5 @@
 ﻿
-namespace AntMessageSimulator
+namespace AntMessageSimulator.Messages.Common
 {
     public class ProductMessage : Message
     {

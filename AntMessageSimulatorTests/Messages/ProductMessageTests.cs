@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AntMessageSimulator;
+using AntMessageSimulator.Messages.Common;
 
 namespace AntMessageSimulator.Tests
 {
