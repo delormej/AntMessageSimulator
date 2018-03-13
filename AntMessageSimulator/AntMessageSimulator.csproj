@@ -90,6 +90,8 @@
     <Compile Include="lib\Dynamic.cs" />
     <Compile Include="Messages\BikePower\StandardPowerOnly.cs" />
     <Compile Include="Messages\Fec\TrackResistanceMessage.cs" />
+    <Compile Include="Messages\MessageType.cs" />
+    <Compile Include="Messages\MessageTypes.cs" />
     <Compile Include="Program\DeviceLogParser.cs" />
     <Compile Include="Data\ExecutionOptions.cs" />
     <Compile Include="Generators\Generator.cs" />
@@ -120,8 +122,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Messages\BikePower\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
