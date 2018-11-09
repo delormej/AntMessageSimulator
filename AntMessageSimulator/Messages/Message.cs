@@ -138,7 +138,7 @@ namespace AntMessageSimulator
         {
             get
             {
-                if (IsDataMessage)
+                if (IsDataMessage && this.bytes.Length > MESSAGE_ID_POSTITION)
                     return this.bytes[MESSAGE_ID_POSTITION];
                 else
                     return 0;
