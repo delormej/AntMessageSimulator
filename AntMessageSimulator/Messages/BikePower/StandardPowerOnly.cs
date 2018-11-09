@@ -16,11 +16,11 @@ namespace AntMessageSimulator.Messages.BikePower
 
         public StandardPowerOnly(Message message) : base(message)
         {
-            EventCount = GetEventCount(message.Bytes[2]);
+            EventCount = GetEventCount(message.Bytes[5]);
             // pedalPower : future implement
-            InstantCadence = message.Bytes[4];
-            AccumulatedPower = GetAccumulatedPower((ushort)(message.Bytes[6] << 8 | message.Bytes[5]));
-            InstantBikePower = (ushort)(message.Bytes[8] << 8 | message.Bytes[7]);
+            InstantCadence = message.Bytes[7];
+            AccumulatedPower = GetAccumulatedPower((ushort)(message.Bytes[9] << 8 | message.Bytes[8]));
+            InstantBikePower = (ushort)(message.Bytes[11] << 8 | message.Bytes[10]);
         }
 
         private byte GetEventCount(byte events)
