@@ -90,7 +90,7 @@ namespace AntMessageSimulator
         {
             return (message.IsDataMessage &&
                 (session.FecId > 0 && session.FecChannelId == message.ChannelId) ||
-                (session.PowerMeterId > 0 && session.PowerMeterId == message.ChannelId));
+                (session.PowerMeterId > 0 && session.PowerMeterChannelId == message.ChannelId));
         }
 
         private IQueryable<T> NotNullItems<T>(IEnumerable<T> list)
