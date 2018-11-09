@@ -44,7 +44,7 @@
 					"categoryAxis": {},
 					"chartCursor": {
 						"enabled": true,
-						"categoryBalloonDateFormat": "JJ:NN:SS"
+                        "categoryBalloonDateFormat": "JJ:NN:SS"
 					},
 					"chartScrollbar": {
 						"enabled": true
@@ -72,14 +72,22 @@
 							"title": "Instant Power (Watts)",
 							"valueAxis": "power-axis",
 							"valueField": "InstantPower",
-							"lineColor": "#daa520"
+                            "lineColor": "#daa520"
 						},
 						{
 							"title": "Average Power (Watts)",
 							"valueAxis": "power-axis",
 							"valueField": "AveragePower",
 							"lineColor": "#ff8c00" /*Dark Orange*/
-						},
+                        },
+                        {
+                            "title": "Power Meter",
+                            "valueAxis": "power-axis",
+                            "valueField": "InstantBikePower",
+                            "lineColor": "#fff000",
+                            "balloonText": "[[InstantBikePower]] Bike Power<br>[[InstantPower]]",
+                            "bullet": "round"
+                        },
 						{
 							"id": "AmGraph-3",
 							"title": "Target Power (Watts)",
@@ -91,7 +99,7 @@
 						{
 							"lineColor": "lightblue",
 							"alphaField": "alpha",
-							"balloonText": "[[ServoPosition]] position",
+                            "balloonText": "[[ServoPosition]] position",
 							"dashLengthField": "dashLength",
 							"fillAlphas": 0.7,
 							"id": "AmGraph-3",
@@ -111,8 +119,7 @@
 					"valueAxes": [
 						{
 							"id": "power-axis",
-							"title": "Power (Watts)",
-							"maximum": 1200
+							"title": "Power (Watts)"
 						},
 						{
 							"id": "speed-axis",
