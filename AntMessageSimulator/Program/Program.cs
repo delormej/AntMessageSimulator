@@ -1,4 +1,6 @@
-﻿namespace AntMessageSimulator
+﻿using System;
+
+namespace AntMessageSimulator
 {
     class Program
     {
@@ -11,7 +13,7 @@
                 Simulator simulator = new Simulator(options);
                 simulator.Execute();
             }
-            catch (ApplicationException e)
+            catch (Exception e)
             {
                 Printer.Error(e.Message);
                 Printer.Usage();
