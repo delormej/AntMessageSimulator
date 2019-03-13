@@ -79,6 +79,7 @@
     <Compile Include="Messages\Fec\IrtExtraInfoMessage.cs" />
     <Compile Include="Messages\MessageFactory.cs" />
     <Compile Include="Messages\Common\ProductMessage.cs" />
+    <Compile Include="Messages\Common\Util.cs" />
     <Compile Include="Messages\Fec\SpecificTrainerDataMessage.cs" />
     <Compile Include="Exceptions\MessageException.cs" />
     <Compile Include="Exceptions\ApplicationException.cs" />

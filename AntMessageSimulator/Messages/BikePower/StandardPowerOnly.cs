@@ -1,4 +1,5 @@
 ﻿using System;
+using AntMessageSimulator.Messages.Common;
 
 namespace AntMessageSimulator.Messages.BikePower
 {
@@ -25,39 +26,14 @@ namespace AntMessageSimulator.Messages.BikePower
 
         private byte GetEventCount(byte events)
         {
-            eventCount = AccumulateByte(EventCount, events);
+            eventCount = Util.AccumulateByte(EventCount, events);
             return eventCount;
         }
 
         private ushort GetAccumulatedPower(ushort power)
         {
-            accumulatedPower = AccumulateDoubleByte(accumulatedPower, power);
+            accumulatedPower = Util.AccumulateDoubleByte(accumulatedPower, power);
             return accumulatedPower;
-        }
-
-        private static ushort AccumulateDoubleByte(ushort accumulator, ushort value)
-        {
-            // Did a rollover occur?
-            if (value < (accumulator & 0xFFFF))
-            {
-                accumulator += 0xFFFF;
-            }
-            accumulator += value;
-
-            return accumulator;
-        }
-
-        // This method accumulates a single byte into a 32 bit unsigned int.
-        private static byte AccumulateByte(byte accumulator, byte value)
-        {
-            // Did a rollover occur?
-            if (value < (accumulator & 0xFF))
-            {
-                accumulator += 0xFF;
-            }
-            accumulator += value;
-        
-            return accumulator;
         }
     }
 }
