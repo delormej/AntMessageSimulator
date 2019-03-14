@@ -12,7 +12,7 @@ namespace AntMessageSimulator.Messages.BikePower
         public byte InstantCadence { get; private set; }
         public ushort Period { get; private set; } // 1/2048s
         public ushort AccumulatedTorque { get; private set; }
-        public ushort CalculatedPower { get; private set; }
+        public double CalculatedPower { get; private set; }
 
         public StandardCrankTorque(Message message) : base(message)
         {
@@ -55,19 +55,16 @@ namespace AntMessageSimulator.Messages.BikePower
 
         private byte CalculateCadence(StandardCrankTorque lastMessage)
         {
-            //
-            // TODO: this doesn't respect rollover math.
-            //
-            int cadence = 60 * (EventCountDiff(lastMessage)) /
-                ( PeriodDiff(lastMessage) / 2048 );
-
+            double cadence = 60 * (EventCountDiff(lastMessage)) /
+                ( PeriodDiff(lastMessage) / 2048D );
+            
             return (byte)cadence;
         }
 
-        private ushort CalculatePower(StandardCrankTorque lastMessage)
+        private double CalculatePower(StandardCrankTorque lastMessage)
         {
-            double result = AverageAngularVelocity(lastMessage) * AverageAngularVelocity(lastMessage);
-            return (ushort)result;
+            double result = AverageAngularVelocity(lastMessage) * AverageTorque(lastMessage);
+            return result;
         }
 
         private double AverageAngularVelocity(StandardCrankTorque lastMessage)
@@ -75,8 +72,8 @@ namespace AntMessageSimulator.Messages.BikePower
             //
             // TODO: this doesn't respect rollover math.
             //
-            double result = ( 2 * Math.PI * (EventCountDiff(lastMessage)) ) / 
-                ( PeriodDiff(lastMessage) / 2048 );
+            double result = ( 2D * Math.PI * (EventCountDiff(lastMessage)) ) / 
+                ( PeriodDiff(lastMessage) / 2048D );
 
             return result;
         }
@@ -84,7 +81,7 @@ namespace AntMessageSimulator.Messages.BikePower
         private double AverageTorque(StandardCrankTorque lastMessage)
         {
             double result = AccumulatedTorqueDiff(lastMessage) / 
-                (32 * EventCountDiff(lastMessage));
+                (32D * EventCountDiff(lastMessage));
 
             return result;
         }
@@ -98,32 +95,32 @@ namespace AntMessageSimulator.Messages.BikePower
 
         private byte EventCountDiff(StandardCrankTorque lastMessage)
         {
-            byte value; 
+            int value; 
             if (lastMessage.EventCount > this.EventCount) // rollover
-                value = byte.MaxValue ^ lastMessage.EventCount + this.EventCount;
+                value = (byte.MaxValue ^ lastMessage.EventCount) + this.EventCount;
             else
                 value = this.EventCount - lastMessage.EventCount;
-            return value;
+            return (byte)value;
         }
 
         private ushort PeriodDiff(StandardCrankTorque lastMessage)
         {
-           byte value; 
+           int value; 
             if (lastMessage.Period > this.Period) // rollover
-                value = ushort.MaxValue ^ lastMessage.Period + this.Period;
+                value = (ushort.MaxValue ^ lastMessage.Period) + this.Period;
             else
                 value = this.Period - lastMessage.Period;
-            return value;
+            return (ushort)value;
         }
 
         private ushort AccumulatedTorqueDiff(StandardCrankTorque lastMessage)
         {
-           byte value; 
+           int value; 
             if (lastMessage.AccumulatedTorque > this.AccumulatedTorque) // rollover
-                value = ushort.MaxValue ^ lastMessage.AccumulatedTorque + this.AccumulatedTorque;
+                value = (ushort.MaxValue ^ lastMessage.AccumulatedTorque) + this.AccumulatedTorque;
             else
                 value = this.AccumulatedTorque - lastMessage.AccumulatedTorque;
-            return value;            
+            return (ushort)value;            
         }
     }
 }
