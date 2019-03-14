@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using ANT_Managed_Library;
 
 namespace AntMessageSimulator
@@ -191,6 +192,11 @@ namespace AntMessageSimulator
                 payload.AppendFormat("[{0:X2}]", Bytes[i]);
 
             return payload.ToString();
+        }
+
+        public virtual void OnAddedToCollection(in List<Message> messages)
+        {
+
         }
 
         /// <summary>

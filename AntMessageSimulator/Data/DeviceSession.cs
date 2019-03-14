@@ -66,6 +66,7 @@ namespace AntMessageSimulator
             }
 
             messages.Add(message);
+            message.OnAddedToCollection(messages);
         }
 
         public float GetLastTimestamp()
