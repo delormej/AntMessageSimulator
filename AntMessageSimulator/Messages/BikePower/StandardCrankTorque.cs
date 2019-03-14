@@ -97,7 +97,7 @@ namespace AntMessageSimulator.Messages.BikePower
         {
             int value; 
             if (lastMessage.EventCount > this.EventCount) // rollover
-                value = (byte.MaxValue ^ lastMessage.EventCount) + this.EventCount;
+                value = 1 + (byte.MaxValue ^ lastMessage.EventCount) + this.EventCount;
             else
                 value = this.EventCount - lastMessage.EventCount;
             return (byte)value;
