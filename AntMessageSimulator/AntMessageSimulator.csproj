@@ -82,6 +82,7 @@
     <Compile Include="Messages\Fec\GeneralFEDataMessage.cs" />
     <Compile Include="Messages\Fec\GeneralSettingsMessage.cs" />
     <Compile Include="Messages\Fec\IrtExtraInfoMessage.cs" />
+    <Compile Include="Messages\Fec\IrtPowerAdjustMessage.cs" />
     <Compile Include="Messages\Fec\IrtSettingsMessage.cs" />
     <Compile Include="Messages\MessageFactory.cs" />
     <Compile Include="Messages\Common\ProductMessage.cs" />

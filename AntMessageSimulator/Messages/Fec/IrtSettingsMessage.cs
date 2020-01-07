@@ -13,7 +13,7 @@ namespace AntMessageSimulator.Messages.Fec
             Drag = Decode(message, 1);
             RollingResistance = Decode(message, 3);
             ServoOffset = Decode(message, 5);
-            Settings = message.Bytes[7];
+            Settings = message.Bytes[7 + MESSAGE_HEADER_LENGTH];
         }
 
         public ushort Drag { get; private set; }
