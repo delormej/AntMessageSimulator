@@ -70,6 +70,7 @@
     <Compile Include="Messages\GeneralFEDataMessageTests.cs" />
     <Compile Include="Messages\GeneralSettingsMessageTests.cs" />
     <Compile Include="Messages\IrtExtraInfoMessageTests.cs" />
+    <Compile Include="Messages\IrtSettingsMessageTest.cs" />
     <Compile Include="Messages\ProductMessageTests.cs" />
     <Compile Include="Messages\SpecificTrainerDataMessageTests.cs" />
     <Compile Include="Messages\TrackResistanceMessageTests.cs" />
