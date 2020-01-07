@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using ANT_Managed_Library;
+using AntMessageSimulator.ANT_NET;
 
 namespace AntMessageSimulator
 {
