@@ -194,9 +194,9 @@ namespace AntMessageSimulator
             return payload.ToString();
         }
 
-        public virtual void OnAddedToCollection(in List<Message> messages)
+        public virtual bool OnBeforeAddToCollection(in List<Message> messages)
         {
-
+            return true;
         }
 
         /// <summary>

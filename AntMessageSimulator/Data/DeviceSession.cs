@@ -65,8 +65,8 @@ namespace AntMessageSimulator
                 FecId = message.DeviceId;
             }
 
-            messages.Add(message);
-            message.OnAddedToCollection(messages);
+            if (message.OnBeforeAddToCollection(messages))
+                messages.Add(message);
         }
 
         public float GetLastTimestamp()

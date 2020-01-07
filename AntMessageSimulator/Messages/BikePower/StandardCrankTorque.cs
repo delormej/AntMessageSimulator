@@ -23,21 +23,25 @@ namespace AntMessageSimulator.Messages.BikePower
             AccumulatedTorque = (ushort)(message.Bytes[11] << 8 | message.Bytes[10]); 
         }
 
-        public override void OnAddedToCollection(in List<Message> messages)
+        public override bool OnBeforeAddToCollection(in List<Message> messages)
         {
             var lastMessage = messages.FindLast(FindLastStandardCrankTorque) as StandardCrankTorque;
+            if (lastMessage == null)
+                return true;
 
-            if (lastMessage != null)
+            if (EventCountDiff(lastMessage) > 0)
             {
                 try
                 {
                     InstantCadence = CalculateCadence(lastMessage);
                     CalculatedPower = CalculatePower(lastMessage);
+
+                    return true;
                 }
-                catch (Exception)
-                { }
-               
+                catch (Exception) {}
             }
+
+            return false;
         }
 
         private bool FindLastStandardCrankTorque(Message message)
@@ -47,10 +51,7 @@ namespace AntMessageSimulator.Messages.BikePower
             //
 
             StandardCrankTorque torqueMessage = message as StandardCrankTorque;
-            if (torqueMessage == null)
-                return false;
-            // Only return true if there has been at least 1 event count difference.
-            return (EventCountDiff(torqueMessage) > 0);
+            return (torqueMessage != null);
         }
 
         private byte CalculateCadence(StandardCrankTorque lastMessage)
