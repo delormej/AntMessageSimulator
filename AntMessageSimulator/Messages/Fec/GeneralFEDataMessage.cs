@@ -18,6 +18,11 @@ namespace AntMessageSimulator.Messages.Fec
             AverageSpeed = (float)speedAverager.Average(message.ChannelId, Speed);
         }
 
+        public override Reading Accept(CreateReadingVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         public override string ToString()
         {
             return string.Format("{{ Timestamp = {0:F3}, Speed = {1:F2}, AverageSpeed = {2:F2} }}", 

@@ -4,9 +4,6 @@
     {
         public static Generator Create(DeviceSession session, ExecutionOptions options)
         {
-#warning Remove this code!
-            return new ReadingGenerator(session);
-
             Generator generator = null;
             if (options.Operation == OperationType.Ants)
                 generator = new AutoAntsScriptGenerator(session, options.Device);
@@ -18,8 +15,8 @@
                 generator = new CArrayGenerator(session, options.Device);
             else if (options.Operation == OperationType.HumanReadable)
                 generator = new HumanReadableGenerator(session, options);
-            // else if (options.Operation == OperationType.Readings)
-            //     generator = new ReadingGenerator(session);
+            else if (options.Operation == OperationType.Readings)
+                generator = new ReadingGenerator(session);
 
             return generator;
         }

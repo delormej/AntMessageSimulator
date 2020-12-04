@@ -188,6 +188,8 @@ namespace AntMessageSimulator
                 Output = OutputType.Console;
             else if (value.ToUpper() == "U")
                 CloudUpload = true;
+            else if (value.ToUpper() == "R")
+                Operation = OperationType.Readings;         
             else
                 throw new ApplicationException(value + " is not a valid option.");
         }

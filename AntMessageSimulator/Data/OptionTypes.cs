@@ -11,7 +11,8 @@ namespace AntMessageSimulator
     {
         Unassigned = 0,
         PowerMeter = 0x0B,
-        FeC = 0x11
+        FeC = 0x11,
+        Speed = 0x7B
     }
 
     public enum OutputType
@@ -29,6 +30,7 @@ namespace AntMessageSimulator
         Ants,
         Json,
         Hz,
-        CArray
+        CArray,
+        Readings
     }
 }
