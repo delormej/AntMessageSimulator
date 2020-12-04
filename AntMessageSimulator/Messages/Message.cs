@@ -199,6 +199,11 @@ namespace AntMessageSimulator
             return true;
         }
 
+        public virtual Reading Accept(CreateReadingVisitor visitor)
+        {
+            return null;
+        }
+
         /// <summary>
         /// Returns the acceptable payload length + ant header length from the 
         /// ANT message.

@@ -47,6 +47,11 @@ namespace AntMessageSimulator.Messages.Fec
             return 1 == ((message.Bytes[7 + MESSAGE_HEADER_LENGTH] & 0x80) >> 7);
         }
         
+        public override Reading Accept(CreateReadingVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         public override string ToString()
         {
             const string format = "{{ Timestamp = {0:F3}, ServoPosition = {1:G}, Target = {2:G}, Flywheel = {3:G}, PowerMeterPaired  = {4} }}";

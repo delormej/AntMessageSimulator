@@ -44,6 +44,11 @@ namespace AntMessageSimulator.Messages.BikePower
             return false;
         }
 
+        public override Reading Accept(CreateReadingVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         private bool FindLastStandardCrankTorque(Message message)
         {
             //
