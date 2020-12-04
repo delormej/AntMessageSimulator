@@ -72,8 +72,6 @@ namespace AntMessageSimulator
             get { return destination != null; }
         }
 
-        public string Query { get; set; }
-
         public ExecutionOptions(string[] args)
         {
             this.args = args;
@@ -190,8 +188,6 @@ namespace AntMessageSimulator
                 Output = OutputType.Console;
             else if (value.ToUpper() == "U")
                 CloudUpload = true;
-            else if (value.ToUpper().StartsWith("Q"))
-                Query = ParseQuery(argIndex);
             else
                 throw new ApplicationException(value + " is not a valid option.");
         }
@@ -205,18 +201,6 @@ namespace AntMessageSimulator
     Example:  simulator.exe Device0.txt 2 --fec --cout      #Prints all FEC commands from session 2 to console.
 ";
             return USAGE;
-        }
-
-        private string ParseQuery(int argIndex)
-        {
-            try
-            {
-                return args[argIndex + 1].Replace("\"", "");
-            }
-            catch
-            {
-                throw new ApplicationException("Invalid query string");
-            }
         }
 
         private void ValidateDeviceOrSetDefault(DeviceType deviceType)
