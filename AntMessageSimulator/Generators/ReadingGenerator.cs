@@ -1,6 +1,10 @@
 using System;
+using System.IO;
+using System.Text;
+using System.Globalization;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using CsvHelper;
 
 namespace AntMessageSimulator
 {    
@@ -31,8 +35,22 @@ namespace AntMessageSimulator
                     readings.Add(reading);
             }
 
-            string output = JsonConvert.SerializeObject(readings);
-            return output;
+            string text = null;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                var writer = new StreamWriter(stream);
+                var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+                csv.WriteHeader<Reading>();
+                csv.NextRecord();
+                csv.WriteRecords(readings);
+
+                stream.Seek(0, SeekOrigin.Begin);
+                StreamReader reader = new StreamReader(stream);
+                text = reader.ReadToEnd();
+            }
+            
+            // string output = JsonConvert.SerializeObject(readings);
+            return text; // output;
         }
     }
 }
