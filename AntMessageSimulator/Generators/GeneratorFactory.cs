@@ -4,6 +4,8 @@
     {
         public static Generator Create(DeviceSession session, ExecutionOptions options)
         {
+            return new PerSecondReadingGenerator(session);
+
             Generator generator = null;
             if (options.Operation == OperationType.Ants)
                 generator = new AutoAntsScriptGenerator(session, options.Device);
