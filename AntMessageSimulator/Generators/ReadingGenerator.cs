@@ -43,6 +43,7 @@ namespace AntMessageSimulator
                 csv.WriteHeader<Reading>();
                 csv.NextRecord();
                 csv.WriteRecords(readings);
+                writer.Flush();
 
                 stream.Seek(0, SeekOrigin.Begin);
                 StreamReader reader = new StreamReader(stream);
