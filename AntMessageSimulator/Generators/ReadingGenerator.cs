@@ -1,20 +1,14 @@
 using System;
-using System.IO;
-using System.Text;
-using System.Globalization;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using CsvHelper;
 
 namespace AntMessageSimulator
 {    
     /// <summary>
     /// Creates a collection of objects representing each second.
     /// </summary>
-    public class ReadingGenerator : Generator
+    public abstract class ReadingGenerator : Generator
     {
         DeviceSession session;
-
         public IEnumerable<Reading> Readings { get; private set; }
 
         public ReadingGenerator(DeviceSession session)
@@ -35,23 +29,10 @@ namespace AntMessageSimulator
                     readings.Add(reading);
             }
 
-            string text = null;
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var writer = new StreamWriter(stream);
-                var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-                csv.WriteHeader<Reading>();
-                csv.NextRecord();
-                csv.WriteRecords(readings);
-                writer.Flush();
-
-                stream.Seek(0, SeekOrigin.Begin);
-                StreamReader reader = new StreamReader(stream);
-                text = reader.ReadToEnd();
-            }
-            
-            // string output = JsonConvert.SerializeObject(readings);
-            return text; // output;
+            string text = Serialize(readings);            
+            return text; 
         }
+
+        protected abstract string Serialize(IEnumerable<Reading> readings);
     }
 }

@@ -16,7 +16,7 @@
             else if (options.Operation == OperationType.HumanReadable)
                 generator = new HumanReadableGenerator(session, options);
             else if (options.Operation == OperationType.Readings)
-                generator = new ReadingGenerator(session);
+                generator = new CsvReadingGenerator(session);
 
             return generator;
         }

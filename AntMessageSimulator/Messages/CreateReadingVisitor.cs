@@ -1,3 +1,4 @@
+using System;
 using AntMessageSimulator.Messages.Speed;
 using AntMessageSimulator.Messages.Fec;
 using AntMessageSimulator.Messages.BikePower;
@@ -5,9 +6,10 @@ using AntMessageSimulator.Messages.BikePower;
 namespace AntMessageSimulator
 {    
     public record Reading (
-        double Timestamp,
-        double Power,
-        double SpeedMps,
+        TimeSpan Timestamp,
+        ushort Weight,
+        ushort Power,
+        decimal SpeedMps,
         ushort ServoPosition,
         double Acceleration,
         ushort TargetPower
@@ -20,14 +22,13 @@ namespace AntMessageSimulator
 
         public CreateReadingVisitor()
         {
-            lastReading = new Reading(0, 0, 0, 0, 0, 0);
+            lastReading = new Reading(new TimeSpan(), 0, 0, 0, 0, 0, 0);
         }
 
         public Reading Visit(StandardCrankTorque message)
         {
-            Reading reading = lastReading with {
-                Timestamp = message.Timestamp,
-                Power = message.CalculatedPower
+            Reading reading = WithTimestamp(message) with {
+                Power = (ushort)Math.Round(message.CalculatedPower, 0)
             };
 
             lastReading = reading;
@@ -36,8 +37,7 @@ namespace AntMessageSimulator
 
         public Reading Visit(IrtExtraInfoMessage message)
         {
-            Reading reading = lastReading with {
-                Timestamp = message.Timestamp,
+            Reading reading = WithTimestamp(message) with {
                 ServoPosition = message.ServoPosition,
                 TargetPower = message.Target
             };
@@ -48,15 +48,33 @@ namespace AntMessageSimulator
 
         public Reading Visit(GeneralFEDataMessage message)
         {
-            Reading reading = lastReading with {
-                Timestamp = message.Timestamp,
-                SpeedMps = message.Speed,
+            Reading reading = WithTimestamp(message) with {
+                SpeedMps = (decimal)Math.Round(message.Speed, 1),
                 Acceleration = CalculateAcceleration(message)
             };
+
+            // If speed is 0, set power.
+            if (reading.SpeedMps == 0.0M) 
+            {
+                reading = reading with { Power = 0 };
+            }
 
             lastReading = reading;
             lastGeneralFEDataMessage = message;
             return lastReading;
+        }
+
+        private Reading WithTimestamp(Message message)
+        {
+            const int DefaultWeight = 1;
+            TimeSpan ignore = TimeSpan.FromMinutes(5);
+            
+            Reading reading = lastReading with {
+                Timestamp = TimeSpan.FromSeconds(message.Timestamp),
+                Weight = lastReading.Timestamp < ignore ? 0 : DefaultWeight  
+            };
+
+            return reading;
         }
 
         private double CalculateAcceleration(GeneralFEDataMessage message)
