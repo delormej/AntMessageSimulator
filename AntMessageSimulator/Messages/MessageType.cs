@@ -18,22 +18,10 @@ namespace AntMessageSimulator.Messages
         public static Type GetType(DeviceType deviceType, byte messageId)
         {
             Type t = null;
-            if (deviceType == DeviceType.Unassigned)
-            {
-                foreach (var ns in namespaces)
-                {
-                    t = GetMessageTypeFromNamespace(ns.Value, messageId);
-                    if (t != null)
-                        break;
-                }
-            }
-            else
-            {
-                var deviceTypeMessages = GetNamespace(deviceType);
-                if (deviceTypeMessages == null)
-                    deviceTypeMessages = namespaces["Common"];
-                t = GetMessageTypeFromNamespace(deviceTypeMessages, messageId);
-            }
+           
+            var deviceTypeMessages = GetNamespace(deviceType);
+            t = GetMessageTypeFromNamespace(deviceTypeMessages, messageId);
+        
             return t;
         }
 
@@ -50,7 +38,7 @@ namespace AntMessageSimulator.Messages
 
         private static IDictionary<byte, Type> GetNamespace(DeviceType deviceType)
         {
-            string ns;
+            string ns = null;
             switch (deviceType)
             {
                 case DeviceType.FeC:
@@ -59,11 +47,22 @@ namespace AntMessageSimulator.Messages
                 case DeviceType.PowerMeter:
                     ns = "BikePower";
                     break;
+                case DeviceType.Speed:
+                    ns = "Speed";
+                    break;                    
                 default:
-                    ns = "Common";
                     break;
             }
-            return GetNamespace(ns);
+
+            IDictionary<byte, Type> messageTypeDictionary = GetNamespace("Common");
+
+            if (ns != null)
+            {
+                messageTypeDictionary = messageTypeDictionary.Concat(GetNamespace(ns))
+                    .ToDictionary(k => k.Key, v => v.Value);
+            }
+
+            return messageTypeDictionary;
         }
 
         private static IDictionary<byte, Type> GetNamespace(string ns)

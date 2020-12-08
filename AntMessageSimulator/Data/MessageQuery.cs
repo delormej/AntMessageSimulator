@@ -58,22 +58,16 @@ namespace AntMessageSimulator
 
         public string FindProductVersion(byte channelId)
         {
-            List<Message> msgs = (from message in session.Messages
-                                 where message.ChannelId == channelId
-                                 select message).ToList();
+            Message message = (from m in session.Messages
+                where m.ChannelId == channelId &&
+                        m is ProductMessage
+                select m).LastOrDefault();
 
-            foreach (var msg in msgs)
-            {
-                ProductMessage message = msg as ProductMessage;
-                if (message != null)
-                    return message.Version;
-            }
-
-            return "";
-                    //return (from message in session.Messages
-                    //       where message.ChannelId == channelId &&
-                    //       message is ProductMessage
-                    //       select ((ProductMessage)message).Version).First();
+            ProductMessage product = message as ProductMessage;
+            if (product != null)
+                return product.Version;
+            else
+                return "";
         }
 
         public IQueryable<Message> FindAllPowerMeterAndFecMessages()
