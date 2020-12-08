@@ -27,6 +27,8 @@ namespace AntMessageSimulator
                 deviceType = DeviceType.FeC;
             else if (message.ChannelId == session.PowerMeterChannelId)
                 deviceType = DeviceType.PowerMeter;
+            else if (message.ChannelId == session.BikeSpeedChannelId)
+                deviceType = DeviceType.Speed;
 
             return CreateMessageTypeInstance(deviceType, message);
         }

@@ -14,6 +14,7 @@ namespace AntMessageSimulator
         public byte FecChannelId { get; private set; }
         public ushort PowerMeterId { get; private set; }
         public byte PowerMeterChannelId { get; private set; }
+        public byte BikeSpeedChannelId { get; private set; }
 
         public IEnumerable<Message> Messages
         {
@@ -63,6 +64,10 @@ namespace AntMessageSimulator
             {
                 FecChannelId = message.ChannelId;
                 FecId = message.DeviceId;
+            }
+            else if (message.IsBikeSpeedIdEvent)
+            {
+                BikeSpeedChannelId = message.ChannelId;
             }
 
             if (message.OnBeforeAddToCollection(messages))

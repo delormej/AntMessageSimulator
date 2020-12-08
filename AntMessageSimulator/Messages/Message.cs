@@ -27,6 +27,7 @@ namespace AntMessageSimulator
         const byte DEVICE_ID_MSB_INDEX = 5;
         const byte DEVICE_ID_LSB_INDEX = 4;
         const byte POWER_METER_DEVICE_TYPE = 0x0B;
+        const byte BIKE_SPEED_DEVICE_TYPE = 0x7B;
         const byte FEC_DEVICE_TYPE = 0x11;
 
         const string TRANSMIT_TX = "TX";
@@ -114,6 +115,15 @@ namespace AntMessageSimulator
                 return IsChannelIdEvent &&
                     Bytes[DEVICE_TYPE_INDEX] == FEC_DEVICE_TYPE;
             }
+        }
+
+        public bool IsBikeSpeedIdEvent
+        {
+            get
+            {
+                return IsChannelIdEvent &&
+                    Bytes[DEVICE_TYPE_INDEX] == BIKE_SPEED_DEVICE_TYPE;
+            }            
         }
 
         public bool IsDataMessage
